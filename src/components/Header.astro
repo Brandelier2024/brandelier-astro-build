@@ -1,27 +1,87 @@
 ---
-// Header.astro — Shared site header
+// Header.astro — Shared site header with interactive Services dropdown & Swipe-to-Call UI
 const currentPath = Astro.url.pathname;
 const isHome = currentPath === '/' || currentPath === '';
 
 const navLinks = [
   { label: 'Home', href: '/' },
   { label: 'About', href: '/about-us' },
-  { label: 'Services', href: '/services' },
+  { label: 'Services', href: '/services', hasDropdown: true },
   { label: 'Portfolio', href: '/portfolio' },
   { label: 'Careers', href: '/careers' },
   { label: 'Blog', href: '/blog' },
   { label: 'Contact', href: '/contact-us' },
 ];
+
+const serviceItems = [
+  { title: 'Social Media Marketing', href: '/services/social-media-marketing', desc: 'Strategy, viral content & community growth', num: '01' },
+  { title: 'Web Development', href: '/services/web-development', desc: 'High-speed custom websites & conversions', num: '02' },
+  { title: 'SEO Optimization', href: '/services/seo-optimization', desc: 'First page rankings & organic visibility', num: '03' },
+  { title: 'Videography & Photography', href: '/services/videography-photography', desc: 'Cinematic brand films & visual stories', num: '04' },
+  { title: 'Content Marketing', href: '/services/content-marketing', desc: 'Copywriting, storytelling & growth content', num: '05' },
+  { title: 'Brand Design', href: '/services/brand-design', desc: 'Brand identity, logos & visual design systems', num: '06' },
+];
 ---
 
 <header class:list={['site-header', { 'is-dark-hero': !isHome }]} id="site-header">
   <a class="brand-mark" href="/" aria-label="Brandelier home">BRANDELIER<span>.</span></a>
+  
   <nav aria-label="Primary navigation">
     {navLinks.map(link => (
-      <a href={link.href} class:list={[{ active: currentPath === link.href || (link.href !== '/' && currentPath.startsWith(link.href)) }]}>{link.label}</a>
+      link.hasDropdown ? (
+        <div class="nav-dropdown-wrapper">
+          <a
+            href={link.href}
+            class:list={['nav-link', 'dropdown-trigger', { active: currentPath.startsWith('/services') }]}
+          >
+            <span>{link.label}</span>
+            <svg class="chevron-icon" viewBox="0 0 12 12" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M2.5 4.5L6 8L9.5 4.5" />
+            </svg>
+          </a>
+          <div class="dropdown-menu">
+            <div class="dropdown-glass">
+              <div class="dropdown-top-bar">
+                <span class="dropdown-badge">Our Core Services</span>
+                <a href="/services" class="dropdown-all-link">Overview & All Services →</a>
+              </div>
+              <div class="dropdown-grid">
+                {serviceItems.map(item => (
+                  <a href={item.href} class="dropdown-item">
+                    <span class="dropdown-num">{item.num}</span>
+                    <div class="dropdown-info">
+                      <span class="dropdown-item-title">{item.title}</span>
+                      <span class="dropdown-item-desc">{item.desc}</span>
+                    </div>
+                    <span class="dropdown-arrow">↗</span>
+                  </a>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      ) : (
+        <a href={link.href} class:list={['nav-link', { active: currentPath === link.href }]}>{link.label}</a>
+      )
     ))}
   </nav>
-  <a class="header-cta" href="/contact-us">Start a project <span aria-hidden="true">↗</span></a>
+
+  <div class="header-right-actions">
+    <!-- Desktop Swipe to Call UI Widget -->
+    <div class="swipe-call-ui desktop-swipe-call" title="Swipe right to call Brandelier">
+      <div class="call-background">
+        <div class="call-number">Swipe to Call</div>
+        <div class="call-slider" role="button" aria-label="Swipe to Call">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="white" viewBox="0 0 24 24">
+            <path d="M6.62 10.79a15.053 15.053 0 006.59 6.59l2.2-2.2a1 1 0 011.11-.21 11.72 11.72 0 003.64.58 1 1 0 011 1v3.3a1 1 0 01-.91 1 19.88 19.88 0 01-17.3-17.3A1 1 0 015 4.25h3.3a1 1 0 011 1 11.72 11.72 0 00.58 3.64 1 1 0 01-.21 1.11z"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <a class="header-cta" href="/contact-us">Start a project <span aria-hidden="true">↗</span></a>
+  </div>
+
   <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Toggle menu" type="button">
     <span></span><span></span><span></span>
   </button>
@@ -29,15 +89,50 @@ const navLinks = [
 
 <!-- Mobile nav overlay -->
 <div class="mobile-nav-overlay" id="mobile-nav-overlay">
-  <nav aria-label="Mobile navigation">
-    {navLinks.map(link => (
-      <a href={link.href} class:list={['mobile-nav-link', { active: currentPath === link.href }]}>{link.label}</a>
-    ))}
-    <a href="/contact-us" class="mobile-nav-cta">Start a project <span aria-hidden="true">↗</span></a>
-  </nav>
+  <div class="mobile-nav-inner">
+    <!-- Mobile Menu Swipe to Call Widget -->
+    <div class="swipe-call-ui mobile-swipe-call" title="Swipe right to call Brandelier">
+      <div class="call-background">
+        <div class="call-number">Swipe to Call</div>
+        <div class="call-slider" role="button" aria-label="Swipe to Call">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="white" viewBox="0 0 24 24">
+            <path d="M6.62 10.79a15.053 15.053 0 006.59 6.59l2.2-2.2a1 1 0 011.11-.21 11.72 11.72 0 003.64.58 1 1 0 011 1v3.3a1 1 0 01-.91 1 19.88 19.88 0 01-17.3-17.3A1 1 0 015 4.25h3.3a1 1 0 011 1 11.72 11.72 0 00.58 3.64 1 1 0 01-.21 1.11z"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <nav aria-label="Mobile navigation">
+      {navLinks.map(link => (
+        link.hasDropdown ? (
+          <div class="mobile-accordion-item">
+            <button class="mobile-accordion-btn" id="mobile-services-toggle" type="button" aria-expanded="false">
+              <span>{link.label}</span>
+              <svg class="mobile-chevron" viewBox="0 0 12 12" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2">
+                <path d="M2.5 4.5L6 8L9.5 4.5" />
+              </svg>
+            </button>
+            <div class="mobile-accordion-content" id="mobile-services-content">
+              <a href="/services" class="mobile-sublink overview-sublink">Overview & All Services →</a>
+              {serviceItems.map(item => (
+                <a href={item.href} class="mobile-sublink">
+                  <span class="sub-num">{item.num}</span>
+                  <span>{item.title}</span>
+                </a>
+              ))}
+            </div>
+          </div>
+        ) : (
+          <a href={link.href} class:list={['mobile-nav-link', { active: currentPath === link.href }]}>{link.label}</a>
+        )
+      ))}
+      <a href="/contact-us" class="mobile-nav-cta">Start a project <span aria-hidden="true">↗</span></a>
+    </nav>
+  </div>
 </div>
 
 <script>
+  // Mobile Menu Toggle
   const btn = document.getElementById('mobile-menu-btn')!;
   const overlay = document.getElementById('mobile-nav-overlay')!;
   const header = document.getElementById('site-header')!;
@@ -56,6 +151,18 @@ const navLinks = [
     });
   });
 
+  // Mobile Services Accordion
+  const servicesToggle = document.getElementById('mobile-services-toggle');
+  const servicesContent = document.getElementById('mobile-services-content');
+  if (servicesToggle && servicesContent) {
+    servicesToggle.addEventListener('click', () => {
+      const isExpanded = servicesToggle.getAttribute('aria-expanded') === 'true';
+      servicesToggle.setAttribute('aria-expanded', String(!isExpanded));
+      servicesToggle.classList.toggle('open', !isExpanded);
+      servicesContent.classList.toggle('open', !isExpanded);
+    });
+  }
+
   // Sticky header on scroll
   let lastScroll = 0;
   window.addEventListener('scroll', () => {
@@ -68,6 +175,108 @@ const navLinks = [
     }
     lastScroll = y;
   }, { passive: true });
+
+  // ========================================================
+  // SWIPE TO CALL LOGIC (Supports multiple widgets on page)
+  // ========================================================
+  function initSwipeSliders() {
+    const containers = document.querySelectorAll('.swipe-call-ui');
+    containers.forEach((container) => {
+      const slider = container.querySelector('.call-slider') as HTMLElement | null;
+      const callNumber = container.querySelector('.call-number') as HTMLElement | null;
+      const track = container.querySelector('.call-background') as HTMLElement | null;
+      if (!slider || !callNumber || !track) return;
+
+      let isDragging = false;
+      let startX = 0;
+      let hasDialed = false;
+
+      const getInitialLeft = () => {
+        const computed = window.getComputedStyle(slider);
+        return parseFloat(computed.left) || 6;
+      };
+      const initialLeft = getInitialLeft();
+
+      const getMaxMove = () => {
+        return track.clientWidth - slider.offsetWidth - initialLeft;
+      };
+
+      const resetSlider = () => {
+        slider.style.transition = 'left 0.3s cubic-bezier(0.16, 1, 0.3, 1)';
+        slider.style.left = `${initialLeft}px`;
+        callNumber.classList.remove('hide');
+      };
+
+      const handleRelease = (currentLeft: number) => {
+        const maxMove = getMaxMove();
+        if (currentLeft >= maxMove * 0.55) {
+          hasDialed = true;
+          slider.style.transition = 'left 0.2s ease';
+          slider.style.left = `${maxMove}px`;
+          setTimeout(() => {
+            window.location.href = "tel:+917058670837";
+          }, 150);
+        } else {
+          resetSlider();
+        }
+      };
+
+      // Mouse drag events
+      slider.addEventListener('mousedown', (e) => {
+        isDragging = true;
+        startX = e.clientX - slider.offsetLeft;
+        slider.style.transition = 'none';
+        callNumber.classList.add('hide');
+      });
+
+      window.addEventListener('mousemove', (e) => {
+        if (!isDragging) return;
+        const maxMove = getMaxMove();
+        let moveX = e.clientX - startX;
+        moveX = Math.max(initialLeft, Math.min(moveX, maxMove));
+        slider.style.left = `${moveX}px`;
+      });
+
+      window.addEventListener('mouseup', () => {
+        if (!isDragging) return;
+        isDragging = false;
+        handleRelease(parseFloat(slider.style.left) || initialLeft);
+      });
+
+      // Touch events (for mobile devices)
+      slider.addEventListener('touchstart', (e) => {
+        isDragging = true;
+        startX = e.touches[0].clientX - slider.offsetLeft;
+        slider.style.transition = 'none';
+        callNumber.classList.add('hide');
+      }, { passive: true });
+
+      window.addEventListener('touchmove', (e) => {
+        if (!isDragging) return;
+        const maxMove = getMaxMove();
+        let moveX = e.touches[0].clientX - startX;
+        moveX = Math.max(initialLeft, Math.min(moveX, maxMove));
+        slider.style.left = `${moveX}px`;
+      }, { passive: true });
+
+      window.addEventListener('touchend', () => {
+        if (!isDragging) return;
+        isDragging = false;
+        handleRelease(parseFloat(slider.style.left) || initialLeft);
+      });
+
+      // Reset when user returns from phone dialer
+      document.addEventListener('visibilitychange', () => {
+        if (document.visibilityState === 'visible' && hasDialed) {
+          resetSlider();
+          hasDialed = false;
+        }
+      });
+    });
+  }
+
+  // Initialize on page load
+  initSwipeSliders();
 </script>
 
 <style>
@@ -75,15 +284,16 @@ const navLinks = [
     align-items: center;
     display: flex;
     justify-content: space-between;
-    padding: 24px 5vw;
+    padding: 20px 5vw;
     position: fixed;
     width: 100%;
     z-index: 100;
     top: 0;
-    transition: transform 0.3s ease, background 0.3s ease, box-shadow 0.3s ease;
+    transition: transform 0.3s ease, background 0.3s ease, box-shadow 0.3s ease, padding 0.3s ease;
+    box-sizing: border-box;
   }
   
-  /* Default light page header styles (homepage top) */
+  /* Brand Logo */
   .brand-mark {
     color: var(--ink);
     font-family: var(--font-heading);
@@ -92,11 +302,19 @@ const navLinks = [
     letter-spacing: -.07em;
     text-decoration: none;
     transition: color .25s ease;
+    flex-shrink: 0;
   }
   .brand-mark span { color: var(--pink); }
   
-  nav { display: flex; gap: 2rem; margin-left: auto; margin-right: 3rem; }
-  nav a, .header-cta {
+  /* Desktop Navigation */
+  nav {
+    display: flex;
+    align-items: center;
+    gap: 1.8rem;
+    margin-left: auto;
+    margin-right: 2rem;
+  }
+  .nav-link, .header-cta {
     color: var(--ink);
     font-family: var(--font-body);
     font-size: .72rem;
@@ -105,11 +323,285 @@ const navLinks = [
     text-transform: uppercase;
     transition: color .2s, border-color .2s;
   }
-  nav a:hover { color: var(--pink); }
-  nav a.active { color: var(--pink); border-bottom: 1px solid var(--pink); padding-bottom: 4px; }
-  .header-cta { border-bottom: 1px solid var(--ink); padding-bottom: 5px; }
+  .nav-link:hover { color: var(--pink); }
+  .nav-link.active { color: var(--pink); border-bottom: 1px solid var(--pink); padding-bottom: 4px; }
+  
+  .header-right-actions {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    flex-shrink: 0;
+  }
+  .header-cta {
+    border-bottom: 1px solid var(--ink);
+    padding-bottom: 4px;
+    white-space: nowrap;
+  }
   .header-cta:hover { color: var(--pink); border-color: var(--pink); }
 
+  /* ========================================================
+     SERVICES DROPDOWN (DESKTOP)
+     Interactive Animation Flyout
+     ======================================================== */
+  .nav-dropdown-wrapper {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+  }
+  .dropdown-trigger {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    cursor: pointer;
+  }
+  .chevron-icon {
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .nav-dropdown-wrapper:hover .chevron-icon {
+    transform: rotate(180deg);
+    color: var(--pink);
+  }
+
+  .dropdown-menu {
+    position: absolute;
+    top: calc(100% + 14px);
+    left: 50%;
+    transform: translateX(-50%) translateY(10px) scale(0.96);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+    z-index: 200;
+    width: 580px;
+    padding-top: 10px; /* Invisible bridge to prevent mouse-leave */
+  }
+  .nav-dropdown-wrapper:hover .dropdown-menu,
+  .nav-dropdown-wrapper:focus-within .dropdown-menu {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transform: translateX(-50%) translateY(0) scale(1);
+  }
+
+  .dropdown-glass {
+    background: rgba(255, 255, 255, 0.98);
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+    border: 1px solid rgba(192, 44, 255, 0.25);
+    border-radius: 20px;
+    padding: 1.4rem;
+    box-shadow: 0 25px 60px rgba(0, 0, 62, 0.14), 0 0 25px rgba(192, 44, 255, 0.12);
+  }
+
+  .dropdown-top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 0.8rem;
+    margin-bottom: 0.8rem;
+    border-bottom: 1px solid rgba(0, 0, 62, 0.08);
+  }
+  .dropdown-badge {
+    font-family: var(--font-body);
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: var(--pink);
+  }
+  .dropdown-all-link {
+    font-family: var(--font-body);
+    font-size: 0.72rem;
+    color: var(--blue-bell);
+    text-decoration: none;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    transition: color 0.2s;
+  }
+  .dropdown-all-link:hover {
+    color: var(--pink);
+  }
+
+  .dropdown-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.6rem;
+  }
+  .dropdown-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 0.8rem;
+    border-radius: 12px;
+    text-decoration: none;
+    transition: background 0.2s, transform 0.2s, border-color 0.2s;
+    border: 1px solid transparent;
+  }
+  .dropdown-item:hover {
+    background: rgba(192, 44, 255, 0.06);
+    border-color: rgba(192, 44, 255, 0.2);
+    transform: translateY(-2px);
+  }
+  .dropdown-num {
+    font-family: var(--font-heading);
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--pink);
+    line-height: 1.2;
+    padding-top: 1px;
+  }
+  .dropdown-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    flex-grow: 1;
+  }
+  .dropdown-item-title {
+    font-family: var(--font-heading);
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--ink);
+    line-height: 1.3;
+    transition: color 0.2s;
+  }
+  .dropdown-item:hover .dropdown-item-title {
+    color: var(--pink);
+  }
+  .dropdown-item-desc {
+    font-family: var(--font-body);
+    font-size: 0.68rem;
+    color: var(--muted);
+    line-height: 1.4;
+  }
+  .dropdown-arrow {
+    font-size: 0.75rem;
+    color: var(--muted);
+    opacity: 0;
+    transform: translate(-3px, 3px);
+    transition: opacity 0.2s, transform 0.2s, color 0.2s;
+  }
+  .dropdown-item:hover .dropdown-arrow {
+    opacity: 1;
+    color: var(--pink);
+    transform: translate(0, 0);
+  }
+
+  /* ========================================================
+     SWIPE TO CALL UI STYLES (User snippet + responsive adaptations)
+     ======================================================== */
+  .swipe-call-ui {
+    display: flex;
+    justify-content: center;
+    margin-top: 0px;
+  }
+
+  .call-background {
+    background: #111;
+    border-radius: 100px;
+    position: relative;
+    box-shadow: 0 0 15px rgba(186, 85, 255, 0.45);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 16px;
+    box-sizing: border-box;
+    overflow: hidden;
+  }
+
+  .call-number {
+    font-family: var(--font-body);
+    font-weight: 700;
+    letter-spacing: 1px;
+    z-index: 1;
+    pointer-events: none;
+    transition: opacity 0.4s ease;
+    color: transparent;
+    background: linear-gradient(90deg, #fff, #c02cff, #fff);
+    background-size: 200%;
+    background-clip: text;
+    -webkit-background-clip: text;
+    animation: colorSwipe 2s linear infinite;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  .call-number.hide {
+    opacity: 0;
+  }
+
+  @keyframes colorSwipe {
+    0% {
+      background-position: 200% 0;
+    }
+    100% {
+      background-position: -200% 0;
+    }
+  }
+
+  .call-slider {
+    position: absolute;
+    background: #c02cff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    cursor: grab;
+    box-shadow: 0 0 10px #c02cff;
+    user-select: none;
+    touch-action: none;
+    z-index: 2;
+  }
+  .call-slider:active {
+    cursor: grabbing;
+  }
+
+  /* Desktop Header Size Variant */
+  .desktop-swipe-call .call-background {
+    width: 195px;
+    height: 42px;
+  }
+  .desktop-swipe-call .call-slider {
+    width: 32px;
+    height: 32px;
+    top: 5px;
+    left: 6px;
+    font-size: 16px;
+  }
+  .desktop-swipe-call .call-slider svg {
+    width: 17px;
+    height: 17px;
+    fill: white;
+  }
+  .desktop-swipe-call .call-number {
+    font-size: 10px;
+    padding-left: 26px !important;
+  }
+
+  /* Mobile Drawer Size Variant */
+  .mobile-swipe-call .call-background {
+    width: 290px;
+    height: 62px;
+    margin-bottom: 2rem;
+  }
+  .mobile-swipe-call .call-slider {
+    width: 48px;
+    height: 48px;
+    top: 7px;
+    left: 8px;
+    font-size: 22px;
+  }
+  .mobile-swipe-call .call-slider svg {
+    width: 22px;
+    height: 22px;
+    fill: white;
+  }
+  .mobile-swipe-call .call-number {
+    font-size: 12px;
+    padding-left: 36px !important;
+  }
+
+  /* Hamburger Menu Button */
   .mobile-menu-btn {
     display: none;
     background: none; border: none; cursor: pointer;
@@ -130,13 +622,13 @@ const navLinks = [
   .site-header.is-dark-hero:not(.scrolled) .brand-mark {
     color: var(--paper);
   }
-  .site-header.is-dark-hero:not(.scrolled) nav a {
-    color: rgba(244,247,255,.85);
+  .site-header.is-dark-hero:not(.scrolled) nav .nav-link {
+    color: rgba(244,247,255,.88);
   }
-  .site-header.is-dark-hero:not(.scrolled) nav a:hover {
+  .site-header.is-dark-hero:not(.scrolled) nav .nav-link:hover {
     color: var(--pink);
   }
-  .site-header.is-dark-hero:not(.scrolled) nav a.active {
+  .site-header.is-dark-hero:not(.scrolled) nav .nav-link.active {
     color: var(--pink);
     border-bottom-color: var(--pink);
   }
@@ -151,6 +643,23 @@ const navLinks = [
   .site-header.is-dark-hero:not(.scrolled) .mobile-menu-btn:not(.open) span {
     background: var(--paper);
   }
+  .site-header.is-dark-hero:not(.scrolled) .dropdown-glass {
+    background: rgba(0, 0, 62, 0.96);
+    border-color: rgba(192, 44, 255, 0.35);
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6), 0 0 25px rgba(192, 44, 255, 0.2);
+  }
+  .site-header.is-dark-hero:not(.scrolled) .dropdown-top-bar {
+    border-bottom-color: rgba(244, 247, 255, 0.1);
+  }
+  .site-header.is-dark-hero:not(.scrolled) .dropdown-item-title {
+    color: var(--paper);
+  }
+  .site-header.is-dark-hero:not(.scrolled) .dropdown-item-desc {
+    color: rgba(244, 247, 255, 0.6);
+  }
+  .site-header.is-dark-hero:not(.scrolled) .dropdown-item:hover {
+    background: rgba(192, 44, 255, 0.15);
+  }
 
   /* ========================================================
      SCROLLED STATE (Light frosted glass on all pages)
@@ -160,19 +669,19 @@ const navLinks = [
     backdrop-filter: blur(14px);
     -webkit-backdrop-filter: blur(14px);
     box-shadow: 0 4px 20px rgba(0,0,62,.06);
-    padding: 16px 5vw;
+    padding: 14px 5vw;
   }
   .site-header.scrolled .brand-mark {
     color: var(--ink);
   }
-  .site-header.scrolled nav a,
+  .site-header.scrolled nav .nav-link,
   .site-header.scrolled .header-cta {
     color: var(--ink);
   }
   .site-header.scrolled .header-cta {
     border-color: var(--ink);
   }
-  .site-header.scrolled nav a:hover,
+  .site-header.scrolled nav .nav-link:hover,
   .site-header.scrolled .header-cta:hover {
     color: var(--pink);
     border-color: var(--pink);
@@ -184,7 +693,7 @@ const navLinks = [
   .site-header.hide { transform: translateY(-100%); }
 
   /* ========================================================
-     MOBILE NAV OVERLAY
+     MOBILE NAV OVERLAY & ACCORDION
      ======================================================== */
   .mobile-nav-overlay {
     position: fixed; inset: 0; z-index: 99;
@@ -192,36 +701,129 @@ const navLinks = [
     display: flex; align-items: center; justify-content: center;
     opacity: 0; pointer-events: none;
     transition: opacity .35s ease;
+    overflow-y: auto;
+    padding: 5rem 1.5rem 3rem;
   }
   .mobile-nav-overlay.open { opacity: 1; pointer-events: all; }
+  .mobile-nav-inner {
+    display: flex; flex-direction: column;
+    align-items: center; width: 100%;
+    max-width: 400px;
+    margin: auto;
+  }
   .mobile-nav-overlay nav {
     display: flex; flex-direction: column;
-    align-items: center; gap: 1.6rem;
-    margin: 0;
-    max-height: 85vh;
-    overflow-y: auto;
+    align-items: center; gap: 1.4rem;
+    margin: 0; width: 100%;
   }
   .mobile-nav-link {
     font-family: var(--font-heading);
-    font-size: clamp(1.8rem, 6vw, 3rem);
+    font-size: clamp(1.8rem, 6vw, 2.5rem);
     color: var(--ink); text-decoration: none;
     font-weight: 500; letter-spacing: -.03em;
     transition: color .2s;
   }
   .mobile-nav-link:hover, .mobile-nav-link.active { color: var(--pink); }
+
+  /* Mobile Services Accordion */
+  .mobile-accordion-item {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .mobile-accordion-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    background: none;
+    border: none;
+    font-family: var(--font-heading);
+    font-size: clamp(1.8rem, 6vw, 2.5rem);
+    color: var(--ink);
+    font-weight: 500;
+    letter-spacing: -.03em;
+    cursor: pointer;
+    padding: 0;
+    transition: color 0.2s;
+  }
+  .mobile-accordion-btn:hover,
+  .mobile-accordion-btn.open {
+    color: var(--pink);
+  }
+  .mobile-chevron {
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .mobile-accordion-btn.open .mobile-chevron {
+    transform: rotate(180deg);
+  }
+  .mobile-accordion-content {
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    transition: max-height 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    width: 100%;
+    align-items: center;
+    margin-top: 0;
+  }
+  .mobile-accordion-content.open {
+    max-height: 380px;
+    opacity: 1;
+    margin-top: 1rem;
+    margin-bottom: 0.5rem;
+  }
+  .mobile-sublink {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-family: var(--font-body);
+    font-size: 0.95rem;
+    color: var(--muted);
+    text-decoration: none;
+    padding: 0.35rem 0.5rem;
+    transition: color 0.2s, transform 0.2s;
+  }
+  .mobile-sublink:hover {
+    color: var(--pink);
+    transform: translateX(3px);
+  }
+  .sub-num {
+    font-family: var(--font-heading);
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--pink);
+  }
+  .overview-sublink {
+    font-weight: 700;
+    color: var(--blue-bell);
+    font-size: 0.85rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
   .mobile-nav-cta {
     font-family: var(--font-body); font-size: .75rem;
     letter-spacing: .12em; text-transform: uppercase;
     color: var(--paper); background: var(--ink);
-    padding: 1rem 2rem; text-decoration: none;
-    margin-top: 1rem; transition: background .2s;
+    padding: 1.1rem 2.2rem; text-decoration: none;
+    border-radius: 100px;
+    margin-top: 1.5rem; transition: background .2s, transform .2s;
   }
-  .mobile-nav-cta:hover { background: var(--pink); }
+  .mobile-nav-cta:hover { background: var(--pink); transform: translateY(-2px); }
 
-  @media (max-width: 900px) {
-    nav, .header-cta { display: none; }
+  /* Responsive Rules */
+  @media (max-width: 1100px) {
+    nav { gap: 1.2rem; margin-right: 1.5rem; }
+    .dropdown-menu { width: 480px; }
+  }
+
+  @media (max-width: 960px) {
+    nav, .desktop-swipe-call, .header-cta { display: none; }
     .mobile-menu-btn { display: flex; }
-    .site-header { padding: 18px 20px; }
+    .site-header { padding: 16px 20px; }
     .site-header.scrolled { padding: 14px 20px; }
   }
 </style>
