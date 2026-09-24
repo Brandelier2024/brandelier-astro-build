@@ -1,12 +1,14 @@
 ---
 // BeaneryModal.astro
-import '@phosphor-icons/web/regular';
 import { Image } from 'astro:assets';
 ---
 <div id="beanery-modal" class="fixed inset-0 bg-[#f4f7ff]/95 backdrop-blur-xl flex flex-col justify-center items-center opacity-0 pointer-events-none transition-opacity duration-500 z-[100]">
     
-    <button id="close-modal-btn" class="absolute top-6 right-6 text-[#53647d] hover:text-[#DD2EB8] hover:rotate-90 transition-all duration-300 z-50">
-        <i class="ph ph-x text-5xl"></i>
+    <button id="close-modal-btn" class="absolute top-6 right-6 text-[#53647d] hover:text-[#DD2EB8] hover:rotate-90 transition-all duration-300 z-50 p-2" aria-label="Close modal" type="button">
+        <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
     </button>
 
     <div class="w-full max-w-7xl mx-auto px-6 mb-8 text-center mt-20 md:mt-0 transition-all duration-500" id="modal-header">

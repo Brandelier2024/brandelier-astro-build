@@ -107,9 +107,9 @@ const serviceItems = [
       {navLinks.map(link => (
         link.hasDropdown ? (
           <div class="mobile-accordion-item">
-            <button class="mobile-accordion-btn" id="mobile-services-toggle" type="button" aria-expanded="false">
+            <button class="mobile-accordion-btn" id="mobile-services-toggle" type="button" aria-expanded="false" aria-label="Toggle services menu">
               <span>{link.label}</span>
-              <svg class="mobile-chevron" viewBox="0 0 12 12" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2">
+              <svg class="mobile-chevron" viewBox="0 0 12 12" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true">
                 <path d="M2.5 4.5L6 8L9.5 4.5" />
               </svg>
             </button>
@@ -196,6 +196,8 @@ const serviceItems = [
       let startSliderX = defaultLeft;
       let autoResetTimer: number | null = null;
 
+      let cachedMaxMove = 0;
+
       const getMaxMove = () => {
         return Math.max(0, track.clientWidth - slider.offsetWidth - defaultLeft);
       };
@@ -230,6 +232,9 @@ const serviceItems = [
           slider.setPointerCapture(e.pointerId);
         } catch (_) {}
 
+        // Measure once per drag gesture to avoid forced reflows during pointermove
+        cachedMaxMove = getMaxMove();
+
         // Cancel transition immediately so dragging feels immediate and responsive
         slider.style.transition = 'none';
 
@@ -241,17 +246,16 @@ const serviceItems = [
         callNumber.classList.add('hide');
       });
 
-      // Pointer move
+      // Pointer move — uses cachedMaxMove without reading DOM geometry on every move
       slider.addEventListener('pointermove', (e) => {
         if (!isDragging) return;
         e.preventDefault();
 
-        const maxMove = getMaxMove();
         const deltaX = e.clientX - startPointerX;
         let targetLeft = startSliderX + deltaX;
 
-        // Clamp between defaultLeft and maxMove
-        targetLeft = Math.max(defaultLeft, Math.min(targetLeft, maxMove));
+        // Clamp between defaultLeft and cachedMaxMove
+        targetLeft = Math.max(defaultLeft, Math.min(targetLeft, cachedMaxMove));
         slider.style.left = `${targetLeft}px`;
       });
 
@@ -263,7 +267,7 @@ const serviceItems = [
           slider.releasePointerCapture(e.pointerId);
         } catch (_) {}
 
-        const maxMove = getMaxMove();
+        const maxMove = cachedMaxMove || getMaxMove();
         const currentLeft = parseFloat(slider.style.left) || defaultLeft;
         const threshold = defaultLeft + (maxMove - defaultLeft) * 0.55;
 
