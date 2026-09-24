@@ -16,7 +16,7 @@ const { title, highlight, description, breadcrumb = [] } = Astro.props;
       <a href="/">Home</a>
       {breadcrumb.map(item => (
         <>
-          <span class="sep">→</span>
+          <span class="sep" aria-hidden="true">→</span>
           <a href={item.href}>{item.label}</a>
         </>
       ))}
@@ -42,14 +42,18 @@ const { title, highlight, description, breadcrumb = [] } = Astro.props;
     right: -10%;
     width: 600px;
     height: 600px;
-    background: radial-gradient(circle, rgba(221,46,184,.08) 0%, transparent 70%);
+    background: radial-gradient(circle, rgba(221,46,184,.1) 0%, transparent 70%);
     pointer-events: none;
   }
   .breadcrumb {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     gap: .6rem;
+    row-gap: .4rem;
     margin-bottom: 2rem;
+    position: relative;
+    z-index: 1;
   }
   .breadcrumb a {
     font-family: Arial, sans-serif;
@@ -60,18 +64,20 @@ const { title, highlight, description, breadcrumb = [] } = Astro.props;
     text-decoration: none;
     transition: color .2s;
   }
-  .breadcrumb a:last-child { color: rgba(244,247,255,.5); }
+  .breadcrumb a:last-child { color: rgba(244,247,255,.5); pointer-events: none; }
   .breadcrumb a:hover { color: var(--paper); }
   .sep { color: rgba(244,247,255,.25); font-size: .65rem; }
   h1 {
     font-family: Georgia, serif;
-    font-size: clamp(3rem, 7vw, 7rem);
+    font-size: clamp(2.4rem, 7.5vw, 6.5rem);
     font-weight: 400;
-    letter-spacing: -.06em;
-    line-height: .88;
+    letter-spacing: -.05em;
+    line-height: .92;
     margin: 0 0 1.5rem;
     position: relative;
     z-index: 1;
+    word-break: break-word;
+    overflow-wrap: break-word;
   }
   h1 em {
     color: var(--pink);
@@ -79,10 +85,10 @@ const { title, highlight, description, breadcrumb = [] } = Astro.props;
   }
   .hero-desc {
     font-family: Georgia, serif;
-    font-size: clamp(1.1rem, 1.6vw, 1.35rem);
-    line-height: 1.4;
-    color: rgba(244,247,255,.6);
-    max-width: 540px;
+    font-size: clamp(1rem, 1.6vw, 1.3rem);
+    line-height: 1.5;
+    color: rgba(244,247,255,.65);
+    max-width: 560px;
     margin: 0;
     position: relative;
     z-index: 1;
@@ -97,6 +103,15 @@ const { title, highlight, description, breadcrumb = [] } = Astro.props;
   }
 
   @media (max-width: 760px) {
-    .page-hero { padding: 10rem 20px 4rem; }
+    .page-hero {
+      padding: 7.5rem 1.25rem 3.5rem;
+    }
+    .breadcrumb {
+      margin-bottom: 1.25rem;
+    }
+    h1 {
+      margin-bottom: 1rem;
+      letter-spacing: -.03em;
+    }
   }
 </style>

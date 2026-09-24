@@ -1,6 +1,8 @@
 ---
 // Header.astro — Shared site header
 const currentPath = Astro.url.pathname;
+const isHome = currentPath === '/' || currentPath === '';
+
 const navLinks = [
   { label: 'Home', href: '/' },
   { label: 'About', href: '/about-us' },
@@ -12,7 +14,7 @@ const navLinks = [
 ];
 ---
 
-<header class="site-header" id="site-header">
+<header class:list={['site-header', { 'is-dark-hero': !isHome }]} id="site-header">
   <a class="brand-mark" href="/" aria-label="Brandelier home">BRANDELIER<span>.</span></a>
   <nav aria-label="Primary navigation">
     {navLinks.map(link => (
@@ -39,11 +41,13 @@ const navLinks = [
   const btn = document.getElementById('mobile-menu-btn')!;
   const overlay = document.getElementById('mobile-nav-overlay')!;
   const header = document.getElementById('site-header')!;
+
   btn.addEventListener('click', () => {
     btn.classList.toggle('open');
     overlay.classList.toggle('open');
     document.body.style.overflow = overlay.classList.contains('open') ? 'hidden' : '';
   });
+
   overlay.querySelectorAll('a').forEach(a => {
     a.addEventListener('click', () => {
       btn.classList.remove('open');
@@ -51,18 +55,19 @@ const navLinks = [
       document.body.style.overflow = '';
     });
   });
+
   // Sticky header on scroll
   let lastScroll = 0;
   window.addEventListener('scroll', () => {
     const y = window.scrollY;
-    if (y > 100) {
+    if (y > 60) {
       header.classList.add('scrolled');
       header.classList.toggle('hide', y > lastScroll && y > 300);
     } else {
       header.classList.remove('scrolled', 'hide');
     }
     lastScroll = y;
-  });
+  }, { passive: true });
 </script>
 
 <style>
@@ -77,21 +82,19 @@ const navLinks = [
     top: 0;
     transition: transform 0.3s ease, background 0.3s ease, box-shadow 0.3s ease;
   }
-  .site-header.scrolled {
-    background: rgba(244,247,255,.92);
-    backdrop-filter: blur(12px);
-    box-shadow: 0 1px 12px rgba(0,0,62,.06);
-  }
-  .site-header.hide { transform: translateY(-100%); }
+  
+  /* Default light page header styles (homepage top) */
   .brand-mark {
     color: var(--ink);
     font-family: Arial, sans-serif;
-    font-size: 1.1rem;
+    font-size: 1.15rem;
     font-weight: 900;
     letter-spacing: -.07em;
     text-decoration: none;
+    transition: color .25s ease;
   }
   .brand-mark span { color: var(--pink); }
+  
   nav { display: flex; gap: 2rem; margin-left: auto; margin-right: 3rem; }
   nav a, .header-cta {
     color: var(--ink);
@@ -100,7 +103,7 @@ const navLinks = [
     letter-spacing: .08em;
     text-decoration: none;
     text-transform: uppercase;
-    transition: color .2s;
+    transition: color .2s, border-color .2s;
   }
   nav a:hover { color: var(--pink); }
   nav a.active { color: var(--pink); border-bottom: 1px solid var(--pink); padding-bottom: 4px; }
@@ -121,29 +124,93 @@ const navLinks = [
   .mobile-menu-btn.open span:nth-child(2) { opacity: 0; }
   .mobile-menu-btn.open span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
 
+  /* ========================================================
+     DARK HERO THEME (Used on inner pages when at top of page)
+     ======================================================== */
+  .site-header.is-dark-hero:not(.scrolled) .brand-mark {
+    color: var(--paper);
+  }
+  .site-header.is-dark-hero:not(.scrolled) nav a {
+    color: rgba(244,247,255,.85);
+  }
+  .site-header.is-dark-hero:not(.scrolled) nav a:hover {
+    color: var(--pink);
+  }
+  .site-header.is-dark-hero:not(.scrolled) nav a.active {
+    color: var(--pink);
+    border-bottom-color: var(--pink);
+  }
+  .site-header.is-dark-hero:not(.scrolled) .header-cta {
+    color: var(--paper);
+    border-color: rgba(244,247,255,.6);
+  }
+  .site-header.is-dark-hero:not(.scrolled) .header-cta:hover {
+    color: var(--pink);
+    border-color: var(--pink);
+  }
+  .site-header.is-dark-hero:not(.scrolled) .mobile-menu-btn:not(.open) span {
+    background: var(--paper);
+  }
+
+  /* ========================================================
+     SCROLLED STATE (Light frosted glass on all pages)
+     ======================================================== */
+  .site-header.scrolled {
+    background: rgba(244,247,255,.94);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    box-shadow: 0 4px 20px rgba(0,0,62,.06);
+    padding: 16px 5vw;
+  }
+  .site-header.scrolled .brand-mark {
+    color: var(--ink);
+  }
+  .site-header.scrolled nav a,
+  .site-header.scrolled .header-cta {
+    color: var(--ink);
+  }
+  .site-header.scrolled .header-cta {
+    border-color: var(--ink);
+  }
+  .site-header.scrolled nav a:hover,
+  .site-header.scrolled .header-cta:hover {
+    color: var(--pink);
+    border-color: var(--pink);
+  }
+  .site-header.scrolled .mobile-menu-btn span {
+    background: var(--ink);
+  }
+
+  .site-header.hide { transform: translateY(-100%); }
+
+  /* ========================================================
+     MOBILE NAV OVERLAY
+     ======================================================== */
   .mobile-nav-overlay {
     position: fixed; inset: 0; z-index: 99;
     background: var(--paper);
     display: flex; align-items: center; justify-content: center;
     opacity: 0; pointer-events: none;
-    transition: opacity .4s ease;
+    transition: opacity .35s ease;
   }
   .mobile-nav-overlay.open { opacity: 1; pointer-events: all; }
   .mobile-nav-overlay nav {
     display: flex; flex-direction: column;
-    align-items: center; gap: 2rem;
+    align-items: center; gap: 1.6rem;
     margin: 0;
+    max-height: 85vh;
+    overflow-y: auto;
   }
   .mobile-nav-link {
     font-family: Georgia, serif;
-    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-size: clamp(1.8rem, 6vw, 3rem);
     color: var(--ink); text-decoration: none;
-    font-weight: 400; letter-spacing: -.04em;
+    font-weight: 400; letter-spacing: -.03em;
     transition: color .2s;
   }
   .mobile-nav-link:hover, .mobile-nav-link.active { color: var(--pink); }
   .mobile-nav-cta {
-    font-family: Arial, sans-serif; font-size: .8rem;
+    font-family: Arial, sans-serif; font-size: .75rem;
     letter-spacing: .12em; text-transform: uppercase;
     color: var(--paper); background: var(--ink);
     padding: 1rem 2rem; text-decoration: none;
@@ -151,9 +218,10 @@ const navLinks = [
   }
   .mobile-nav-cta:hover { background: var(--pink); }
 
-  @media (max-width: 760px) {
+  @media (max-width: 900px) {
     nav, .header-cta { display: none; }
     .mobile-menu-btn { display: flex; }
-    .site-header { padding: 20px; }
+    .site-header { padding: 18px 20px; }
+    .site-header.scrolled { padding: 14px 20px; }
   }
 </style>

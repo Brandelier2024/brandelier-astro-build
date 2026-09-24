@@ -42,8 +42,19 @@ const { title, description = 'Brandelier Media Works is a results-driven digital
     --muted: #53647d;
     --line: rgba(0,0,62,.2);
   }
-  html { scroll-behavior: smooth; }
-  body { margin: 0; background: var(--paper); color: var(--ink); font-family: Georgia, 'Times New Roman', serif; }
+  html {
+    scroll-behavior: smooth;
+    overflow-x: hidden;
+  }
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: Georgia, 'Times New Roman', serif;
+    overflow-x: hidden;
+    width: 100%;
+    -webkit-font-smoothing: antialiased;
+  }
   * { box-sizing: border-box; }
   img { max-width: 100%; height: auto; }
   a { transition: color .2s ease; }
