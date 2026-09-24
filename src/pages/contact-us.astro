@@ -1,0 +1,183 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PageHero from '../components/PageHero.astro';
+---
+
+<Layout title="Contact Digital Marketing Company in Pune | Brandelier" description="Contact Brandelier – a creative digital marketing company in Pune. Reach us for SEO, branding, social media & web solutions.">
+
+  <PageHero
+    title="Let's talk"
+    highlight="business."
+    description="Have a project in mind? We'd love to hear from you. Reach out and let's start building something extraordinary."
+    breadcrumb={[{ label: 'Contact Us', href: '/contact-us' }]}
+  />
+
+  <section class="contact-main">
+    <div class="contact-grid">
+      <!-- Contact Form -->
+      <div class="contact-form-wrap">
+        <h2>Send us a message</h2>
+        <form class="contact-form" id="contact-form">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="name">Full Name</label>
+              <input type="text" id="name" name="name" placeholder="Your name" required />
+            </div>
+            <div class="form-group">
+              <label for="email">Email Address</label>
+              <input type="email" id="email" name="email" placeholder="you@company.com" required />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="phone">Phone Number</label>
+              <input type="tel" id="phone" name="phone" placeholder="+91 XXXXX XXXXX" />
+            </div>
+            <div class="form-group">
+              <label for="service">Service Interested In</label>
+              <select id="service" name="service">
+                <option value="">Select a service</option>
+                <option>Social Media Marketing</option>
+                <option>Web Development</option>
+                <option>SEO Optimization</option>
+                <option>Videography & Photography</option>
+                <option>Content Marketing</option>
+                <option>Brand Design</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="message">Your Message</label>
+            <textarea id="message" name="message" rows="5" placeholder="Tell us about your project..." required></textarea>
+          </div>
+          <button type="submit" class="submit-btn">Send Message <span aria-hidden="true">↗</span></button>
+        </form>
+      </div>
+
+      <!-- Contact Info Sidebar -->
+      <div class="contact-info">
+        <div class="info-card">
+          <h3>Get in Touch</h3>
+          <div class="info-item">
+            <span class="info-label">Email</span>
+            <a href="mailto:Info@brandelier.in">Info@brandelier.in</a>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Phone</span>
+            <a href="tel:+917058670837">+91 70586 70837</a>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Office Hours</span>
+            <span>Mon – Fri, 10:00 AM – 6:00 PM</span>
+          </div>
+        </div>
+
+        <div class="info-card">
+          <h3>Visit Us</h3>
+          <p class="address">403, West Avenue,<br />Near Bremen Chowk, Aundh,<br />Pune – 411067,<br />Maharashtra, India</p>
+        </div>
+
+        <div class="info-card">
+          <h3>Follow Us</h3>
+          <div class="social-links">
+            <a href="https://www.instagram.com/brandelier.in/?hl=en" target="_blank" rel="noopener">Instagram</a>
+            <a href="https://www.linkedin.com/company/brandelier-in/" target="_blank" rel="noopener">LinkedIn</a>
+            <a href="https://www.facebook.com/brandelier" target="_blank" rel="noopener">Facebook</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Map -->
+  <section class="map-section">
+    <iframe
+      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3782.0!2d73.8!3d18.56!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2sAundh%2C+Pune!5e0!3m2!1sen!2sin!4v1"
+      width="100%" height="450" style="border:0; display:block;" allowfullscreen="" loading="lazy"
+      title="Brandelier Office Location"
+    ></iframe>
+  </section>
+</Layout>
+
+<style>
+  h2 { font-family: Georgia, serif; font-size: clamp(1.8rem, 3vw, 2.5rem); font-weight: 400; letter-spacing: -.04em; margin: 0 0 2rem; }
+  h2 em { color: var(--pink); font-style: italic; }
+
+  .contact-main { padding: 6rem 10vw; }
+  .contact-grid { display: grid; grid-template-columns: 1.5fr 1fr; gap: 5rem; }
+
+  /* Form */
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem; }
+  .form-group { margin-bottom: 0; }
+  .form-group label {
+    display: block; font-family: Arial, sans-serif; font-size: .7rem;
+    letter-spacing: .12em; text-transform: uppercase; color: var(--muted);
+    margin-bottom: .5rem;
+  }
+  .form-group input, .form-group select, .form-group textarea {
+    width: 100%; padding: 1rem; border: 1px solid var(--line);
+    border-radius: 10px; font-family: Georgia, serif; font-size: .95rem;
+    color: var(--ink); background: white; transition: border-color .2s;
+    outline: none;
+  }
+  .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+    border-color: var(--pink);
+  }
+  .form-group textarea { resize: vertical; min-height: 120px; }
+  .form-group + .form-group { margin-top: 1.5rem; }
+
+  .submit-btn {
+    display: inline-flex; align-items: center; gap: 1rem;
+    font-family: Arial, sans-serif; font-size: .78rem;
+    letter-spacing: .12em; text-transform: uppercase;
+    background: var(--ink); color: var(--paper);
+    border: none; padding: 1.2rem 2.5rem; cursor: pointer;
+    margin-top: 1.5rem; transition: background .3s;
+  }
+  .submit-btn:hover { background: var(--pink); }
+
+  /* Info Sidebar */
+  .contact-info { display: flex; flex-direction: column; gap: 2rem; }
+  .info-card {
+    padding: 2rem; border: 1px solid var(--line);
+    border-radius: 16px; transition: border-color .3s;
+  }
+  .info-card:hover { border-color: var(--pink); }
+  .info-card h3 {
+    font-family: Arial, sans-serif; font-size: .7rem;
+    letter-spacing: .14em; text-transform: uppercase;
+    color: var(--blue-bell); margin: 0 0 1.5rem;
+  }
+  .info-item { margin-bottom: 1.2rem; }
+  .info-label {
+    display: block; font-family: Arial, sans-serif; font-size: .65rem;
+    letter-spacing: .1em; text-transform: uppercase;
+    color: rgba(0,0,62,.35); margin-bottom: .3rem;
+  }
+  .info-item a, .info-item span {
+    font-family: Arial, sans-serif; font-size: .88rem;
+    color: var(--ink); text-decoration: none;
+  }
+  .info-item a:hover { color: var(--pink); }
+  .address {
+    font-family: Arial, sans-serif; font-size: .85rem;
+    line-height: 1.6; color: var(--muted); margin: 0;
+  }
+  .social-links { display: flex; gap: 1rem; }
+  .social-links a {
+    font-family: Arial, sans-serif; font-size: .75rem;
+    letter-spacing: .08em; text-transform: uppercase;
+    color: var(--ink); text-decoration: none;
+    padding: .5rem 1rem; border: 1px solid var(--line);
+    border-radius: 100px; transition: all .2s;
+  }
+  .social-links a:hover { border-color: var(--pink); color: var(--pink); }
+
+  .map-section { background: var(--ink); }
+
+  @media (max-width: 760px) {
+    .contact-main { padding: 4rem 20px; }
+    .contact-grid { grid-template-columns: 1fr; gap: 3rem; }
+    .form-row { grid-template-columns: 1fr; }
+  }
+</style>

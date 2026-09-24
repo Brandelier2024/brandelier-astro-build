@@ -1,0 +1,174 @@
+---
+// ServicePage.astro — Reusable layout for individual service sub-pages
+import Layout from '../layouts/Layout.astro';
+import PageHero from './PageHero.astro';
+
+interface Props {
+  title: string;
+  seoTitle: string;
+  description: string;
+  heroHighlight: string;
+  heroDescription: string;
+  features: { title: string; desc: string }[];
+  benefits: string[];
+  process: { step: string; title: string; desc: string }[];
+  otherServices: { title: string; href: string }[];
+}
+
+const { title, seoTitle, description, heroHighlight, heroDescription, features, benefits, process, otherServices } = Astro.props;
+---
+
+<Layout title={seoTitle} description={description}>
+  <PageHero
+    title={title}
+    highlight={heroHighlight}
+    description={heroDescription}
+    breadcrumb={[{ label: 'Services', href: '/services' }, { label: title, href: '#' }]}
+  />
+
+  <!-- Features -->
+  <section class="sp-features">
+    <div class="sp-heading">
+      <p class="sp-label">What We Offer</p>
+      <h2>Everything you need<br /><em>to succeed.</em></h2>
+    </div>
+    <div class="features-grid">
+      {features.map((f, i) => (
+        <article class="feature-card">
+          <span class="feature-num">{String(i + 1).padStart(2, '0')}</span>
+          <h3>{f.title}</h3>
+          <p>{f.desc}</p>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <!-- Benefits -->
+  <section class="sp-benefits">
+    <div class="sp-heading">
+      <p class="sp-label">Why Choose Us</p>
+      <h2>Outcomes that<br /><em>matter.</em></h2>
+    </div>
+    <div class="benefits-list">
+      {benefits.map(b => (
+        <div class="benefit-item">
+          <span class="benefit-check">✓</span>
+          <span>{b}</span>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- Process -->
+  <section class="sp-process">
+    <div class="sp-heading">
+      <p class="sp-label">Our Process</p>
+      <h2>How we<br /><em>deliver.</em></h2>
+    </div>
+    <div class="process-timeline">
+      {process.map(p => (
+        <article class="process-item">
+          <span class="process-num">{p.step}</span>
+          <div>
+            <h3>{p.title}</h3>
+            <p>{p.desc}</p>
+          </div>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <!-- Other Services -->
+  <section class="sp-other">
+    <p class="sp-label">Explore More</p>
+    <h2>Other services<br /><em>we offer.</em></h2>
+    <div class="other-grid">
+      {otherServices.map(s => (
+        <a href={s.href} class="other-card">
+          <span>{s.title}</span>
+          <span class="other-arrow">↗</span>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="sp-cta">
+    <p class="sp-label">Ready to get started?</p>
+    <h2>Let's build<br /><em>something great.</em></h2>
+    <a href="/contact-us" class="cta-button">Start a Project <span aria-hidden="true">↗</span></a>
+  </section>
+</Layout>
+
+<style>
+  .sp-label { font-family: Arial, sans-serif; font-size: .7rem; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+  h2 { font-family: Georgia, serif; font-size: clamp(3rem, 6vw, 5.5rem); font-weight: 400; letter-spacing: -.06em; line-height: .88; margin: 1.5rem 0 0; }
+  h2 em { color: var(--pink); font-style: italic; }
+
+  /* Features */
+  .sp-features { padding: 8rem 10vw; }
+  .sp-heading { margin-bottom: 5rem; }
+  .features-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; }
+  .feature-card {
+    padding: 2.5rem; border: 1px solid var(--line);
+    border-radius: 16px; transition: border-color .3s, transform .3s;
+  }
+  .feature-card:hover { border-color: var(--pink); transform: translateY(-4px); }
+  .feature-num { font-family: Arial, sans-serif; font-size: .72rem; color: var(--blue-bell); letter-spacing: .08em; }
+  .feature-card h3 { font-family: Georgia, serif; font-size: 1.4rem; font-weight: 400; margin: 1.5rem 0 .8rem; }
+  .feature-card p { font-family: Arial, sans-serif; font-size: .85rem; line-height: 1.55; color: var(--muted); margin: 0; }
+
+  /* Benefits */
+  .sp-benefits { background: var(--ink); color: var(--paper); padding: 8rem 10vw; }
+  .sp-benefits .sp-label { color: var(--blue-bell); }
+  .benefits-list { max-width: 700px; }
+  .benefit-item {
+    display: flex; align-items: center; gap: 1.2rem;
+    padding: 1.2rem 0; border-bottom: 1px solid rgba(244,247,255,.08);
+    font-family: Georgia, serif; font-size: 1.15rem; color: rgba(244,247,255,.7);
+  }
+  .benefit-check { color: var(--caramel); font-size: 1.2rem; flex-shrink: 0; }
+
+  /* Process */
+  .sp-process { padding: 8rem 10vw; }
+  .process-timeline { max-width: 800px; }
+  .process-item {
+    display: flex; gap: 2rem; padding: 2rem 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .process-num {
+    font-family: Georgia, serif; font-size: 2.5rem;
+    color: var(--blue-bell); line-height: 1; flex-shrink: 0;
+    width: 60px;
+  }
+  .process-item h3 { font-family: Georgia, serif; font-size: 1.4rem; font-weight: 400; margin: 0 0 .5rem; }
+  .process-item p { font-family: Arial, sans-serif; font-size: .88rem; line-height: 1.5; color: var(--muted); margin: 0; }
+
+  /* Other Services */
+  .sp-other { background: rgba(0,0,62,.03); padding: 6rem 10vw; }
+  .other-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-top: 3rem; }
+  .other-card {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 1.5rem 2rem; border: 1px solid var(--line);
+    border-radius: 12px; text-decoration: none; color: var(--ink);
+    font-family: Georgia, serif; font-size: 1.1rem;
+    transition: border-color .3s, transform .2s;
+  }
+  .other-card:hover { border-color: var(--pink); transform: translateY(-3px); }
+  .other-arrow { font-size: 1.2rem; color: var(--muted); transition: color .2s, transform .2s; }
+  .other-card:hover .other-arrow { color: var(--pink); transform: translate(2px, -2px); }
+
+  /* CTA */
+  .sp-cta { background: var(--ink); color: var(--paper); padding: 8rem 10vw; text-align: center; }
+  .sp-cta .sp-label { color: var(--blue-bell); }
+  .cta-button { display: inline-flex; align-items: center; gap: 1rem; font-family: Arial, sans-serif; font-size: .78rem; letter-spacing: .12em; text-transform: uppercase; text-decoration: none; color: var(--paper); border: 1px solid var(--blue-bell); padding: 1.2rem 2.5rem; margin-top: 3rem; transition: background .3s, border-color .3s; }
+  .cta-button:hover { background: rgba(63,154,230,.15); border-color: var(--paper); }
+
+  @media (max-width: 960px) {
+    .features-grid, .other-grid { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 760px) {
+    .sp-features, .sp-benefits, .sp-process, .sp-other, .sp-cta { padding: 5rem 20px; }
+    .features-grid, .other-grid { grid-template-columns: 1fr; }
+  }
+</style>

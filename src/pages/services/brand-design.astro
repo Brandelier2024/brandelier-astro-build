@@ -1,0 +1,43 @@
+---
+import ServicePage from '../../components/ServicePage.astro';
+
+const otherServices = [
+  { title: 'Social Media Marketing', href: '/services/social-media-marketing' },
+  { title: 'Web Development', href: '/services/web-development' },
+  { title: 'SEO Optimization', href: '/services/seo-optimization' },
+  { title: 'Videography & Photography', href: '/services/videography-photography' },
+  { title: 'Content Marketing', href: '/services/content-marketing' },
+];
+---
+
+<ServicePage
+  title="Brand"
+  seoTitle="Branding & Visual Identity Design in Pune | Brandelier"
+  description="Make your brand impossible to ignore. Distinctive brand identity, logo design, guidelines, and visual strategy in Pune by Brandelier Media Works."
+  heroHighlight="Design."
+  heroDescription="Create a powerful, timeless visual identity that resonates with your audience. From strategic positioning to complete visual design systems, we craft brands with unforgettable presence."
+  features={[
+    { title: 'Brand Strategy & Positioning', desc: 'Define your purpose, target persona, competitive moat, and brand positioning statement.' },
+    { title: 'Logo & Visual Identity Systems', desc: 'Primary marks, secondary badges, color palettes, typographic hierarchies, and visual motif libraries.' },
+    { title: 'Comprehensive Brand Guidelines', desc: 'In-depth brand books documenting correct logo usage, color values, typography rules, tone of voice, and dos and don’ts.' },
+    { title: 'Packaging & Print Collateral', desc: 'Bespoke packaging design, business cards, stationery, brochures, merchandise, and environmental signage.' },
+    { title: 'Digital Brand Assets & Social Kits', desc: 'Cohesive templates for social media, email headers, pitch decks, and digital banners.' },
+    { title: 'Rebranding & Brand Refresh', desc: 'Modernizing legacy brands while preserving brand equity and customer recognition.' },
+  ]}
+  benefits={[
+    'Command premium pricing with a cohesive, world-class aesthetic',
+    'Stand out instantly in saturated, noisy digital marketplaces',
+    'Streamline all future design decisions with clear brand rulebooks',
+    'Build immediate credibility and trust with prospective clients and investors',
+    'Foster deep emotional loyalty through consistent, thoughtful touchpoints',
+    'Scalable visual systems that adapt as your company expands into new markets',
+  ]}
+  process={[
+    { step: '01', title: 'Brand Discovery & Immersion', desc: 'Deep-dive interviews, competitor benchmarking, and stakeholder alignment to discover your core DNA.' },
+    { step: '02', title: 'Strategic Concept & Moodboards', desc: 'Developing creative directions, visual moodboards, and conceptual themes.' },
+    { step: '03', title: 'Identity Design & Iteration', desc: 'Designing logos, typography pairings, color systems, and testing them across real-world mockups.' },
+    { step: '04', title: 'Collateral & Asset Rollout', desc: 'Extending the visual identity to packaging, stationery, pitch decks, and digital assets.' },
+    { step: '05', title: 'Brand Guidelines Delivery', desc: 'Packaging all production files, vectors, fonts, and the definitive brand guideline manual.' },
+  ]}
+  otherServices={otherServices}
+/>

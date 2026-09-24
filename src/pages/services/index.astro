@@ -1,0 +1,184 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import PageHero from '../../components/PageHero.astro';
+
+const services = [
+  {
+    number: '01',
+    title: 'Social Media Marketing',
+    description: 'Build your brand voice, grow your audience, and drive real engagement across platforms. We manage your social presence with strategic content, community management, and targeted campaigns.',
+    href: '/services/social-media-marketing',
+    features: ['Platform Strategy', 'Content Calendars', 'Community Management', 'Paid Social Campaigns'],
+  },
+  {
+    number: '02',
+    title: 'Web Development',
+    description: 'We build more than websites — we craft seamless digital journeys. Our web development services help brands convert, connect, and grow with beautiful, high-performance sites.',
+    href: '/services/web-development',
+    features: ['Custom Websites', 'E-commerce', 'Landing Pages', 'UI/UX Design'],
+  },
+  {
+    number: '03',
+    title: 'SEO Optimization',
+    description: 'Dominate search rankings with data-driven SEO strategies. We optimize your digital presence to drive organic traffic, increase visibility, and generate quality leads.',
+    href: '/services/seo-optimization',
+    features: ['On-page SEO', 'Technical Audits', 'Link Building', 'Local SEO'],
+  },
+  {
+    number: '04',
+    title: 'Videography & Photography',
+    description: 'Visual storytelling that captures your brand essence. From product shoots to cinematic brand films, we produce content that makes audiences stop, watch, and remember.',
+    href: '/services/videography-photography',
+    features: ['Brand Films', 'Product Photography', 'Social Reels', 'Event Coverage'],
+  },
+  {
+    number: '05',
+    title: 'Content Marketing',
+    description: 'Stories, systems, and useful content that keep your brand in motion. We create and distribute compelling content that educates, entertains, and converts your audience.',
+    href: '/services/content-marketing',
+    features: ['Blog Writing', 'Copywriting', 'Email Marketing', 'Content Strategy'],
+  },
+  {
+    number: '06',
+    title: 'Brand Design',
+    description: 'Create a powerful visual identity that resonates with your audience. From logos to complete brand guidelines, we design identities that stand the test of time.',
+    href: '/services/brand-design',
+    features: ['Logo Design', 'Brand Guidelines', 'Packaging Design', 'Visual Identity'],
+  },
+];
+---
+
+<Layout title="Top Digital Marketing Services in Pune | Brandelier" description="Grow your brand with expert digital marketing services in Pune by Brandelier – from SEO to content, branding, and social media strategies.">
+
+  <PageHero
+    title="Strategy meets"
+    highlight="execution."
+    description="We offer end-to-end digital marketing services designed to help brands grow, connect, and dominate their space."
+    breadcrumb={[{ label: 'Services', href: '/services' }]}
+  />
+
+  <!-- Services Grid -->
+  <section class="services-listing">
+    {services.map(service => (
+      <a href={service.href} class="service-card-link">
+        <article class="service-card">
+          <div class="service-card-top">
+            <span class="service-num">{service.number}</span>
+            <span class="service-arrow">↗</span>
+          </div>
+          <h2>{service.title}</h2>
+          <p class="service-desc">{service.description}</p>
+          <div class="service-features">
+            {service.features.map(f => (
+              <span class="feature-tag">{f}</span>
+            ))}
+          </div>
+        </article>
+      </a>
+    ))}
+  </section>
+
+  <!-- Process -->
+  <section class="process-section">
+    <div class="process-heading">
+      <p class="section-label">Our Process</p>
+      <h2>Good work,<br /><em>on purpose.</em></h2>
+    </div>
+    <div class="process-grid">
+      <article class="process-step">
+        <span class="process-num">01</span>
+        <h3>Discovery & Strategy</h3>
+        <p>We dive deep into your business, market, and audience to craft a data-backed digital strategy.</p>
+      </article>
+      <article class="process-step">
+        <span class="process-num">02</span>
+        <h3>Design & Development</h3>
+        <p>Beautiful, functional digital experiences that turn heads and drive conversions.</p>
+      </article>
+      <article class="process-step">
+        <span class="process-num">03</span>
+        <h3>Marketing & Promotion</h3>
+        <p>Cross-platform campaigns that build awareness, generate leads, and drive results.</p>
+      </article>
+      <article class="process-step">
+        <span class="process-num">04</span>
+        <h3>Monitoring & Optimization</h3>
+        <p>Data-led refinement to continuously improve performance and ROI.</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="services-cta">
+    <p class="section-label">Let's work together</p>
+    <h2>Have a project<br /><em>in mind?</em></h2>
+    <a href="/contact-us" class="cta-button">Start a Conversation <span aria-hidden="true">↗</span></a>
+  </section>
+
+</Layout>
+
+<style>
+  .section-label { font-family: Arial, sans-serif; font-size: .7rem; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+  h2 { font-family: Georgia, serif; font-size: clamp(3rem, 6vw, 6rem); font-weight: 400; letter-spacing: -.06em; line-height: .88; margin: 1.5rem 0 0; }
+  h2 em { color: var(--pink); font-style: italic; }
+
+  /* Services Grid */
+  .services-listing { padding: 6rem 10vw; display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+  .service-card-link { text-decoration: none; color: var(--ink); }
+  .service-card {
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    padding: 2.5rem;
+    height: 100%;
+    transition: border-color .3s, transform .3s, box-shadow .3s;
+    display: flex; flex-direction: column;
+  }
+  .service-card:hover {
+    border-color: var(--pink);
+    transform: translateY(-6px);
+    box-shadow: 0 20px 60px rgba(0,0,62,.08);
+  }
+  .service-card-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; }
+  .service-num { font-family: Arial, sans-serif; font-size: .72rem; color: var(--muted); letter-spacing: .08em; }
+  .service-arrow { font-size: 1.5rem; color: var(--muted); transition: color .2s, transform .2s; }
+  .service-card:hover .service-arrow { color: var(--pink); transform: translate(3px, -3px); }
+  .service-card h2 { font-size: clamp(1.6rem, 2.5vw, 2.2rem); margin: 0 0 1rem; line-height: 1; }
+  .service-desc { font-family: Arial, sans-serif; font-size: .88rem; line-height: 1.55; color: var(--muted); margin: 0 0 2rem; flex-grow: 1; }
+  .service-features { display: flex; flex-wrap: wrap; gap: .5rem; }
+  .feature-tag {
+    font-family: Arial, sans-serif; font-size: .68rem;
+    letter-spacing: .06em; text-transform: uppercase;
+    padding: .4rem .8rem; border-radius: 100px;
+    background: rgba(63,154,230,.08); color: var(--blue-bell);
+    border: 1px solid rgba(63,154,230,.15);
+  }
+
+  /* Process */
+  .process-section { background: var(--ink); color: var(--paper); padding: 8rem 10vw; }
+  .process-section .section-label { color: var(--blue-bell); }
+  .process-heading { margin-bottom: 5rem; }
+  .process-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; border-top: 1px solid rgba(244,247,255,.1); }
+  .process-step { padding: 2rem; border-right: 1px solid rgba(244,247,255,.1); }
+  .process-step:last-child { border-right: none; }
+  .process-num { font-family: Arial, sans-serif; font-size: .72rem; color: var(--blue-bell); letter-spacing: .08em; }
+  .process-step h3 { font-family: Georgia, serif; font-size: 1.4rem; font-weight: 400; margin: 3rem 0 1rem; }
+  .process-step p { font-family: Arial, sans-serif; font-size: .85rem; line-height: 1.55; color: rgba(244,247,255,.5); margin: 0; }
+
+  /* CTA */
+  .services-cta { background: var(--ink); color: var(--paper); padding: 6rem 10vw 10rem; text-align: center; border-top: 1px solid rgba(63,154,230,.15); }
+  .services-cta .section-label { color: var(--blue-bell); }
+  .cta-button { display: inline-flex; align-items: center; gap: 1rem; font-family: Arial, sans-serif; font-size: .78rem; letter-spacing: .12em; text-transform: uppercase; text-decoration: none; color: var(--paper); border: 1px solid var(--blue-bell); padding: 1.2rem 2.5rem; margin-top: 3rem; transition: background .3s, border-color .3s; }
+  .cta-button:hover { background: rgba(63,154,230,.15); border-color: var(--paper); }
+
+  @media (max-width: 960px) {
+    .process-grid { grid-template-columns: 1fr 1fr; }
+    .process-step:nth-child(2) { border-right: none; }
+    .process-step:nth-child(3), .process-step:nth-child(4) { border-top: 1px solid rgba(244,247,255,.1); }
+  }
+  @media (max-width: 760px) {
+    .services-listing { grid-template-columns: 1fr; padding: 4rem 20px; }
+    .process-section, .services-cta { padding: 5rem 20px; }
+    .process-grid { grid-template-columns: 1fr; }
+    .process-step { border-right: none; border-bottom: 1px solid rgba(244,247,255,.1); }
+  }
+</style>

@@ -1,0 +1,29 @@
+---
+// Marquee.astro
+const tags = ["Social", "Influencer", "Retargeting", "Google", "Video", "Local", "Community"];
+---
+<div class="relative flex overflow-x-hidden bg-slate-100 py-6">
+  <div class="animate-marquee whitespace-nowrap flex space-x-8 px-4">
+    {tags.map(tag => (
+      <span class="text-2xl font-semibold text-slate-800">{tag}</span>
+    ))}
+  </div>
+  <div class="absolute top-0 animate-marquee2 whitespace-nowrap flex space-x-8 px-4">
+    {tags.map(tag => (
+      <span class="text-2xl font-semibold text-slate-800">{tag}</span>
+    ))}
+  </div>
+</div>
+
+<style>
+  .animate-marquee { animation: marquee 25s linear infinite; }
+  .animate-marquee2 { animation: marquee2 25s linear infinite; }
+  @keyframes marquee {
+    0% { transform: translateX(0%); }
+    100% { transform: translateX(-100%); }
+  }
+  @keyframes marquee2 {
+    0% { transform: translateX(100%); }
+    100% { transform: translateX(0%); }
+  }
+</style>

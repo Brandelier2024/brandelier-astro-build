@@ -1,0 +1,139 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { Image } from 'astro:assets';
+import PageHero from '../components/PageHero.astro';
+
+const projects = [
+  { title: 'Beanery Café', category: 'Content Production', image: 'https://brandelier.in/wp-content/uploads/2026/08/TAG@LENSSHIMMMER-00268-scaled.jpg', desc: 'Full content production including photography, videography, and social media content for this premium café brand.' },
+  { title: 'Brand Film Production', category: 'Videography', image: 'https://brandelier.in/wp-content/uploads/2026/08/Brandelier-.jpg-scaled.jpeg', desc: 'Cinematic brand films crafted to tell compelling stories and connect with audiences emotionally.' },
+  { title: 'Digital Marketing Campaign', category: 'Performance Marketing', image: 'https://brandelier.in/wp-content/uploads/2026/08/TAG@LENSSHIMMMER-08596-scaled.jpg', desc: 'Data-driven performance campaigns delivering measurable ROI across multiple channels.' },
+  { title: 'E-commerce Website', category: 'Web Development', image: 'https://brandelier.in/wp-content/uploads/2026/08/TAG@LENSSHIMMMER-08585-scaled.jpg', desc: 'Custom e-commerce platforms designed for conversion with seamless user experiences.' },
+  { title: 'Social Media Growth', category: 'Social Media', image: 'https://brandelier.in/wp-content/uploads/2026/08/WhatsApp-Image-2026-08-25-at-2.02.42-AM.jpeg', desc: 'Strategic social media management driving community growth and brand engagement.' },
+  { title: 'Brand Identity Design', category: 'Brand Design', image: 'https://brandelier.in/wp-content/uploads/2026/08/Brandelier-3.jpg-scaled.jpeg', desc: 'Complete brand identity systems including logos, typography, color palettes, and guidelines.' },
+];
+
+const categories = ['All', 'Content Production', 'Videography', 'Performance Marketing', 'Web Development', 'Social Media', 'Brand Design'];
+---
+
+<Layout title="Portfolio – Creative Work by Brandelier" description="Explore our portfolio of digital marketing, web development, branding, and content production projects.">
+
+  <PageHero
+    title="Work that"
+    highlight="speaks."
+    description="A selection of projects that showcase our craft, creativity, and commitment to results."
+    breadcrumb={[{ label: 'Portfolio', href: '/portfolio' }]}
+  />
+
+  <section class="portfolio-section">
+    <div class="filter-bar">
+      {categories.map((cat, i) => (
+        <button class:list={['filter-btn', { active: i === 0 }]} data-filter={cat}>{cat}</button>
+      ))}
+    </div>
+
+    <div class="portfolio-grid">
+      {projects.map(project => (
+        <article class="portfolio-card" data-category={project.category}>
+          <div class="card-image">
+            <Image src={project.image} alt={project.title} width={700} height={500} loading="lazy" />
+            <div class="card-overlay">
+              <span class="card-cat">{project.category}</span>
+            </div>
+          </div>
+          <div class="card-content">
+            <h3>{project.title}</h3>
+            <p>{project.desc}</p>
+          </div>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="portfolio-cta">
+    <p class="section-label">Like what you see?</p>
+    <h2>Let's create something<br /><em>amazing together.</em></h2>
+    <a href="/contact-us" class="cta-button">Start a Project <span aria-hidden="true">↗</span></a>
+  </section>
+</Layout>
+
+<script>
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const filter = btn.getAttribute('data-filter');
+      document.querySelectorAll('.portfolio-card').forEach(card => {
+        const cat = card.getAttribute('data-category');
+        if (filter === 'All' || cat === filter) {
+          (card as HTMLElement).style.display = '';
+          (card as HTMLElement).style.animation = 'fadeUp .4s ease forwards';
+        } else {
+          (card as HTMLElement).style.display = 'none';
+        }
+      });
+    });
+  });
+</script>
+
+<style>
+  .section-label { font-family: Arial, sans-serif; font-size: .7rem; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+  h2 { font-family: Georgia, serif; font-size: clamp(3rem, 6vw, 6rem); font-weight: 400; letter-spacing: -.06em; line-height: .88; margin: 1.5rem 0 0; }
+  h2 em { color: var(--pink); font-style: italic; }
+
+  .portfolio-section { padding: 5rem 10vw; }
+
+  /* Filter */
+  .filter-bar { display: flex; flex-wrap: wrap; gap: .6rem; margin-bottom: 3rem; }
+  .filter-btn {
+    font-family: Arial, sans-serif; font-size: .7rem;
+    letter-spacing: .08em; text-transform: uppercase;
+    padding: .6rem 1.2rem; border: 1px solid var(--line);
+    border-radius: 100px; background: transparent;
+    color: var(--muted); cursor: pointer;
+    transition: all .2s;
+  }
+  .filter-btn:hover { border-color: var(--ink); color: var(--ink); }
+  .filter-btn.active { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+
+  /* Grid */
+  .portfolio-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; }
+  .portfolio-card {
+    border: 1px solid var(--line); border-radius: 16px;
+    overflow: hidden; transition: transform .3s, box-shadow .3s, border-color .3s;
+  }
+  .portfolio-card:hover { transform: translateY(-6px); box-shadow: 0 20px 60px rgba(0,0,62,.08); border-color: var(--pink); }
+  .card-image { position: relative; height: 260px; overflow: hidden; }
+  .card-image img { width: 100%; height: 100%; object-fit: cover; transition: transform .5s; }
+  .portfolio-card:hover .card-image img { transform: scale(1.05); }
+  .card-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(0,0,62,.7), transparent);
+    display: flex; align-items: flex-end; padding: 1.5rem;
+  }
+  .card-cat {
+    font-family: Arial, sans-serif; font-size: .65rem;
+    letter-spacing: .12em; text-transform: uppercase;
+    color: var(--caramel);
+  }
+  .card-content { padding: 1.5rem; }
+  .card-content h3 { font-family: Georgia, serif; font-size: 1.3rem; font-weight: 400; margin: 0 0 .5rem; }
+  .card-content p { font-family: Arial, sans-serif; font-size: .8rem; line-height: 1.5; color: var(--muted); margin: 0; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* CTA */
+  .portfolio-cta { background: var(--ink); color: var(--paper); padding: 8rem 10vw; text-align: center; }
+  .portfolio-cta .section-label { color: var(--blue-bell); }
+  .cta-button { display: inline-flex; align-items: center; gap: 1rem; font-family: Arial, sans-serif; font-size: .78rem; letter-spacing: .12em; text-transform: uppercase; text-decoration: none; color: var(--paper); border: 1px solid var(--blue-bell); padding: 1.2rem 2.5rem; margin-top: 3rem; transition: background .3s, border-color .3s; }
+  .cta-button:hover { background: rgba(63,154,230,.15); border-color: var(--paper); }
+
+  @media (max-width: 960px) { .portfolio-grid { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 760px) {
+    .portfolio-section { padding: 4rem 20px; }
+    .portfolio-grid { grid-template-columns: 1fr; }
+    .portfolio-cta { padding: 5rem 20px; }
+  }
+</style>

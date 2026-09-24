@@ -1,0 +1,43 @@
+---
+import ServicePage from '../../components/ServicePage.astro';
+
+const otherServices = [
+  { title: 'Social Media Marketing', href: '/services/social-media-marketing' },
+  { title: 'Web Development', href: '/services/web-development' },
+  { title: 'Content Marketing', href: '/services/content-marketing' },
+  { title: 'Brand Design', href: '/services/brand-design' },
+  { title: 'Videography & Photography', href: '/services/videography-photography' },
+];
+---
+
+<ServicePage
+  title="SEO"
+  seoTitle="Best SEO Services in Pune | Brandelier"
+  description="Dominate search rankings with Brandelier – expert SEO services in Pune for organic traffic growth, keyword ranking, and sustainable visibility."
+  heroHighlight="Optimization."
+  heroDescription="Dominate search rankings with data-driven SEO strategies that drive organic traffic, increase visibility, and generate quality leads."
+  features={[
+    { title: 'On-Page SEO', desc: 'Optimize meta tags, headers, content structure, and internal linking for maximum search engine visibility.' },
+    { title: 'Technical SEO', desc: 'Core Web Vitals optimization, site speed, crawlability, schema markup, and technical infrastructure improvements.' },
+    { title: 'Keyword Research', desc: 'In-depth keyword analysis to target high-intent, high-volume search terms your audience is using.' },
+    { title: 'Link Building', desc: 'Authority-building outreach campaigns with quality backlinks from relevant, high-DA domains.' },
+    { title: 'Local SEO', desc: 'Google Business Profile optimization, local citations, and geo-targeted strategies for local market dominance.' },
+    { title: 'SEO Audits & Reporting', desc: 'Comprehensive audits with actionable recommendations and monthly performance tracking.' },
+  ]}
+  benefits={[
+    'Higher organic rankings for target keywords',
+    'Increased website traffic from search engines',
+    'Better user experience through technical improvements',
+    'Higher conversion rates from intent-driven traffic',
+    'Long-term, sustainable online visibility',
+    'Competitive advantage in your local market',
+  ]}
+  process={[
+    { step: '01', title: 'SEO Audit', desc: 'Comprehensive analysis of your current SEO health, competitors, and keyword opportunities.' },
+    { step: '02', title: 'Strategy & Planning', desc: 'Custom SEO roadmap with prioritized actions based on impact and feasibility.' },
+    { step: '03', title: 'On-Page Optimization', desc: 'Content optimization, meta tag improvements, and internal linking structure updates.' },
+    { step: '04', title: 'Off-Page & Link Building', desc: 'Authority building through quality backlinks, PR, and content outreach.' },
+    { step: '05', title: 'Monitor & Iterate', desc: 'Continuous tracking, A/B testing, and algorithm-aligned refinements.' },
+  ]}
+  otherServices={otherServices}
+/>

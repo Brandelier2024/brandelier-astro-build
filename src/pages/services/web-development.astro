@@ -1,0 +1,43 @@
+---
+import ServicePage from '../../components/ServicePage.astro';
+
+const otherServices = [
+  { title: 'Social Media Marketing', href: '/services/social-media-marketing' },
+  { title: 'SEO Optimization', href: '/services/seo-optimization' },
+  { title: 'Content Marketing', href: '/services/content-marketing' },
+  { title: 'Brand Design', href: '/services/brand-design' },
+  { title: 'Videography & Photography', href: '/services/videography-photography' },
+];
+---
+
+<ServicePage
+  title="Web"
+  seoTitle="Web Development Company in Pune | Brandelier"
+  description="Build stunning, high-performance websites with Brandelier – a leading web development company in Pune offering custom design, e-commerce & UI/UX solutions."
+  heroHighlight="Development."
+  heroDescription="We build more than websites — we craft seamless digital journeys that convert visitors into customers."
+  features={[
+    { title: 'Custom Website Design', desc: 'Bespoke, pixel-perfect website designs tailored to your brand identity and business goals.' },
+    { title: 'E-commerce Development', desc: 'High-converting online stores with seamless checkout, inventory management, and payment integrations.' },
+    { title: 'Landing Pages', desc: 'Conversion-focused landing pages optimized for campaigns, lead generation, and product launches.' },
+    { title: 'UI/UX Design', desc: 'User-centered design that ensures intuitive navigation, accessibility, and delightful experiences.' },
+    { title: 'CMS Integration', desc: 'Easy-to-manage websites with WordPress, Shopify, or custom CMS solutions tailored to your workflow.' },
+    { title: 'Performance Optimization', desc: 'Lightning-fast load times, SEO-friendly architecture, and mobile-first responsive development.' },
+  ]}
+  benefits={[
+    'Professional, conversion-optimized web presence',
+    'Mobile-first responsive design across all devices',
+    'Fast page load speeds for better user experience and SEO',
+    'Easy content management with intuitive CMS tools',
+    'Secure, scalable architecture built for growth',
+    'Ongoing support and maintenance for peace of mind',
+  ]}
+  process={[
+    { step: '01', title: 'Discovery & Planning', desc: 'We understand your goals, audience, and requirements through detailed consultation.' },
+    { step: '02', title: 'Wireframing & Design', desc: 'Interactive wireframes and mockups for your approval before development begins.' },
+    { step: '03', title: 'Development', desc: 'Clean, efficient code with modern frameworks, ensuring speed and reliability.' },
+    { step: '04', title: 'Testing & QA', desc: 'Rigorous testing across devices and browsers to ensure a flawless launch.' },
+    { step: '05', title: 'Launch & Support', desc: 'Smooth deployment followed by ongoing monitoring, updates, and support.' },
+  ]}
+  otherServices={otherServices}
+/>

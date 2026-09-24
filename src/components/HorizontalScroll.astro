@@ -1,0 +1,49 @@
+---
+// HorizontalScroll.astro
+---
+<section class="horizontal-scroll-wrapper relative h-screen bg-slate-50 overflow-hidden">
+  <div class="pin-container flex h-full w-[300vw]">
+    
+    <div class="panel w-screen h-full flex flex-col justify-center px-12 md:px-24">
+      <span class="text-brand-orange font-semibold tracking-widest uppercase mb-4">Phase 01</span>
+      <h2 class="text-5xl md:text-7xl font-bold text-slate-900">The Blueprint.</h2>
+      <p class="text-xl md:text-2xl mt-6 text-slate-600 max-w-2xl">Where chaos becomes strategy. Storyboarding, location scouting, and mapping out visual transitions before we ever touch a camera.</p>
+    </div>
+    
+    <div class="panel w-screen h-full flex flex-col justify-center px-12 md:px-24">
+      <span class="text-brand-orange font-semibold tracking-widest uppercase mb-4">Phase 02</span>
+      <h2 class="text-5xl md:text-7xl font-bold text-slate-900">The Capture.</h2>
+      <p class="text-xl md:text-2xl mt-6 text-slate-600 max-w-2xl">Rigging lights, framing shadows, and calling action. Every movement on set is intentional, crafting the Brandelier visual signature.</p>
+    </div>
+    
+    <div class="panel w-screen h-full flex flex-col justify-center px-12 md:px-24">
+      <span class="text-brand-orange font-semibold tracking-widest uppercase mb-4">Phase 03</span>
+      <h2 class="text-5xl md:text-7xl font-bold text-slate-900">The Polish.</h2>
+      <p class="text-xl md:text-2xl mt-6 text-slate-600 max-w-2xl">Dialing in the colors, sound design, and rhythm in the edit bay. Transforming raw footage into compelling, cinematic narratives.</p>
+    </div>
+
+  </div>
+</section>
+
+<script>
+  import { gsap } from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  const panels = gsap.utils.toArray<HTMLElement>(".panel");
+  const container = document.querySelector<HTMLElement>(".pin-container");
+
+  if (container) {
+    gsap.to(panels, {
+      xPercent: -100 * (panels.length - 1),
+      ease: "none",
+      scrollTrigger: {
+        trigger: ".horizontal-scroll-wrapper",
+        pin: true,
+        scrub: 1,
+        end: () => "+=" + container.offsetWidth
+      }
+    });
+  }
+</script>

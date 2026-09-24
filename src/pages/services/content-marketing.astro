@@ -1,0 +1,43 @@
+---
+import ServicePage from '../../components/ServicePage.astro';
+
+const otherServices = [
+  { title: 'Social Media Marketing', href: '/services/social-media-marketing' },
+  { title: 'Web Development', href: '/services/web-development' },
+  { title: 'SEO Optimization', href: '/services/seo-optimization' },
+  { title: 'Videography & Photography', href: '/services/videography-photography' },
+  { title: 'Brand Design', href: '/services/brand-design' },
+];
+---
+
+<ServicePage
+  title="Content"
+  seoTitle="Content Marketing Services in Pune | Brandelier"
+  description="Strategic content marketing services in Pune by Brandelier. High-converting copy, blog writing, lead magnets, and editorial storytelling."
+  heroHighlight="Marketing."
+  heroDescription="Stories, systems, and purposeful content that keep your brand in constant forward motion. We create content that educates, inspires, and converts."
+  features={[
+    { title: 'Editorial & Blog Strategy', desc: 'Keyword-optimized articles and long-form authority guides that attract inbound organic traffic and build industry credibility.' },
+    { title: 'High-Converting Copywriting', desc: 'Punchy website copy, landing page messaging, sales decks, and ad copy engineered to provoke action.' },
+    { title: 'Email Marketing & Newsletters', desc: 'Nurture workflows, automated drip sequences, and editorial newsletters that retain subscribers and drive repeat revenue.' },
+    { title: 'Ebooks, Whitepapers & Case Studies', desc: 'In-depth lead generation assets that showcase your expertise and capture high-value prospective clients.' },
+    { title: 'Interactive & Social Copy', desc: 'Polls, quizzes, swipe carousels, and viral hooks crafted specifically for each social ecosystem.' },
+    { title: 'Content Distribution & Syndication', desc: 'Multi-channel distribution blueprints ensuring your message reaches the right eyes on the right platforms.' },
+  ]}
+  benefits={[
+    'Position your brand as the undisputed authority in your niche',
+    'Generate sustainable organic leads without paying for every single click',
+    'Boost customer lifetime value through consistent educational touchpoints',
+    'Form stronger emotional connections with clear, relatable storytelling',
+    'Unified voice and tone across every customer-facing touchpoint',
+    'Compounding return on investment as content libraries grow in search authority',
+  ]}
+  process={[
+    { step: '01', title: 'Audience Research & Tone Audit', desc: 'We uncover customer pain points, search habits, and establish your definitive brand voice.' },
+    { step: '02', title: 'Editorial Calendar & Roadmap', desc: 'Curating targeted topics, keyword themes, and content formats mapped to the customer journey.' },
+    { step: '03', title: 'Research & Creation', desc: 'Our writers and editors craft compelling, insightful drafts optimized for clarity and engagement.' },
+    { step: '04', title: 'Review & Polishing', desc: 'Iterative refinement, visual asset pairing, and strict SEO on-page compliance.' },
+    { step: '05', title: 'Publishing & Performance Analysis', desc: 'Multi-platform deployment paired with monthly tracking of traffic, reads, and conversion metrics.' },
+  ]}
+  otherServices={otherServices}
+/>

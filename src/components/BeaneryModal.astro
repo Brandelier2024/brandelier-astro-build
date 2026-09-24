@@ -1,0 +1,92 @@
+---
+// BeaneryModal.astro
+import '@phosphor-icons/web/regular';
+import { Image } from 'astro:assets';
+---
+<div id="beanery-modal" class="fixed inset-0 bg-[#f4f7ff]/95 backdrop-blur-xl flex flex-col justify-center items-center opacity-0 pointer-events-none transition-opacity duration-500 z-[100]">
+    
+    <button id="close-modal-btn" class="absolute top-6 right-6 text-[#53647d] hover:text-[#DD2EB8] hover:rotate-90 transition-all duration-300 z-50">
+        <i class="ph ph-x text-5xl"></i>
+    </button>
+
+    <div class="w-full max-w-7xl mx-auto px-6 mb-8 text-center mt-20 md:mt-0 transition-all duration-500" id="modal-header">
+        <h3 class="text-4xl md:text-6xl font-black text-[#00003E] mb-4">Beanery <span class="text-[#DD2EB8]">Unfiltered.</span></h3>
+        <p class="text-[#53647d] max-w-2xl mx-auto">Drag to explore the concepts, camera setups, styling, and creative decisions.</p>
+    </div>
+
+    <div class="w-full overflow-x-auto pb-12 pt-4 cursor-grab active:cursor-grabbing relative z-40" id="horizontal-scroll-container" style="scrollbar-width: none;">
+        <div class="flex gap-6 md:gap-10 px-6 md:px-[15vw] w-max items-center h-full">
+            <!-- Gallery Item (Light Theme Card) -->
+            <div class="w-[280px] md:w-[450px] aspect-[4/5] rounded-2xl overflow-hidden relative group shrink-0 shadow-xl bg-[#f4f7ff] border border-[#3F9AE6]/30">
+                <Image src="https://brandelier.in/wp-content/uploads/2026/08/TAG@LENSSHIMMMER-00268-scaled.jpg" width={900} height={1125} class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" alt="Camera Setup" />
+                <div class="absolute inset-0 bg-gradient-to-t from-white/95 via-white/40 to-transparent flex flex-col justify-end p-8 translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
+                    <span class="text-[#9B2FCA] text-xs font-bold tracking-widest uppercase mb-1">01 / Setup</span>
+                    <h4 class="text-[#00003E] text-2xl font-bold mb-2">Finding the Light</h4>
+                    <p class="text-[#53647d] text-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300">Dialing in the practical lights to match the café's natural ambient warmth.</p>
+                </div>
+            </div>
+            <!-- Add other gallery items here -->
+        </div>
+    </div>
+
+    <div class="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-4 w-full max-w-md px-6 z-50">
+        <div class="w-full h-1 bg-[#3F9AE6]/25 rounded-full overflow-hidden">
+            <div id="scroll-progress-bar" class="h-full bg-[#DD2EB8] w-0 transition-all duration-75 ease-out"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Astro isolates this script automatically
+    const modal = document.getElementById('beanery-modal')! as HTMLDivElement;
+    const slider = document.getElementById('horizontal-scroll-container')! as HTMLDivElement;
+    const progressBar = document.getElementById('scroll-progress-bar')! as HTMLDivElement;
+    const closeBtn = document.getElementById('close-modal-btn')! as HTMLButtonElement;
+    
+    let isDown = false;
+    let startX = 0;
+    let scrollLeft = 0;
+
+    // Ensure triggers open the modal
+    document.querySelectorAll('.open-gallery-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            modal.classList.remove('opacity-0', 'pointer-events-none');
+            document.body.style.overflow = 'hidden'; // Lock background scroll
+        });
+    });
+
+    closeBtn.addEventListener('click', () => {
+        modal.classList.add('opacity-0', 'pointer-events-none');
+        document.body.style.overflow = ''; // Restore scroll
+    });
+
+    function updateProgress() {
+        const maxScroll = slider.scrollWidth - slider.clientWidth;
+        progressBar.style.width = maxScroll > 0 ? (slider.scrollLeft / maxScroll) * 100 + '%' : '0%';
+    }
+
+    slider.addEventListener('scroll', updateProgress);
+    
+    // Convert vertical mouse wheel to horizontal scroll inside modal
+    modal.addEventListener('wheel', (e) => {
+        if (!modal.classList.contains('opacity-0') && Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
+            e.preventDefault();
+            slider.scrollLeft += e.deltaY;
+        }
+    }, { passive: false });
+
+    slider.addEventListener('mousedown', (e) => {
+        isDown = true;
+        startX = e.pageX - slider.offsetLeft;
+        scrollLeft = slider.scrollLeft;
+    });
+    slider.addEventListener('mouseleave', () => isDown = false);
+    slider.addEventListener('mouseup', () => isDown = false);
+    slider.addEventListener('mousemove', (e) => {
+        if (!isDown) return;
+        e.preventDefault();
+        const x = e.pageX - slider.offsetLeft;
+        slider.scrollLeft = scrollLeft - (x - startX) * 2;
+    });
+</script>

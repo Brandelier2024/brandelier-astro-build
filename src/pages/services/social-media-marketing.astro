@@ -1,0 +1,43 @@
+---
+import ServicePage from '../../components/ServicePage.astro';
+
+const otherServices = [
+  { title: 'Web Development', href: '/services/web-development' },
+  { title: 'SEO Optimization', href: '/services/seo-optimization' },
+  { title: 'Content Marketing', href: '/services/content-marketing' },
+  { title: 'Brand Design', href: '/services/brand-design' },
+  { title: 'Videography & Photography', href: '/services/videography-photography' },
+];
+---
+
+<ServicePage
+  title="Social Media"
+  seoTitle="Social Media Marketing Company in Pune | Brandelier"
+  description="Boost your social presence with Brandelier – expert social media marketing services in Pune for audience growth, engagement, and brand awareness."
+  heroHighlight="Marketing."
+  heroDescription="Build your brand voice, grow your audience, and drive real engagement across every platform that matters."
+  features={[
+    { title: 'Platform Strategy', desc: 'Tailored strategies for Instagram, Facebook, LinkedIn, Twitter, and emerging platforms aligned with your audience.' },
+    { title: 'Content Creation', desc: 'Thumb-stopping graphics, reels, stories, and carousels that reflect your brand and resonate with your audience.' },
+    { title: 'Community Management', desc: 'Active community engagement, comment moderation, and relationship building to foster loyal brand advocates.' },
+    { title: 'Paid Social Campaigns', desc: 'Data-driven ad campaigns across Meta, LinkedIn, and more to generate leads and drive conversions.' },
+    { title: 'Analytics & Reporting', desc: 'Comprehensive performance tracking with actionable insights and monthly reports.' },
+    { title: 'Influencer Collaborations', desc: 'Strategic influencer partnerships to expand reach and build credibility with your target audience.' },
+  ]}
+  benefits={[
+    'Increased brand visibility and awareness across platforms',
+    'Higher engagement rates with quality, targeted content',
+    'Measurable growth in followers, reach, and impressions',
+    'Data-driven decisions backed by regular analytics reports',
+    'Consistent brand voice and visual identity online',
+    'Cost-effective lead generation through paid campaigns',
+  ]}
+  process={[
+    { step: '01', title: 'Audit & Discovery', desc: 'We analyze your current social presence, competitors, and target audience to identify opportunities.' },
+    { step: '02', title: 'Strategy Development', desc: 'Custom social media strategy with content pillars, posting schedule, and KPIs.' },
+    { step: '03', title: 'Content Production', desc: 'Our creative team designs and produces platform-optimized content each month.' },
+    { step: '04', title: 'Campaign Management', desc: 'We manage posting, engagement, and paid campaigns while monitoring performance.' },
+    { step: '05', title: 'Report & Optimize', desc: 'Monthly reporting with insights and continuous optimization for better results.' },
+  ]}
+  otherServices={otherServices}
+/>

@@ -1,0 +1,44 @@
+---
+// DraggableGallery.astro
+import 'swiper/css';
+---
+<section class="py-24 bg-white overflow-hidden pl-12 md:pl-24">
+  <div class="mb-12">
+    <h2 class="text-4xl font-bold text-slate-900">Beanery Unfiltered.</h2>
+    <p class="text-slate-500 mt-2">Drag to explore the concepts, camera setups, styling, and creative decisions.</p>
+  </div>
+
+  <div class="swiper mySwiper w-full h-[500px] cursor-grab active:cursor-grabbing">
+    <div class="swiper-wrapper">
+      
+      <div class="swiper-slide bg-slate-50 border border-slate-100 rounded-3xl p-10 flex flex-col justify-end">
+        <span class="text-sm font-bold tracking-widest text-slate-400">01 / Setup</span>
+        <h3 class="text-3xl font-bold mt-4 text-slate-900">Finding the Light</h3>
+        <p class="mt-4 text-slate-600">Dialing in the practical lights to match the café's natural ambient warmth.</p>
+      </div>
+      
+      <div class="swiper-slide bg-slate-50 border border-slate-100 rounded-3xl p-10 flex flex-col justify-end">
+        <span class="text-sm font-bold tracking-widest text-slate-400">02 / Action</span>
+        <h3 class="text-3xl font-bold mt-4 text-slate-900">The Perfect Pour</h3>
+        <p class="mt-4 text-slate-600">Shooting at 120fps to capture the rich texture and steam of the espresso extraction.</p>
+      </div>
+      
+      <!-- Add slides 03 and 04 here -->
+
+    </div>
+  </div>
+</section>
+
+<script>
+  import Swiper from 'swiper';
+  
+  const swiper = new Swiper('.mySwiper', {
+    slidesPerView: 1.2,
+    spaceBetween: 24,
+    grabCursor: true,
+    breakpoints: {
+      768: { slidesPerView: 2.5 },
+      1024: { slidesPerView: 3.2 }
+    }
+  });
+</script>

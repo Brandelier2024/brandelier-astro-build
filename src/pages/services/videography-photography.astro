@@ -1,0 +1,43 @@
+---
+import ServicePage from '../../components/ServicePage.astro';
+
+const otherServices = [
+  { title: 'Social Media Marketing', href: '/services/social-media-marketing' },
+  { title: 'Web Development', href: '/services/web-development' },
+  { title: 'SEO Optimization', href: '/services/seo-optimization' },
+  { title: 'Content Marketing', href: '/services/content-marketing' },
+  { title: 'Brand Design', href: '/services/brand-design' },
+];
+---
+
+<ServicePage
+  title="Videography &"
+  seoTitle="Videography and Photography Services in Pune | Brandelier"
+  description="Lights, camera — video production that actually converts. Professional photography and videography in Pune by Brandelier Media Works."
+  heroHighlight="Photography."
+  heroDescription="Visual storytelling that captures your brand essence. From high-energy reels to cinematic brand commercials, we craft visuals that make audiences stop, watch, and remember."
+  features={[
+    { title: 'Commercial Brand Films', desc: 'Cinematic storytelling engineered to evoke emotion, explain your unique value proposition, and leave a lasting impression.' },
+    { title: 'Social Media Video & Reels', desc: 'Fast-paced, hook-driven vertical videos and short-form content designed to boost algorithm reach and audience engagement.' },
+    { title: 'Product & Commercial Photography', desc: 'Studio and on-location photography that highlights details, build premium perception, and drive conversion rates.' },
+    { title: 'Corporate & Event Coverage', desc: 'Dynamic coverage of company milestones, launch events, summits, and executive interviews.' },
+    { title: 'Post-Production & Color Grading', desc: 'High-end editing, sound design, motion graphics, and cinematic color grading to elevate raw footage into finished masterpieces.' },
+    { title: 'Creative Direction & Storyboarding', desc: 'Concept development, scriptwriting, shot lists, and moodboards to ensure every frame has purpose before we shoot.' },
+  ]}
+  benefits={[
+    'High-production value that positions your brand as an industry leader',
+    'Increased social engagement and watch time across Instagram, YouTube, and LinkedIn',
+    'Rich visual assets tailored for websites, ads, and multi-channel marketing campaigns',
+    'Full-service turnkey production: from concept and scripting to final cut',
+    'Experienced directors, cinematographers, and editors with top-tier camera packages',
+    'Measurable performance improvements in ad click-through and customer trust',
+  ]}
+  process={[
+    { step: '01', title: 'Concept & Scripting', desc: 'We collaborate to outline goals, develop narrative treatments, write scripts, and map out visual storyboards.' },
+    { step: '02', title: 'Pre-Production & Logistics', desc: 'Location scouting, casting, styling, gear preparation, and scheduling every minute of shoot day.' },
+    { step: '03', title: 'The Shoot', desc: 'Our production crew captures high-fidelity footage with professional lighting, cinema cameras, and crisp audio.' },
+    { step: '04', title: 'Post-Production', desc: 'Offline editing, sound design, music scoring, color grading, and motion graphics.' },
+    { step: '05', title: 'Delivery & Formatting', desc: 'Delivered in all necessary aspect ratios (16:9, 9:16, 1:1, 4:5) ready for web and ad campaigns.' },
+  ]}
+  otherServices={otherServices}
+/>
