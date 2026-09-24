@@ -3,6 +3,7 @@ import Layout from '../layouts/Layout.astro';
 import { Image } from 'astro:assets';
 import BtsExperience from '../components/BtsExperience.astro';
 import BeaneryModal from '../components/BeaneryModal.astro';
+import BrandReveal from '../components/BrandReveal.astro';
 
 const services = [
   ['01', 'Performance Marketing', 'Campaigns engineered to turn attention into measurable growth.', '/services/social-media-marketing'],
@@ -59,19 +60,8 @@ const featuredBlogs = [
 
 <Layout title="Best Digital Marketing Company in Pune | Brandelier.in" description="Brandelier Media Works is a results-driven digital marketing company in Pune offering SEO, social media, branding & web services to grow your business online.">
 
-  <section class="hero-section" id="top">
-    <div class="hero-copy">
-      <p class="eyebrow">Creative digital agency · Pune / India</p>
-      <h1>We create<br /><em>the brand.</em></h1>
-      <p class="hero-intro">At Brandelier, we fuse creativity and strategy to elevate brands in the digital world.</p>
-      <a class="text-link" href="/about-us">Discover Brandelier <span aria-hidden="true">↓</span></a>
-    </div>
-    <div class="hero-visual" aria-label="Brandelier production team at work">
-      <Image src="https://brandelier.in/wp-content/uploads/2026/08/Brandelier-.jpg-scaled.jpeg" alt="Brandelier production camera setup" width={1200} height={1400} loading="eager" />
-      <span class="visual-note">Ideas in<br />motion</span><span class="visual-index">01 / 04</span>
-    </div>
-    <div class="hero-scroll">Scroll to explore <span aria-hidden="true">↓</span></div>
-  </section>
+  <!-- Brand Reveal Intro Animation -->
+  <BrandReveal />
 
   <!-- Marquee Section -->
   <div class="marquee-section">
