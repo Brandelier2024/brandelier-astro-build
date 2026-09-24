@@ -44,6 +44,10 @@ p, span, a, input, select, textarea, button, label {
   font-family: var(--font-body);
 }
 
+em, i {
+  font-style: normal;
+}
+
 * {
   box-sizing: border-box;
 }
