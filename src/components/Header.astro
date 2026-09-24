@@ -178,7 +178,7 @@ const serviceItems = [
   }, { passive: true });
 
   // ========================================================
-  // SWIPE TO CALL LOGIC (Supports multiple widgets on page)
+  // SWIPE TO CALL LOGIC (Robust Pointer Events & Never-Stuck)
   // ========================================================
   function initSwipeSliders() {
     const containers = document.querySelectorAll('.swipe-call-ui');
@@ -188,89 +188,112 @@ const serviceItems = [
       const track = container.querySelector('.call-background') as HTMLElement | null;
       if (!slider || !callNumber || !track) return;
 
-      let isDragging = false;
-      let startX = 0;
-      let hasDialed = false;
+      const isDesktop = container.classList.contains('desktop-swipe-call');
+      const defaultLeft = isDesktop ? 6 : 8;
 
-      const getInitialLeft = () => {
-        const computed = window.getComputedStyle(slider);
-        return parseFloat(computed.left) || 6;
-      };
-      const initialLeft = getInitialLeft();
+      let isDragging = false;
+      let startPointerX = 0;
+      let startSliderX = defaultLeft;
+      let autoResetTimer: number | null = null;
 
       const getMaxMove = () => {
-        return track.clientWidth - slider.offsetWidth - initialLeft;
+        return Math.max(0, track.clientWidth - slider.offsetWidth - defaultLeft);
       };
 
       const resetSlider = () => {
-        slider.style.transition = 'left 0.3s cubic-bezier(0.16, 1, 0.3, 1)';
-        slider.style.left = `${initialLeft}px`;
+        isDragging = false;
+        slider.style.transition = 'left 0.35s cubic-bezier(0.16, 1, 0.3, 1)';
+        slider.style.left = `${defaultLeft}px`;
         callNumber.classList.remove('hide');
       };
 
-      const handleRelease = (currentLeft: number) => {
+      // Clean up inline transition when return animation completes
+      slider.addEventListener('transitionend', (e) => {
+        if (e.propertyName === 'left' && !isDragging) {
+          slider.style.transition = '';
+        }
+      });
+
+      // Pointer down (Mouse, Touch, Stylus)
+      slider.addEventListener('pointerdown', (e) => {
+        if (e.button !== 0 && e.pointerType === 'mouse') return;
+        e.preventDefault();
+
+        // Clear any pending auto-reset timer
+        if (autoResetTimer) {
+          clearTimeout(autoResetTimer);
+          autoResetTimer = null;
+        }
+
+        isDragging = true;
+        try {
+          slider.setPointerCapture(e.pointerId);
+        } catch (_) {}
+
+        // Cancel transition immediately so dragging feels immediate and responsive
+        slider.style.transition = 'none';
+
+        // Measure current position cleanly (works even if grabbed while returning)
+        const currentStyleLeft = parseFloat(slider.style.left);
+        startSliderX = !isNaN(currentStyleLeft) ? currentStyleLeft : defaultLeft;
+        startPointerX = e.clientX;
+
+        callNumber.classList.add('hide');
+      });
+
+      // Pointer move
+      slider.addEventListener('pointermove', (e) => {
+        if (!isDragging) return;
+        e.preventDefault();
+
         const maxMove = getMaxMove();
-        if (currentLeft >= maxMove * 0.55) {
-          hasDialed = true;
-          slider.style.transition = 'left 0.2s ease';
+        const deltaX = e.clientX - startPointerX;
+        let targetLeft = startSliderX + deltaX;
+
+        // Clamp between defaultLeft and maxMove
+        targetLeft = Math.max(defaultLeft, Math.min(targetLeft, maxMove));
+        slider.style.left = `${targetLeft}px`;
+      });
+
+      const onPointerEnd = (e: PointerEvent) => {
+        if (!isDragging) return;
+        isDragging = false;
+
+        try {
+          slider.releasePointerCapture(e.pointerId);
+        } catch (_) {}
+
+        const maxMove = getMaxMove();
+        const currentLeft = parseFloat(slider.style.left) || defaultLeft;
+        const threshold = defaultLeft + (maxMove - defaultLeft) * 0.55;
+
+        if (currentLeft >= threshold) {
+          // Swiped successfully to make call!
+          slider.style.transition = 'left 0.2s cubic-bezier(0.16, 1, 0.3, 1)';
           slider.style.left = `${maxMove}px`;
+
           setTimeout(() => {
             window.location.href = "tel:+917058670837";
-          }, 150);
+          }, 120);
+
+          // ALWAYS smoothly return slider back to original position after call
+          autoResetTimer = window.setTimeout(() => {
+            resetSlider();
+            autoResetTimer = null;
+          }, 1200);
         } else {
+          // Released below threshold -> smoothly return to start
           resetSlider();
         }
       };
 
-      // Mouse drag events
-      slider.addEventListener('mousedown', (e) => {
-        isDragging = true;
-        startX = e.clientX - slider.offsetLeft;
-        slider.style.transition = 'none';
-        callNumber.classList.add('hide');
-      });
+      slider.addEventListener('pointerup', onPointerEnd);
+      slider.addEventListener('pointercancel', onPointerEnd);
 
-      window.addEventListener('mousemove', (e) => {
-        if (!isDragging) return;
-        const maxMove = getMaxMove();
-        let moveX = e.clientX - startX;
-        moveX = Math.max(initialLeft, Math.min(moveX, maxMove));
-        slider.style.left = `${moveX}px`;
-      });
-
-      window.addEventListener('mouseup', () => {
-        if (!isDragging) return;
-        isDragging = false;
-        handleRelease(parseFloat(slider.style.left) || initialLeft);
-      });
-
-      // Touch events (for mobile devices)
-      slider.addEventListener('touchstart', (e) => {
-        isDragging = true;
-        startX = e.touches[0].clientX - slider.offsetLeft;
-        slider.style.transition = 'none';
-        callNumber.classList.add('hide');
-      }, { passive: true });
-
-      window.addEventListener('touchmove', (e) => {
-        if (!isDragging) return;
-        const maxMove = getMaxMove();
-        let moveX = e.touches[0].clientX - startX;
-        moveX = Math.max(initialLeft, Math.min(moveX, maxMove));
-        slider.style.left = `${moveX}px`;
-      }, { passive: true });
-
-      window.addEventListener('touchend', () => {
-        if (!isDragging) return;
-        isDragging = false;
-        handleRelease(parseFloat(slider.style.left) || initialLeft);
-      });
-
-      // Reset when user returns from phone dialer
+      // Also reset if tab visibility changes
       document.addEventListener('visibilitychange', () => {
-        if (document.visibilityState === 'visible' && hasDialed) {
+        if (document.visibilityState === 'visible') {
           resetSlider();
-          hasDialed = false;
         }
       });
     });
@@ -573,6 +596,7 @@ const serviceItems = [
     width: 17px;
     height: 17px;
     fill: white;
+    pointer-events: none;
   }
   .desktop-swipe-call .call-number {
     font-size: 10px;
@@ -596,6 +620,7 @@ const serviceItems = [
     width: 22px;
     height: 22px;
     fill: white;
+    pointer-events: none;
   }
   .mobile-swipe-call .call-number {
     font-size: 12px;
