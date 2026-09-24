@@ -86,7 +86,7 @@ const navLinks = [
   /* Default light page header styles (homepage top) */
   .brand-mark {
     color: var(--ink);
-    font-family: Arial, sans-serif;
+    font-family: var(--font-heading);
     font-size: 1.15rem;
     font-weight: 900;
     letter-spacing: -.07em;
@@ -98,7 +98,7 @@ const navLinks = [
   nav { display: flex; gap: 2rem; margin-left: auto; margin-right: 3rem; }
   nav a, .header-cta {
     color: var(--ink);
-    font-family: Arial, sans-serif;
+    font-family: var(--font-body);
     font-size: .72rem;
     letter-spacing: .08em;
     text-decoration: none;
@@ -202,15 +202,15 @@ const navLinks = [
     overflow-y: auto;
   }
   .mobile-nav-link {
-    font-family: Georgia, serif;
+    font-family: var(--font-heading);
     font-size: clamp(1.8rem, 6vw, 3rem);
     color: var(--ink); text-decoration: none;
-    font-weight: 400; letter-spacing: -.03em;
+    font-weight: 500; letter-spacing: -.03em;
     transition: color .2s;
   }
   .mobile-nav-link:hover, .mobile-nav-link.active { color: var(--pink); }
   .mobile-nav-cta {
-    font-family: Arial, sans-serif; font-size: .75rem;
+    font-family: var(--font-body); font-size: .75rem;
     letter-spacing: .12em; text-transform: uppercase;
     color: var(--paper); background: var(--ink);
     padding: 1rem 2rem; text-decoration: none;

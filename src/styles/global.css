@@ -1,1 +1,58 @@
 @import "tailwindcss";
+
+/* ========================================================
+   GLOBAL TYPOGRAPHY & DESIGN SYSTEM
+   Change fonts or brand colors for the ENTIRE website here!
+   ======================================================== */
+:root {
+  /* Fonts: Montserrat for Headings/Display, Open Sans for Body/UI */
+  --font-heading: 'Montserrat', sans-serif;
+  --font-body: 'Open Sans', sans-serif;
+
+  /* Brand Color Palette */
+  --ink: #00003e;
+  --paper: #f4f7ff;
+  --blue-bell: #3f9ae6;
+  --violet: #9b2fca;
+  --pink: #dd2eb8;
+  --caramel: #ebad74;
+  --muted: #53647d;
+  --line: rgba(0, 0, 62, 0.15);
+}
+
+html {
+  scroll-behavior: smooth;
+  overflow-x: hidden;
+}
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-body);
+  overflow-x: hidden;
+  width: 100%;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+}
+
+p, span, a, input, select, textarea, button, label {
+  font-family: var(--font-body);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+a {
+  transition: color .2s ease;
+}

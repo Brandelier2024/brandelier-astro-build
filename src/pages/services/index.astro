@@ -118,8 +118,8 @@ const services = [
 </Layout>
 
 <style>
-  .section-label { font-family: Arial, sans-serif; font-size: .7rem; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
-  h2 { font-family: Georgia, serif; font-size: clamp(3rem, 6vw, 6rem); font-weight: 400; letter-spacing: -.06em; line-height: .88; margin: 1.5rem 0 0; }
+  .section-label { font-family: var(--font-body); font-size: .7rem; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+  h2 { font-family: var(--font-heading); font-size: clamp(2.8rem, 6vw, 5.5rem); font-weight: 500; letter-spacing: -.04em; line-height: .95; margin: 1.5rem 0 0; }
   h2 em { color: var(--pink); font-style: italic; }
 
   /* Services Grid */
@@ -139,14 +139,14 @@ const services = [
     box-shadow: 0 20px 60px rgba(0,0,62,.08);
   }
   .service-card-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; }
-  .service-num { font-family: Arial, sans-serif; font-size: .72rem; color: var(--muted); letter-spacing: .08em; }
+  .service-num { font-family: var(--font-heading); font-size: .75rem; font-weight: 700; color: var(--muted); letter-spacing: .08em; }
   .service-arrow { font-size: 1.5rem; color: var(--muted); transition: color .2s, transform .2s; }
   .service-card:hover .service-arrow { color: var(--pink); transform: translate(3px, -3px); }
-  .service-card h2 { font-size: clamp(1.6rem, 2.5vw, 2.2rem); margin: 0 0 1rem; line-height: 1; }
-  .service-desc { font-family: Arial, sans-serif; font-size: .88rem; line-height: 1.55; color: var(--muted); margin: 0 0 2rem; flex-grow: 1; }
+  .service-card h2 { font-family: var(--font-heading); font-size: clamp(1.5rem, 2.3vw, 2rem); font-weight: 600; margin: 0 0 1rem; line-height: 1.1; }
+  .service-desc { font-family: var(--font-body); font-size: .9rem; line-height: 1.6; color: var(--muted); margin: 0 0 2rem; flex-grow: 1; }
   .service-features { display: flex; flex-wrap: wrap; gap: .5rem; }
   .feature-tag {
-    font-family: Arial, sans-serif; font-size: .68rem;
+    font-family: var(--font-body); font-size: .68rem;
     letter-spacing: .06em; text-transform: uppercase;
     padding: .4rem .8rem; border-radius: 100px;
     background: rgba(63,154,230,.08); color: var(--blue-bell);
@@ -160,14 +160,14 @@ const services = [
   .process-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; border-top: 1px solid rgba(244,247,255,.1); }
   .process-step { padding: 2rem; border-right: 1px solid rgba(244,247,255,.1); }
   .process-step:last-child { border-right: none; }
-  .process-num { font-family: Arial, sans-serif; font-size: .72rem; color: var(--blue-bell); letter-spacing: .08em; }
-  .process-step h3 { font-family: Georgia, serif; font-size: 1.4rem; font-weight: 400; margin: 3rem 0 1rem; }
-  .process-step p { font-family: Arial, sans-serif; font-size: .85rem; line-height: 1.55; color: rgba(244,247,255,.5); margin: 0; }
+  .process-num { font-family: var(--font-heading); font-size: .75rem; font-weight: 700; color: var(--blue-bell); letter-spacing: .08em; }
+  .process-step h3 { font-family: var(--font-heading); font-size: 1.35rem; font-weight: 600; margin: 3rem 0 1rem; }
+  .process-step p { font-family: var(--font-body); font-size: .88rem; line-height: 1.6; color: rgba(244,247,255,.6); margin: 0; }
 
   /* CTA */
   .services-cta { background: var(--ink); color: var(--paper); padding: 6rem 10vw 10rem; text-align: center; border-top: 1px solid rgba(63,154,230,.15); }
   .services-cta .section-label { color: var(--blue-bell); }
-  .cta-button { display: inline-flex; align-items: center; gap: 1rem; font-family: Arial, sans-serif; font-size: .78rem; letter-spacing: .12em; text-transform: uppercase; text-decoration: none; color: var(--paper); border: 1px solid var(--blue-bell); padding: 1.2rem 2.5rem; margin-top: 3rem; transition: background .3s, border-color .3s; }
+  .cta-button { display: inline-flex; align-items: center; gap: 1rem; font-family: var(--font-body); font-size: .78rem; letter-spacing: .12em; text-transform: uppercase; text-decoration: none; color: var(--paper); border: 1px solid var(--blue-bell); padding: 1.2rem 2.5rem; margin-top: 3rem; transition: background .3s, border-color .3s; }
   .cta-button:hover { background: rgba(63,154,230,.15); border-color: var(--paper); }
 
   @media (max-width: 960px) {

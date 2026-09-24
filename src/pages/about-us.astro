@@ -120,8 +120,8 @@ const stats = [
 </Layout>
 
 <style>
-  .section-label { font-family: Arial, sans-serif; font-size: .7rem; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
-  h2 { font-family: Georgia, serif; font-size: clamp(3rem, 6vw, 6rem); font-weight: 400; letter-spacing: -.06em; line-height: .88; margin: 1.5rem 0 0; }
+  .section-label { font-family: var(--font-body); font-size: .7rem; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+  h2 { font-family: var(--font-heading); font-size: clamp(2.8rem, 6vw, 5.5rem); font-weight: 500; letter-spacing: -.04em; line-height: .95; margin: 1.5rem 0 0; }
   h2 em { color: var(--pink); font-style: italic; }
 
   /* Story */
@@ -135,14 +135,14 @@ const stats = [
   .about-stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem; text-align: center; }
   .about-stat { padding: 2.5rem; border: 1px solid rgba(63,154,230,.15); border-radius: 16px; transition: border-color .3s, transform .3s; }
   .about-stat:hover { border-color: var(--pink); transform: translateY(-4px); }
-  .about-stat-num { display: block; font-family: Georgia, serif; font-size: clamp(3rem, 5vw, 4.5rem); color: var(--paper); letter-spacing: -.04em; line-height: 1; margin-bottom: .5rem; }
-  .about-stat-label { font-family: Arial, sans-serif; font-size: .7rem; letter-spacing: .14em; text-transform: uppercase; color: var(--blue-bell); }
+  .about-stat-num { display: block; font-family: var(--font-heading); font-size: clamp(3rem, 5vw, 4.5rem); font-weight: 700; color: var(--paper); letter-spacing: -.04em; line-height: 1; margin-bottom: .5rem; }
+  .about-stat-label { font-family: var(--font-body); font-size: .75rem; letter-spacing: .14em; text-transform: uppercase; color: var(--blue-bell); }
 
   /* Image Break */
   .about-image-break { position: relative; height: 60vh; min-height: 400px; overflow: hidden; }
   .about-image-break img { width: 100%; height: 100%; object-fit: cover; filter: saturate(.85); }
   .image-overlay-text { position: absolute; bottom: 3rem; left: 5vw; display: flex; flex-direction: column; }
-  .image-overlay-text span { font-family: Georgia, serif; font-size: clamp(2rem, 4vw, 3.5rem); color: white; letter-spacing: -.04em; line-height: 1; text-shadow: 0 2px 20px rgba(0,0,0,.5); }
+  .image-overlay-text span { font-family: var(--font-heading); font-size: clamp(2rem, 4vw, 3.5rem); font-weight: 600; color: white; letter-spacing: -.04em; line-height: 1.1; text-shadow: 0 2px 20px rgba(0,0,0,.5); }
   .image-overlay-text span:last-child { font-style: italic; color: var(--caramel); }
 
   /* Values */
@@ -152,8 +152,8 @@ const stats = [
   .value-card { padding: 2rem; border: 1px solid var(--line); border-radius: 16px; transition: border-color .3s, transform .3s; }
   .value-card:hover { border-color: var(--pink); transform: translateY(-4px); }
   .value-icon { display: block; font-size: 1.8rem; color: var(--pink); margin-bottom: 1.5rem; }
-  .value-card h3 { font-family: Georgia, serif; font-size: 1.4rem; font-weight: 400; margin: 0 0 .8rem; }
-  .value-card p { font-family: Arial, sans-serif; font-size: .85rem; line-height: 1.5; color: var(--muted); margin: 0; }
+  .value-card h3 { font-family: var(--font-heading); font-size: 1.35rem; font-weight: 600; margin: 0 0 .8rem; }
+  .value-card p { font-family: var(--font-body); font-size: .88rem; line-height: 1.6; color: var(--muted); margin: 0; }
 
   /* Team */
   .team-section { background: var(--ink); color: var(--paper); padding: 8rem 10vw; }
@@ -163,15 +163,15 @@ const stats = [
   .team-card { text-align: center; padding: 2rem; border: 1px solid rgba(63,154,230,.1); border-radius: 16px; transition: border-color .3s, transform .3s; }
   .team-card:hover { border-color: var(--pink); transform: translateY(-4px); }
   .team-avatar { width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(135deg, var(--violet), var(--pink)); display: flex; align-items: center; justify-content: center; margin: 0 auto 1.5rem; }
-  .team-avatar span { font-family: Arial, sans-serif; font-size: 1.2rem; font-weight: 700; color: white; letter-spacing: .05em; }
-  .team-card h3 { font-family: Georgia, serif; font-size: 1.2rem; font-weight: 400; margin: 0 0 .3rem; }
-  .team-role { font-family: Arial, sans-serif; font-size: .7rem; letter-spacing: .12em; text-transform: uppercase; color: var(--caramel); margin: 0 0 1rem; }
-  .team-desc { font-family: Arial, sans-serif; font-size: .8rem; line-height: 1.5; color: rgba(244,247,255,.5); margin: 0; }
+  .team-avatar span { font-family: var(--font-heading); font-size: 1.2rem; font-weight: 700; color: white; letter-spacing: .05em; }
+  .team-card h3 { font-family: var(--font-heading); font-size: 1.2rem; font-weight: 600; margin: 0 0 .3rem; }
+  .team-role { font-family: var(--font-body); font-size: .72rem; letter-spacing: .12em; text-transform: uppercase; color: var(--caramel); margin: 0 0 1rem; }
+  .team-desc { font-family: var(--font-body); font-size: .85rem; line-height: 1.55; color: rgba(244,247,255,.6); margin: 0; }
 
   /* CTA */
   .about-cta { background: var(--ink); color: var(--paper); padding: 8rem 10vw; border-top: 1px solid rgba(63,154,230,.15); text-align: center; }
   .about-cta .section-label { color: var(--blue-bell); }
-  .cta-button { display: inline-flex; align-items: center; gap: 1rem; font-family: Arial, sans-serif; font-size: .78rem; letter-spacing: .12em; text-transform: uppercase; text-decoration: none; color: var(--paper); border: 1px solid var(--blue-bell); padding: 1.2rem 2.5rem; margin-top: 3rem; transition: background .3s, border-color .3s; }
+  .cta-button { display: inline-flex; align-items: center; gap: 1rem; font-family: var(--font-body); font-size: .78rem; letter-spacing: .12em; text-transform: uppercase; text-decoration: none; color: var(--paper); border: 1px solid var(--blue-bell); padding: 1.2rem 2.5rem; margin-top: 3rem; transition: background .3s, border-color .3s; }
   .cta-button:hover { background: rgba(63,154,230,.15); border-color: var(--paper); }
 
   @media (max-width: 960px) {

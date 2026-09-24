@@ -21,6 +21,11 @@ const { title, description = 'Brandelier Media Works is a results-driven digital
     <meta name="description" content={description} />
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
+
+    <!-- Google Fonts: Montserrat (Headings) & Open Sans (Body/UI) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300..900;1,300..900&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet" />
   </head>
   <body>
     <Header />
@@ -30,32 +35,3 @@ const { title, description = 'Brandelier Media Works is a results-driven digital
     <Footer />
   </body>
 </html>
-
-<style is:global>
-  :root {
-    --ink: #00003e;
-    --paper: #f4f7ff;
-    --blue-bell: #3f9ae6;
-    --violet: #9b2fca;
-    --pink: #dd2eb8;
-    --caramel: #ebad74;
-    --muted: #53647d;
-    --line: rgba(0,0,62,.2);
-  }
-  html {
-    scroll-behavior: smooth;
-    overflow-x: hidden;
-  }
-  body {
-    margin: 0;
-    background: var(--paper);
-    color: var(--ink);
-    font-family: Georgia, 'Times New Roman', serif;
-    overflow-x: hidden;
-    width: 100%;
-    -webkit-font-smoothing: antialiased;
-  }
-  * { box-sizing: border-box; }
-  img { max-width: 100%; height: auto; }
-  a { transition: color .2s ease; }
-</style>

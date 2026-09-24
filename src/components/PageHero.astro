@@ -56,7 +56,7 @@ const { title, highlight, description, breadcrumb = [] } = Astro.props;
     z-index: 1;
   }
   .breadcrumb a {
-    font-family: Arial, sans-serif;
+    font-family: var(--font-body);
     font-size: .7rem;
     letter-spacing: .12em;
     text-transform: uppercase;
@@ -68,9 +68,9 @@ const { title, highlight, description, breadcrumb = [] } = Astro.props;
   .breadcrumb a:hover { color: var(--paper); }
   .sep { color: rgba(244,247,255,.25); font-size: .65rem; }
   h1 {
-    font-family: Georgia, serif;
+    font-family: var(--font-heading);
     font-size: clamp(2.4rem, 7.5vw, 6.5rem);
-    font-weight: 400;
+    font-weight: 500;
     letter-spacing: -.05em;
     line-height: .92;
     margin: 0 0 1.5rem;
@@ -84,7 +84,7 @@ const { title, highlight, description, breadcrumb = [] } = Astro.props;
     font-style: italic;
   }
   .hero-desc {
-    font-family: Georgia, serif;
+    font-family: var(--font-body);
     font-size: clamp(1rem, 1.6vw, 1.3rem);
     line-height: 1.5;
     color: rgba(244,247,255,.65);

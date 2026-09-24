@@ -116,9 +116,9 @@ import PageHero from '../components/PageHero.astro';
 
 <style>
   h2 {
-    font-family: Georgia, serif;
+    font-family: var(--font-heading);
     font-size: clamp(1.8rem, 3.5vw, 2.8rem);
-    font-weight: 400;
+    font-weight: 500;
     letter-spacing: -.04em;
     margin: 0 0 2rem;
   }
@@ -163,7 +163,7 @@ import PageHero from '../components/PageHero.astro';
   }
   .form-group label {
     display: block;
-    font-family: Arial, sans-serif;
+    font-family: var(--font-body);
     font-size: .7rem;
     letter-spacing: .12em;
     text-transform: uppercase;
@@ -179,7 +179,7 @@ import PageHero from '../components/PageHero.astro';
     padding: 1rem 1.1rem;
     border: 1px solid var(--line);
     border-radius: 12px;
-    font-family: Georgia, serif;
+    font-family: var(--font-body);
     font-size: 1rem; /* 16px to prevent iOS Safari auto-zoom */
     color: var(--ink);
     background: white;
@@ -222,7 +222,7 @@ import PageHero from '../components/PageHero.astro';
     display: inline-flex;
     align-items: center;
     gap: 1rem;
-    font-family: Arial, sans-serif;
+    font-family: var(--font-body);
     font-size: .78rem;
     letter-spacing: .12em;
     text-transform: uppercase;
@@ -261,7 +261,7 @@ import PageHero from '../components/PageHero.astro';
     box-shadow: 0 10px 30px rgba(0,0,62,.04);
   }
   .info-card h3 {
-    font-family: Arial, sans-serif;
+    font-family: var(--font-heading);
     font-size: .7rem;
     letter-spacing: .14em;
     text-transform: uppercase;
@@ -276,7 +276,7 @@ import PageHero from '../components/PageHero.astro';
   }
   .info-label {
     display: block;
-    font-family: Arial, sans-serif;
+    font-family: var(--font-body);
     font-size: .65rem;
     letter-spacing: .1em;
     text-transform: uppercase;
@@ -285,7 +285,7 @@ import PageHero from '../components/PageHero.astro';
   }
   .info-item a,
   .info-item span {
-    font-family: Arial, sans-serif;
+    font-family: var(--font-body);
     font-size: .88rem;
     color: var(--ink);
     text-decoration: none;
@@ -297,7 +297,7 @@ import PageHero from '../components/PageHero.astro';
     color: var(--pink);
   }
   .address {
-    font-family: Arial, sans-serif;
+    font-family: var(--font-body);
     font-size: .88rem;
     line-height: 1.65;
     color: var(--muted);
@@ -310,7 +310,7 @@ import PageHero from '../components/PageHero.astro';
     gap: .75rem;
   }
   .social-links a {
-    font-family: Arial, sans-serif;
+    font-family: var(--font-body);
     font-size: .72rem;
     letter-spacing: .08em;
     text-transform: uppercase;
