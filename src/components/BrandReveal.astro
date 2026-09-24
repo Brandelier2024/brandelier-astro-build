@@ -1,12 +1,14 @@
 ---
-// BrandReveal.astro — Scroll-driven 3D laptop/phone brand reveal intro
-// Refined proportions, sleek closed-lid profile, cinematic pacing
+// BrandReveal.astro — Scroll-driven 3D brand reveal intro
+// High-performance, GPU-accelerated, responsive with gsap.matchMedia
+import { Image } from 'astro:assets';
+import heroPhoto from '../assets/images/_uploads/2026/08/Brandelier-.jpg-scaled.jpeg';
 ---
 
 <section class="reveal-scroll-container" id="revealScrollContainer">
   <div class="reveal-sticky-scene" id="revealStickyScene">
 
-    <!-- Ambient background aura -->
+    <!-- Ambient background aura glow -->
     <div class="reveal-bg-glow" aria-hidden="true"></div>
 
     <!-- Phase 1: Intro Headline -->
@@ -24,13 +26,11 @@
     </div>
 
     <!-- Phase 2a: Laptop Device (Desktop / Tablet) -->
-    <div class="reveal-device-wrapper reveal-laptop-wrap" id="revealLaptop">
+    <div class="reveal-device-wrapper reveal-laptop-wrap" id="revealLaptop" aria-hidden="true">
       <div class="reveal-laptop-lid-container" id="revealLaptopLid">
         <div class="reveal-laptop-lid">
-          <!-- Top edge camera dot -->
-          <div class="reveal-laptop-camera" aria-hidden="true"></div>
+          <div class="reveal-laptop-camera"></div>
           
-          <!-- Inner screen display -->
           <div class="reveal-screen-inner" id="revealLaptopScreen">
             <div class="reveal-screen-flash" id="revealLaptopFlash"></div>
             <div class="reveal-screen-logo" id="revealLaptopLogo">
@@ -39,16 +39,15 @@
           </div>
         </div>
       </div>
-      <!-- Laptop Unibody Base -->
+
       <div class="reveal-laptop-base">
         <div class="reveal-laptop-notch"></div>
       </div>
-      <!-- Soft ambient shadow beneath laptop -->
-      <div class="reveal-laptop-shadow" aria-hidden="true"></div>
+      <div class="reveal-laptop-shadow"></div>
     </div>
 
     <!-- Phase 2b: Phone Device (Mobile) -->
-    <div class="reveal-device-wrapper reveal-phone-wrap" id="revealPhone">
+    <div class="reveal-device-wrapper reveal-phone-wrap" id="revealPhone" aria-hidden="true">
       <div class="reveal-phone-body" id="revealPhoneBody">
         <div class="reveal-phone-notch"></div>
         <div class="reveal-screen-inner" id="revealPhoneScreen">
@@ -58,7 +57,7 @@
           </div>
         </div>
       </div>
-      <div class="reveal-phone-shadow" aria-hidden="true"></div>
+      <div class="reveal-phone-shadow"></div>
     </div>
 
     <!-- Phase 3: Hero Section Curtain (Revealed seamlessly upon zoom) -->
@@ -81,11 +80,17 @@
         </div>
 
         <div class="reveal-hero-visual" aria-label="Brandelier production team at work">
-          <img
-            src="https://brandelier.in/wp-content/uploads/2026/08/Brandelier-.jpg-scaled.jpeg"
+          <Image
+            src={heroPhoto}
             alt="Brandelier production camera setup"
             class="reveal-hero-img"
+            width={900}
+            height={1100}
+            format="webp"
+            quality={82}
             loading="eager"
+            decoding="async"
+            fetchpriority="high"
           />
           <span class="reveal-visual-note">Ideas in<br />motion</span>
           <span class="reveal-visual-index">01 / 04</span>
@@ -101,176 +106,269 @@
   </div>
 </section>
 
-<!-- GSAP Animation Engine -->
-<script is:inline src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-<script is:inline src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-<script is:inline>
-  (function initBrandReveal() {
-    function setup() {
-      if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') {
-        setTimeout(setup, 50);
-        return;
-      }
+<script>
+  import { gsap } from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
-      gsap.registerPlugin(ScrollTrigger);
+  gsap.registerPlugin(ScrollTrigger);
 
-      var container = document.getElementById('revealScrollContainer');
-      if (!container) return;
+  let mm: ReturnType<typeof gsap.matchMedia> | null = null;
 
-      var header = document.getElementById('site-header');
+  function cleanupBrandReveal() {
+    if (mm) {
+      mm.revert();
+      mm = null;
+    }
+  }
 
-      // Sync header dark mode initially
-      if (header && window.scrollY < window.innerHeight * 2.0) {
-        header.classList.add('is-dark-hero');
-      }
+  function initBrandReveal() {
+    cleanupBrandReveal();
 
-      var isMobile = window.innerWidth < 768;
-      var laptopEl = document.getElementById('revealLaptop');
-      var phoneEl  = document.getElementById('revealPhone');
+    const container = document.getElementById('revealScrollContainer');
+    if (!container) return;
 
-      if (isMobile) {
-        if (phoneEl) phoneEl.classList.add('is-active');
-        if (laptopEl) laptopEl.classList.remove('is-active');
-      } else {
-        if (laptopEl) laptopEl.classList.add('is-active');
-        if (phoneEl) phoneEl.classList.remove('is-active');
-      }
+    const header = document.getElementById('site-header');
+    const laptop = document.getElementById('revealLaptop');
+    const phone = document.getElementById('revealPhone');
+    
+    mm = gsap.matchMedia();
 
-      var activeWrapper = isMobile ? '#revealPhone' : '#revealLaptop';
-      var activeFlash   = isMobile ? '#revealPhoneFlash' : '#revealLaptopFlash';
-      var activeLogo    = isMobile ? '#revealPhoneLogo' : '#revealLaptopLogo';
-      var zoomScale     = isMobile ? 8.5 : 12;
-      var zoomOrigin    = isMobile ? '50% 50%' : '50% 43%';
+    // 1. Accessibility: Instant Hero for Reduced Motion Users
+    mm.add('(prefers-reduced-motion: reduce)', () => {
+      gsap.set('#revealIntroText', { autoAlpha: 0, display: 'none' });
+      gsap.set(['#revealLaptop', '#revealPhone'], { autoAlpha: 0, display: 'none' });
+      gsap.set('#revealHeroCurtain', { opacity: 1, pointerEvents: 'auto' });
+      gsap.set('#revealHeroContent', { opacity: 1, y: 0 });
+      if (header) header.classList.remove('is-dark-hero');
+    });
 
-      // Set initial state
-      gsap.set(activeWrapper, { opacity: 0, scale: 0.72 });
-      if (!isMobile) {
-        gsap.set('#revealLaptopLid', { rotationX: -88 });
-      } else {
-        gsap.set('#revealPhoneBody', { rotationX: 25 });
-      }
+    // 2. Desktop & Tablet: Sleek 3D Laptop Reveal (>= 768px)
+    mm.add('(min-width: 768px) and (prefers-reduced-motion: no-preference)', () => {
+      if (phone) phone.style.display = 'none';
+      if (laptop) laptop.style.display = 'flex';
 
-      // Master Timeline: mapped across container scroll
-      var tl = gsap.timeline({
+      // Set initial states
+      gsap.set('#revealLaptop', { autoAlpha: 0, scale: 0.72 });
+      gsap.set('#revealLaptopLid', { rotationX: -88 });
+      gsap.set('#revealLaptopFlash', { opacity: 0 });
+      gsap.set('#revealLaptopLogo', { opacity: 0 });
+      gsap.set('#revealLaptopShadow', { opacity: 0.65 });
+      gsap.set('#revealHeroCurtain', { opacity: 0, pointerEvents: 'none' });
+      gsap.set('#revealHeroContent', { opacity: 0, y: 30 });
+
+      let isDarkState = true;
+
+      const tl = gsap.timeline({
         scrollTrigger: {
-          trigger: '#revealScrollContainer',
+          trigger: container,
           start: 'top top',
           end: 'bottom bottom',
           scrub: 1.0,
           pin: false,
-          onUpdate: function(self) {
-            // Header theme switch: dark during intro/zoom, light once hero curtain shows
-            if (header) {
-              if (self.progress > 0.70) {
-                header.classList.remove('is-dark-hero');
-              } else {
-                header.classList.add('is-dark-hero');
-              }
+          onUpdate: (self) => {
+            const shouldBeDark = self.progress <= 0.68;
+            if (shouldBeDark !== isDarkState) {
+              isDarkState = shouldBeDark;
+              if (header) header.classList.toggle('is-dark-hero', isDarkState);
             }
           }
         }
       });
 
-      // 0.0 -> 1.5: Intro headline fades out & floats up
-      tl.to('#revealIntroText', {
-        opacity: 0,
-        y: -45,
-        scale: 0.95,
-        duration: 1.5,
-        ease: 'power2.inOut'
-      })
-
-      // 1.5 -> 2.6: Sleek compact device fades in
-      .to(activeWrapper, {
-        opacity: 1,
-        scale: 0.78,
-        duration: 1.1,
-        ease: 'power2.out'
-      }, '-=0.3')
-
-      // 2.6 -> 4.4: Device opens upright & scales to full 1.0 natural size
-      if (!isMobile) {
-        tl.to('#revealLaptopLid', {
+      tl
+        // Step 1: Intro headline floats up & vanishes
+        .to('#revealIntroText', {
+          autoAlpha: 0,
+          y: -45,
+          scale: 0.95,
+          duration: 1.5,
+          ease: 'power2.inOut'
+        })
+        // Step 2: Sleek compact closed laptop fades in
+        .to('#revealLaptop', {
+          autoAlpha: 1,
+          scale: 0.78,
+          duration: 1.1,
+          ease: 'power2.out'
+        }, '-=0.3')
+        // Step 3: Laptop lid opens smoothly & scales to 1.0 natural size
+        .to('#revealLaptopLid', {
           rotationX: 0,
           duration: 1.8,
           ease: 'power2.inOut'
         })
-        .to(activeWrapper, {
+        .to('#revealLaptop', {
           scale: 1.0,
           duration: 1.8,
           ease: 'power2.inOut'
-        }, '<');
-      } else {
-        tl.to('#revealPhoneBody', {
+        }, '<')
+        // Step 4: Display screen flashes on and reveals BRANDELIER. logo
+        .to('#revealLaptopFlash', {
+          opacity: 0.95,
+          duration: 0.22,
+          ease: 'power1.out'
+        })
+        .to('#revealLaptopLogo', {
+          opacity: 1,
+          duration: 0.12
+        })
+        .to('#revealLaptopFlash', {
+          opacity: 0,
+          duration: 0.45,
+          ease: 'power2.out'
+        })
+        .to({}, { duration: 0.4 }) // Pause to view lit logo
+        // Step 5: Fade shadow & zoom deep into the display
+        .to('#revealLaptopShadow', {
+          opacity: 0,
+          duration: 0.6,
+          ease: 'power2.in'
+        }, 'zoomStart')
+        .to('#revealLaptop', {
+          scale: 12,
+          transformOrigin: '50% 43%',
+          duration: 2.2,
+          ease: 'power3.inOut'
+        }, 'zoomStart')
+        .to('#revealLaptopLogo', {
+          opacity: 0,
+          scale: 2.0,
+          duration: 0.9,
+          ease: 'power2.in'
+        }, '-=1.4')
+        // Step 6: Hero Curtain fades in seamlessly
+        .to('#revealHeroCurtain', {
+          opacity: 1,
+          pointerEvents: 'auto',
+          duration: 0.8,
+          ease: 'power2.out'
+        }, '-=0.7')
+        .to('#revealHeroContent', {
+          y: 0,
+          opacity: 1,
+          duration: 1.0,
+          ease: 'power2.out'
+        }, '-=0.4')
+        // Deallocate massive 12x GPU transformed element once curtain covers screen
+        .set('#revealLaptop', { autoAlpha: 0 })
+        // Resting zone for hero content
+        .to({}, { duration: 1.8 });
+    });
+
+    // 3. Mobile: Sleek 3D Smartphone Reveal (< 768px)
+    mm.add('(max-width: 767px) and (prefers-reduced-motion: no-preference)', () => {
+      if (laptop) laptop.style.display = 'none';
+      if (phone) phone.style.display = 'flex';
+
+      // Set initial states
+      gsap.set('#revealPhone', { autoAlpha: 0, scale: 0.75 });
+      gsap.set('#revealPhoneBody', { rotationX: 25 });
+      gsap.set('#revealPhoneFlash', { opacity: 0 });
+      gsap.set('#revealPhoneLogo', { opacity: 0 });
+      gsap.set('#revealPhoneShadow', { opacity: 0.6 });
+      gsap.set('#revealHeroCurtain', { opacity: 0, pointerEvents: 'none' });
+      gsap.set('#revealHeroContent', { opacity: 0, y: 25 });
+
+      let isDarkState = true;
+
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: container,
+          start: 'top top',
+          end: 'bottom bottom',
+          scrub: 1.0,
+          pin: false,
+          onUpdate: (self) => {
+            const shouldBeDark = self.progress <= 0.68;
+            if (shouldBeDark !== isDarkState) {
+              isDarkState = shouldBeDark;
+              if (header) header.classList.toggle('is-dark-hero', isDarkState);
+            }
+          }
+        }
+      });
+
+      tl
+        .to('#revealIntroText', {
+          autoAlpha: 0,
+          y: -35,
+          scale: 0.95,
+          duration: 1.5,
+          ease: 'power2.inOut'
+        })
+        .to('#revealPhone', {
+          autoAlpha: 1,
+          scale: 0.85,
+          duration: 1.1,
+          ease: 'power2.out'
+        }, '-=0.3')
+        .to('#revealPhoneBody', {
           rotationX: 0,
           duration: 1.8,
           ease: 'power2.inOut'
         })
-        .to(activeWrapper, {
+        .to('#revealPhone', {
           scale: 1.0,
           duration: 1.8,
           ease: 'power2.inOut'
-        }, '<');
-      }
+        }, '<')
+        .to('#revealPhoneFlash', {
+          opacity: 0.95,
+          duration: 0.22,
+          ease: 'power1.out'
+        })
+        .to('#revealPhoneLogo', {
+          opacity: 1,
+          duration: 0.12
+        })
+        .to('#revealPhoneFlash', {
+          opacity: 0,
+          duration: 0.45,
+          ease: 'power2.out'
+        })
+        .to({}, { duration: 0.4 })
+        .to('#revealPhoneShadow', {
+          opacity: 0,
+          duration: 0.6,
+          ease: 'power2.in'
+        }, 'zoomPhoneStart')
+        .to('#revealPhone', {
+          scale: 8.5,
+          transformOrigin: '50% 50%',
+          duration: 2.2,
+          ease: 'power3.inOut'
+        }, 'zoomPhoneStart')
+        .to('#revealPhoneLogo', {
+          opacity: 0,
+          scale: 1.8,
+          duration: 0.9,
+          ease: 'power2.in'
+        }, '-=1.4')
+        .to('#revealHeroCurtain', {
+          opacity: 1,
+          pointerEvents: 'auto',
+          duration: 0.8,
+          ease: 'power2.out'
+        }, '-=0.7')
+        .to('#revealHeroContent', {
+          y: 0,
+          opacity: 1,
+          duration: 1.0,
+          ease: 'power2.out'
+        }, '-=0.4')
+        // Deallocate phone GPU transformed layer once curtain covers screen
+        .set('#revealPhone', { autoAlpha: 0 })
+        .to({}, { duration: 1.8 });
+    });
 
-      // 4.4 -> 5.2: Screen wakes up with quick flash and reveals BRANDELIER. logo
-      tl.to(activeFlash, {
-        opacity: 0.95,
-        duration: 0.22,
-        ease: 'power1.out'
-      })
-      .to(activeLogo, {
-        opacity: 1,
-        duration: 0.12
-      })
-      .to(activeFlash, {
-        opacity: 0,
-        duration: 0.45,
-        ease: 'power2.out'
-      })
+    ScrollTrigger.refresh();
+  }
 
-      // Brief pause to admire the lit brand display
-      .to({}, { duration: 0.4 })
-
-      // 5.6 -> 7.8: Camera zooms deep into the display
-      .to(activeWrapper, {
-        scale: zoomScale,
-        transformOrigin: zoomOrigin,
-        duration: 2.2,
-        ease: 'power3.inOut'
-      })
-      .to(activeLogo, {
-        opacity: 0,
-        scale: 2.0,
-        duration: 0.9,
-        ease: 'power2.in'
-      }, '-=1.4')
-
-      // 7.4 -> 8.2: Hero Curtain fades in seamlessly
-      .to('#revealHeroCurtain', {
-        opacity: 1,
-        pointerEvents: 'auto',
-        duration: 0.8,
-        ease: 'power2.out'
-      }, '-=0.7')
-      .fromTo('#revealHeroContent', 
-        { y: 30, opacity: 0 },
-        { y: 0, opacity: 1, duration: 1.0, ease: 'power2.out' },
-        '-=0.4'
-      )
-
-      // 8.2 -> 10.0: Stationary hero rest zone so the user comfortably sees the full hero before scrolling into next section
-      .to({}, { duration: 1.8 });
-
-      ScrollTrigger.refresh();
-    }
-
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', setup);
-    } else {
-      setup();
-    }
-  })();
+  // Initialize on load and on Astro view transition navigation
+  initBrandReveal();
+  document.addEventListener('astro:page-load', initBrandReveal);
+  document.addEventListener('astro:before-swap', cleanupBrandReveal);
+  window.addEventListener('pagehide', cleanupBrandReveal);
 </script>
 
 <style>
@@ -296,7 +394,7 @@
     perspective-origin: 50% 50%;
   }
 
-  /* Soft ambient background radial gradient */
+  /* Soft ambient background radial aura */
   .reveal-bg-glow {
     position: absolute;
     width: 65vw;
@@ -318,6 +416,7 @@
     flex-direction: column;
     align-items: center;
     pointer-events: none;
+    will-change: transform, opacity;
   }
 
   .reveal-intro-eyebrow {
@@ -382,29 +481,44 @@
   /* ================= 3D DEVICE SHARED WRAPPER ================= */
   .reveal-device-wrapper {
     position: absolute;
-    display: none;
     flex-direction: column;
     align-items: center;
     transform-style: preserve-3d;
     opacity: 0;
-    transform: scale(0.72);
     z-index: 5;
     will-change: transform, opacity;
+    backface-visibility: hidden;
+    pointer-events: none;
   }
 
-  .reveal-device-wrapper.is-active {
-    display: flex !important;
+  /* Desktop Viewport (>= 768px): Laptop only */
+  @media (min-width: 768px) {
+    .reveal-laptop-wrap {
+      display: flex;
+    }
+    .reveal-phone-wrap {
+      display: none !important;
+    }
+  }
+
+  /* Mobile Viewport (< 768px): Phone only */
+  @media (max-width: 767px) {
+    .reveal-laptop-wrap {
+      display: none !important;
+    }
+    .reveal-phone-wrap {
+      display: flex;
+    }
   }
 
   /* ================= REFINED LAPTOP STYLES ================= */
-  /* Refined, compact dimensions — NEVER oversized when closed */
   .reveal-laptop-lid-container {
     transform-style: preserve-3d;
     position: relative;
     z-index: 2;
     transform-origin: bottom center;
-    transform: rotateX(-88deg);
     will-change: transform;
+    backface-visibility: hidden;
   }
 
   .reveal-laptop-lid {
@@ -421,6 +535,7 @@
     align-items: center;
     position: relative;
     box-sizing: border-box;
+    backface-visibility: hidden;
   }
 
   .reveal-laptop-camera {
@@ -525,8 +640,9 @@
     box-shadow: 
       inset 0 0 0 2px rgba(255, 255, 255, 0.15),
       0 20px 45px rgba(0, 0, 0, 0.85);
-    transform: rotateX(25deg);
     transform-style: preserve-3d;
+    backface-visibility: hidden;
+    will-change: transform;
   }
 
   .reveal-phone-notch {
@@ -573,6 +689,7 @@
     padding: 110px 5vw 50px;
     box-sizing: border-box;
     overflow: hidden;
+    will-change: opacity;
   }
 
   .reveal-hero-content {
@@ -583,6 +700,7 @@
     max-width: 1400px;
     margin: 0 auto;
     width: 100%;
+    will-change: transform, opacity;
   }
 
   .reveal-hero-copy {
@@ -739,6 +857,33 @@
     }
     .reveal-hero-scroll-cue {
       display: none;
+    }
+  }
+
+  /* Accessibility: Zero-motion instant layout */
+  @media (prefers-reduced-motion: reduce) {
+    .reveal-scroll-container {
+      height: auto !important;
+      min-height: 100vh;
+    }
+    .reveal-sticky-scene {
+      position: relative !important;
+      height: auto !important;
+      min-height: 100vh;
+    }
+    .reveal-intro-text,
+    .reveal-device-wrapper,
+    .reveal-bg-glow {
+      display: none !important;
+    }
+    .reveal-hero-curtain {
+      position: relative !important;
+      opacity: 1 !important;
+      pointer-events: auto !important;
+    }
+    .reveal-hero-content {
+      opacity: 1 !important;
+      transform: none !important;
     }
   }
 </style>
