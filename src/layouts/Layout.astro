@@ -2,6 +2,7 @@
 // Layout.astro — Shared page layout
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import ScrollAnimations from '../components/ScrollAnimations.astro';
 import '../styles/global.css';
 
 interface Props {
@@ -36,6 +37,7 @@ const { title, description = 'Brandelier Media Works is a results-driven digital
     <main>
       <slot />
     </main>
+    <ScrollAnimations />
     <Footer />
   </body>
 </html>

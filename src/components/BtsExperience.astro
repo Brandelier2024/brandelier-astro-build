@@ -1,19 +1,32 @@
 ---
-// BtsExperience.astro
+// BtsExperience.astro — Full Behind-the-Scenes cinematic experience
 import { Image } from 'astro:assets';
 ---
+
 <div id="brandelier-bts-env" class="relative bg-[#f4f7ff] text-[#00003E] w-full min-h-screen overflow-clip">
-    <!-- Atmospheric Backgrounds (Light Theme) -->
+    <!-- Atmospheric Canvas -->
     <canvas id="studio-dust-canvas" class="fixed top-0 left-0 w-screen h-screen pointer-events-none z-0 opacity-60"></canvas>
+
     <div class="relative z-20">
-        <!-- Hero Section -->
+        <!-- ================================ -->
+        <!-- HERO SECTION                     -->
+        <!-- ================================ -->
         <section class="hero-section relative min-h-screen flex items-center justify-center pt-20 pb-10 px-6">
-            <!-- Floating Images -->
+            <!-- Floating Parallax Images -->
             <div class="floating-img absolute w-40 md:w-64 h-56 md:h-80 top-[15%] left-[5%] md:left-[10%] rotate-[-8deg] rounded-xl overflow-hidden shadow-2xl z-10" data-speed="0.1" data-parallax="1.5">
                 <Image src="https://brandelier.in/wp-content/uploads/2026/08/Brandelier-.jpg-scaled.jpeg" width={600} height={800} class="w-full h-full object-cover grayscale-[40%] hover:grayscale-0 transition-all duration-500 scale-110" alt="Camera Setup" />
             </div>
-            <!-- Add the other floating images here following the same light-theme shadow logic -->
+            <div class="floating-img absolute w-32 md:w-56 h-40 md:h-72 top-[20%] right-[-2%] md:right-[5%] rotate-[10deg] rounded-xl overflow-hidden shadow-2xl z-10" data-speed="0.05" data-parallax="-1.2">
+                <Image src="https://brandelier.in/wp-content/uploads/2026/08/WhatsApp-Image-2026-08-25-at-2.02.42-AM.jpeg" width={600} height={800} class="w-full h-full object-cover grayscale-[40%] hover:grayscale-0 transition-all duration-500 scale-110" alt="On Set" />
+            </div>
+            <div class="floating-img hide-mobile absolute w-48 h-64 bottom-[15%] left-[12%] rotate-[12deg] rounded-xl overflow-hidden shadow-2xl z-10" data-speed="0.15" data-parallax="2">
+                <Image src="https://brandelier.in/wp-content/uploads/2026/08/Brandelier-3.jpg-scaled.jpeg" width={600} height={800} class="w-full h-full object-cover grayscale-[40%] hover:grayscale-0 transition-all duration-500 scale-110" alt="Directing" />
+            </div>
+            <div class="floating-img hide-mobile absolute w-56 h-56 bottom-[20%] right-[15%] rotate-[-15deg] rounded-xl overflow-hidden shadow-2xl z-10" data-speed="0.08" data-parallax="-1.8">
+                <Image src="https://brandelier.in/wp-content/uploads/2026/08/TAG@LENSSHIMMMER-00268-scaled.jpg" width={600} height={600} class="w-full h-full object-cover grayscale-[40%] hover:grayscale-0 transition-all duration-500 scale-110" alt="Lighting Setup" />
+            </div>
 
+            <!-- Hero Text Content -->
             <div class="hero-content text-center max-w-4xl mx-auto pointer-events-none z-30">
                 <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#3F9AE6]/15 border border-[#3F9AE6]/40 backdrop-blur-md mb-8 fade-in-up">
                     <span class="w-2 h-2 rounded-full bg-[#DD2EB8] shadow-[0_0_8px_#DD2EB8] animate-pulse"></span>
@@ -29,15 +42,23 @@ import { Image } from 'astro:assets';
                     Unfiltered moments from our sets. This is where strategy meets storytelling, lights are perfected, and the vision comes to life.
                 </p>
             </div>
+
+            <!-- Scroll Indicator -->
+            <div class="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3 fade-in-up opacity-50 z-20">
+                <span class="text-[10px] tracking-[0.3em] uppercase text-[#00003E] font-bold">Scroll to Explore</span>
+                <div class="w-[1px] h-12 bg-gradient-to-b from-[#DD2EB8] to-transparent bts-bounce-subtle"></div>
+            </div>
         </section>
 
-        <!-- Cinematic Stacking Cards Section -->
+        <!-- ================================ -->
+        <!-- CINEMATIC STACKING CARDS         -->
+        <!-- ================================ -->
         <section class="stack-section relative w-full pb-[10vh]">
-            <!-- Card 01 -->
+            <!-- Card 01: Pre-Production -->
             <div class="stack-card sticky top-0 h-screen w-full flex items-center justify-center p-8">
                 <div class="card-inner relative w-full max-w-[1200px] h-[80vh] rounded-[24px] overflow-hidden shadow-2xl border border-[#3F9AE6]/30 bg-[#f4f7ff]">
                     <div class="absolute inset-[-10%] w-[120%] h-[120%] z-0">
-                        <Image class="gsap-parallax-img w-full h-full object-cover" src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1600&q=80" width={1600} height={1000} alt="Pre-Production" />
+                        <Image class="gsap-parallax-img w-full h-full object-cover" src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1600&q=80" width={1600} height={1000} alt="Pre-Production Planning" />
                     </div>
                     <div class="relative z-10 h-full flex flex-col justify-end p-8 md:p-16 bg-gradient-to-t from-white via-white/80 to-transparent">
                         <div class="overflow-hidden mb-2">
@@ -52,77 +73,338 @@ import { Image } from 'astro:assets';
                     </div>
                 </div>
             </div>
-            <!-- Duplicate for Phase 02 and Phase 03 -->
+
+            <!-- Card 02: On Set -->
+            <div class="stack-card sticky top-0 h-screen w-full flex items-center justify-center p-8">
+                <div class="card-inner relative w-full max-w-[1200px] h-[80vh] rounded-[24px] overflow-hidden shadow-2xl border border-[#3F9AE6]/30 bg-[#f4f7ff]">
+                    <div class="absolute inset-[-10%] w-[120%] h-[120%] z-0">
+                        <Image class="gsap-parallax-img w-full h-full object-cover" src="https://brandelier.in/wp-content/uploads/2026/08/TAG@LENSSHIMMMER-08596-scaled.jpg" width={1600} height={1000} alt="On Set Filming" />
+                    </div>
+                    <div class="relative z-10 h-full flex flex-col justify-end p-8 md:p-16 bg-gradient-to-t from-white via-white/80 to-transparent">
+                        <div class="overflow-hidden mb-2">
+                            <span class="block text-[#9B2FCA] font-bold tracking-[0.2em] uppercase text-sm translate-y-full reveal-on-scroll">Phase 02</span>
+                        </div>
+                        <div class="overflow-hidden mb-4">
+                            <h2 class="text-5xl md:text-7xl font-black text-[#00003E] translate-y-full reveal-on-scroll">The Capture.</h2>
+                        </div>
+                        <div class="overflow-hidden max-w-xl">
+                            <p class="text-[#53647d] text-lg md:text-xl translate-y-full reveal-on-scroll">Rigging lights, framing shadows, and calling action. Every movement on set is intentional, crafting the Brandelier visual signature.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 03: Post-Production -->
+            <div class="stack-card sticky top-0 h-screen w-full flex items-center justify-center p-8">
+                <div class="card-inner relative w-full max-w-[1200px] h-[80vh] rounded-[24px] overflow-hidden shadow-2xl border border-[#3F9AE6]/30 bg-[#f4f7ff]">
+                    <div class="absolute inset-[-10%] w-[120%] h-[120%] z-0">
+                        <Image class="gsap-parallax-img w-full h-full object-cover" src="https://images.unsplash.com/photo-1601506521937-0121a7fc2a6b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1600&q=80" width={1600} height={1000} alt="Post Production Editing" />
+                    </div>
+                    <div class="relative z-10 h-full flex flex-col justify-end p-8 md:p-16 bg-gradient-to-t from-white via-white/80 to-transparent">
+                        <div class="overflow-hidden mb-2">
+                            <span class="block text-[#9B2FCA] font-bold tracking-[0.2em] uppercase text-sm translate-y-full reveal-on-scroll">Phase 03</span>
+                        </div>
+                        <div class="overflow-hidden mb-4">
+                            <h2 class="text-5xl md:text-7xl font-black text-[#00003E] translate-y-full reveal-on-scroll">The Polish.</h2>
+                        </div>
+                        <div class="overflow-hidden max-w-xl">
+                            <p class="text-[#53647d] text-lg md:text-xl translate-y-full reveal-on-scroll">Dialing in the colors, sound design, and rhythm in the edit bay. Transforming raw footage into compelling, cinematic narratives.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================================ -->
+        <!-- BEANERY CAFÉ SHOWCASE SECTION    -->
+        <!-- ================================ -->
+        <section class="beanery-trigger-section relative min-h-screen flex items-center justify-center py-24 px-6 z-20 bg-[#f4f7ff] overflow-hidden">
+            <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                
+                <!-- Text Content -->
+                <div class="text-left beanery-text">
+                    <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#3F9AE6]/10 border border-[#3F9AE6]/30 backdrop-blur-md mb-6">
+                        <span class="text-xs font-bold tracking-[0.2em] uppercase text-[#9B2FCA]">Case Study Spotlight</span>
+                    </div>
+                    <h2 class="text-4xl md:text-6xl font-black leading-tight mb-6 text-[#00003E]">
+                        Crafting the Story <br>
+                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-[#9B2FCA] to-[#DD2EB8]">Behind the Brand.</span>
+                    </h2>
+                    <p class="text-[#53647d] text-lg md:text-xl leading-relaxed mb-10 font-light">
+                        For Beanery Café, we went beyond simply creating content — we captured the energy, details, and personality that make the brand feel alive. From planning the visual direction and setting up each frame to shooting the food, beverages, ambience, and candid moments, every shot was thoughtfully crafted to reflect Beanery's premium yet inviting identity.
+                        <br><br>
+                        Our behind-the-scenes process brings you closer to the work that happens before the final reel or post — the concepts, camera setups, styling, retakes, and creative decisions that turn everyday café moments into content people want to stop and look at.
+                    </p>
+                    
+                    <!-- Trigger Button -->
+                    <button class="open-gallery-btn group relative inline-flex items-center justify-center px-8 py-4 bg-[#DD2EB8] text-white font-bold uppercase tracking-widest rounded-full overflow-hidden transition-all hover:shadow-[0_0_30px_rgba(221,46,184,0.4)]" type="button">
+                        <span class="relative z-10 flex items-center gap-3">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.14v14l11-7-11-7z"/></svg>
+                            Explore Beanery BTS
+                        </span>
+                        <div class="absolute inset-0 bg-white/20 transform scale-x-0 origin-left group-hover:scale-x-100 transition-transform duration-500 ease-out"></div>
+                    </button>
+                </div>
+
+                <!-- Floating Phone Mockup -->
+                <div class="relative mx-auto flex justify-center beanery-phone cursor-pointer open-gallery-btn w-full max-w-[300px]">
+                    <div class="bts-phone-mockup relative w-full aspect-[9/19] bg-black border-[8px] border-[#1a1a1a] rounded-[2.5rem] overflow-hidden transform rotate-[-6deg] transition-all duration-700 hover:rotate-0 hover:scale-105 group flex items-center justify-center">
+                        
+                        <Image src="https://brandelier.in/wp-content/uploads/2026/08/WhatsApp-Image-2026-08-25-at-2.02.42-AM.jpeg" width={540} height={960} class="w-full h-full object-contain bg-black opacity-90 group-hover:scale-110 transition-transform duration-700" alt="Beanery Coffee Reel" />
+                        
+                        <!-- Overlay -->
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent flex flex-col justify-end p-6 pointer-events-none">
+                            <div class="flex items-center gap-2 mb-2">
+                                <div class="w-8 h-8 rounded-full bg-[#DD2EB8] flex items-center justify-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="white"><path d="M2 21V3l20 9-20 9z"/></svg>
+                                </div>
+                                <span class="text-white font-bold text-sm drop-shadow-md">@beanerycafe</span>
+                            </div>
+                            <p class="text-white text-xs font-light drop-shadow-md">The perfect pour. #BTS #CoffeeCulture</p>
+                            
+                            <!-- Play Icon Overlay -->
+                            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-16 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="white"><path d="M8 5.14v14l11-7-11-7z"/></svg>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Decorative blur behind phone -->
+                    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-[#DD2EB8]/15 blur-[100px] -z-10 rounded-full"></div>
+                </div>
+            </div>
         </section>
     </div>
 </div>
+
+<style>
+    /* ========= BTS ENVIRONMENT ========= */
+
+    /* Floating images */
+    #brandelier-bts-env .floating-img {
+        will-change: transform;
+        border: 1px solid rgba(0,0,62,0.08);
+    }
+
+    @media (max-width: 768px) {
+        #brandelier-bts-env .floating-img.hide-mobile {
+            display: none;
+        }
+        #brandelier-bts-env .floating-img {
+            opacity: 0.25;
+            z-index: 1;
+            filter: blur(2px);
+        }
+        #brandelier-bts-env .hero-content {
+            z-index: 10;
+        }
+        #brandelier-bts-env .card-inner {
+            height: 70vh !important;
+        }
+    }
+
+    /* Scroll Indicator */
+    @keyframes bts-bounce {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(8px); }
+    }
+    .bts-bounce-subtle {
+        animation: bts-bounce 2s infinite ease-in-out;
+    }
+
+    /* Phone Mockup */
+    #brandelier-bts-env .bts-phone-mockup {
+        box-shadow: -20px 20px 60px rgba(0,0,62,0.25), inset 0 0 20px rgba(255,255,255,0.08);
+    }
+    #brandelier-bts-env .bts-phone-mockup::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 40%;
+        height: 24px;
+        background: #050505;
+        border-bottom-left-radius: 12px;
+        border-bottom-right-radius: 12px;
+        z-index: 10;
+    }
+</style>
 
 <script>
     import { gsap } from "gsap";
     import { ScrollTrigger } from "gsap/ScrollTrigger";
     
-    // Astro wraps this script so it runs client-side automatically
     gsap.registerPlugin(ScrollTrigger);
 
-    // 1. Text Reveal
-    gsap.to(".gsap-reveal-text .line", { y: 0, opacity: 1, duration: 1.2, stagger: 0.15, ease: "power4.out" });
-    gsap.fromTo(".fade-in-up", { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 1, stagger: 0.1, ease: "power4.out", delay: 0.5 });
+    // ========================================
+    // 1. HERO TEXT REVEAL
+    // ========================================
+    const heroTl = gsap.timeline({ defaults: { ease: "power4.out" } });
 
-    // 2. Parallax Floating Images
+    heroTl.to(".gsap-reveal-text .line", {
+        y: 0,
+        opacity: 1,
+        duration: 1.2,
+        stagger: 0.15,
+        delay: 0.2
+    })
+    .fromTo(".fade-in-up",
+        { y: 30, opacity: 0 },
+        { y: 0, opacity: 1, duration: 1, stagger: 0.1 },
+        "-=0.8"
+    );
+
+    // ========================================
+    // 2. FLOATING IMAGES — Parallax + Idle
+    // ========================================
     const floaters = gsap.utils.toArray('.floating-img') as HTMLElement[];
+    const heroSection = document.querySelector('.hero-section') as HTMLElement;
+
     floaters.forEach(img => {
         const speed = parseFloat(img.dataset.speed || '0.1') || 0.1;
+
+        // Idle float
+        gsap.to(img, {
+            y: "-=15",
+            rotation: "+=2",
+            duration: 3 + Math.random() * 2,
+            yoyo: true,
+            repeat: -1,
+            ease: "sine.inOut"
+        });
+
+        // Scroll parallax
         gsap.to(img, {
             y: () => -window.innerHeight * speed * 3,
             ease: "none",
-            scrollTrigger: { trigger: ".hero-section", start: "top top", end: "bottom top", scrub: true }
+            scrollTrigger: {
+                trigger: ".hero-section",
+                start: "top top",
+                end: "bottom top",
+                scrub: true
+            }
         });
-        // Idle float animation
-        gsap.to(img, { y: "-=15", rotation: "+=2", duration: 3 + Math.random() * 2, yoyo: true, repeat: -1, ease: "sine.inOut" });
     });
 
-    // 3. Stacking Cards
+    // Mouse-reactive parallax on hero images (desktop only)
+    if (heroSection && window.matchMedia("(pointer: fine)").matches) {
+        heroSection.addEventListener('mousemove', (e) => {
+            const x = (e.clientX / window.innerWidth - 0.5) * 2;
+            const y = (e.clientY / window.innerHeight - 0.5) * 2;
+            floaters.forEach(img => {
+                const factor = parseFloat(img.getAttribute('data-parallax') || '1') || 1;
+                gsap.to(img, {
+                    x: x * 40 * factor,
+                    y: y * 40 * factor,
+                    duration: 1,
+                    ease: "power2.out"
+                });
+            });
+        });
+
+        heroSection.addEventListener('mouseleave', () => {
+            floaters.forEach(img => {
+                gsap.to(img, { x: 0, y: 0, duration: 1.5, ease: "elastic.out(1, 0.3)" });
+            });
+        });
+    }
+
+    // ========================================
+    // 3. STACKING CARDS — Scale/Fade + Parallax
+    // ========================================
     const cards = gsap.utils.toArray('.stack-card') as HTMLElement[];
+
     cards.forEach((card, index) => {
         const inner = card.querySelector('.card-inner') as HTMLElement;
         const img = card.querySelector('.gsap-parallax-img') as HTMLElement;
         const textElements = card.querySelectorAll('.reveal-on-scroll');
 
+        // Scale down previous cards as next card stacks on top
         if (index < cards.length - 1) {
             gsap.to(inner, {
-                scale: 0.9, opacity: 0.5,
-                scrollTrigger: { trigger: card, start: "top top", end: "bottom top", scrub: true }
+                scale: 0.9,
+                opacity: 0.3,
+                filter: "blur(4px)",
+                scrollTrigger: {
+                    trigger: card,
+                    start: "top top",
+                    end: "bottom top",
+                    scrub: true
+                }
             });
         }
 
-        gsap.fromTo(img, { y: "-15%" }, {
-            y: "15%", ease: "none",
-            scrollTrigger: { trigger: card, start: "top bottom", end: "bottom top", scrub: true }
-        });
+        // Background image parallax
+        gsap.fromTo(img,
+            { y: "-15%" },
+            {
+                y: "15%",
+                ease: "none",
+                scrollTrigger: {
+                    trigger: card,
+                    start: "top bottom",
+                    end: "bottom top",
+                    scrub: true
+                }
+            }
+        );
 
+        // Text reveal on scroll
         gsap.to(textElements, {
-            y: 0, duration: 0.8, stagger: 0.1, ease: "power3.out",
-            scrollTrigger: { trigger: card, start: "top 60%", toggleActions: "play reverse play reverse" }
+            y: 0,
+            duration: 0.8,
+            stagger: 0.1,
+            ease: "power3.out",
+            scrollTrigger: {
+                trigger: card,
+                start: "top 60%",
+                toggleActions: "play reverse play reverse"
+            }
         });
     });
 
-    // 4. Light Theme Canvas Particles (Optimized with IntersectionObserver & Reduced Motion)
+    // ========================================
+    // 4. BEANERY SHOWCASE — Entrance Animation
+    // ========================================
+    const beaneryTl = gsap.timeline({
+        scrollTrigger: {
+            trigger: ".beanery-trigger-section",
+            start: "top 70%",
+            toggleActions: "play none none reverse"
+        }
+    });
+
+    beaneryTl.fromTo(".beanery-text",
+        { opacity: 0, x: -60 },
+        { opacity: 1, x: 0, duration: 1, ease: "power3.out" }
+    )
+    .fromTo(".beanery-phone",
+        { opacity: 0, y: 100, rotation: 5 },
+        { opacity: 1, y: 0, rotation: -6, duration: 1.2, ease: "back.out(1.5)" },
+        "-=0.6"
+    );
+
+    // ========================================
+    // 5. CANVAS PARTICLES (Cinematic Dust)
+    // ========================================
     const btsEnv = document.getElementById('brandelier-bts-env');
     const canvas = document.getElementById('studio-dust-canvas') as HTMLCanvasElement | null;
     const ctx = canvas?.getContext('2d');
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     if (canvas && ctx && btsEnv && !prefersReducedMotion) {
-        const particles: { x: number; y: number; size: number; speedY: number }[] = [];
+        const particles: { x: number; y: number; size: number; speedY: number; opacity: number }[] = [];
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
-        
-        for (let i = 0; i < 35; i++) {
+
+        for (let i = 0; i < 40; i++) {
             particles.push({
                 x: Math.random() * canvas.width,
                 y: Math.random() * canvas.height,
-                size: Math.random() * 1.5 + 0.1,
-                speedY: Math.random() * -0.3 - 0.1
+                size: Math.random() * 1.5 + 0.2,
+                speedY: Math.random() * -0.3 - 0.1,
+                opacity: Math.random() * 0.4 + 0.1
             });
         }
 
@@ -132,8 +414,9 @@ import { Image } from 'astro:assets';
         function draw() {
             if (!isAnimating || !ctx || !canvas) return;
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            ctx.fillStyle = 'rgba(221, 46, 184, 0.4)';
+
             particles.forEach(p => {
+                ctx.fillStyle = `rgba(221, 46, 184, ${p.opacity})`;
                 ctx.beginPath();
                 ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
                 ctx.fill();
@@ -164,5 +447,11 @@ import { Image } from 'astro:assets';
         }, { rootMargin: '100px 0px' });
 
         observer.observe(btsEnv);
+
+        // Resize canvas on window resize
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
     }
 </script>

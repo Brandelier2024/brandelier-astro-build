@@ -1,42 +1,105 @@
 ---
-// BeaneryModal.astro
+// BeaneryModal.astro — Horizontal scroll gallery popup for Beanery Café BTS
 import { Image } from 'astro:assets';
+
+const galleryItems = [
+  {
+    src: 'https://brandelier.in/wp-content/uploads/2026/08/TAG@LENSSHIMMMER-00268-scaled.jpg',
+    alt: 'Camera Setup',
+    label: '01 / Setup',
+    title: 'Finding the Light',
+    description: 'Dialing in the practical lights to match the café\'s natural ambient warmth.'
+  },
+  {
+    src: 'https://brandelier.in/wp-content/uploads/2026/08/TAG@LENSSHIMMMER-08596-scaled.jpg',
+    alt: 'Coffee Pour',
+    label: '02 / Action',
+    title: 'The Perfect Pour',
+    description: 'Shooting at 120fps to capture the rich texture and steam of the espresso extraction.'
+  },
+  {
+    src: 'https://brandelier.in/wp-content/uploads/2026/08/TAG@LENSSHIMMMER-08585-scaled.jpg',
+    alt: 'Cafe Vibe',
+    label: '03 / Environment',
+    title: 'Capturing Vibe',
+    description: 'Using a wide prime lens to establish the premium yet inviting identity of the space.'
+  },
+  {
+    src: 'https://brandelier.in/wp-content/uploads/2026/08/Brandelier-.jpg-scaled.jpeg',
+    alt: 'Reviewing footage',
+    label: '04 / Review',
+    title: 'On-Set Polish',
+    description: 'Reviewing color profiles and framing live on the monitor with the client.'
+  }
+];
 ---
-<div id="beanery-modal" class="fixed inset-0 bg-[#f4f7ff]/95 backdrop-blur-xl flex flex-col justify-center items-center opacity-0 pointer-events-none transition-opacity duration-500 z-[100]">
+
+<div id="beanery-modal" class="fixed inset-0 bg-[#f4f7ff]/95 flex flex-col justify-center items-center opacity-0 pointer-events-none transition-opacity duration-500 z-[100]">
     
-    <button id="close-modal-btn" class="absolute top-6 right-6 text-[#53647d] hover:text-[#DD2EB8] hover:rotate-90 transition-all duration-300 z-50 p-2" aria-label="Close modal" type="button">
+    <!-- Close Button -->
+    <button id="close-modal-btn" class="absolute top-6 right-6 md:top-10 md:right-10 text-[#53647d] hover:text-[#DD2EB8] hover:rotate-90 transition-all duration-300 z-50 p-2" aria-label="Close modal" type="button">
         <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <line x1="18" y1="6" x2="6" y2="18"></line>
             <line x1="6" y1="6" x2="18" y2="18"></line>
         </svg>
     </button>
 
-    <div class="w-full max-w-7xl mx-auto px-6 mb-8 text-center mt-20 md:mt-0 transition-all duration-500" id="modal-header">
+    <!-- Modal Header -->
+    <div class="w-full max-w-7xl mx-auto px-6 mb-8 text-center mt-20 md:mt-0 transition-all duration-500 opacity-0 translate-y-8" id="modal-header">
         <h3 class="text-4xl md:text-6xl font-black text-[#00003E] mb-4">Beanery <span class="text-[#DD2EB8]">Unfiltered.</span></h3>
-        <p class="text-[#53647d] max-w-2xl mx-auto">Drag to explore the concepts, camera setups, styling, and creative decisions.</p>
+        <p class="text-[#53647d] max-w-2xl mx-auto text-sm md:text-base">Drag to explore the concepts, camera setups, styling, and creative decisions that went into the Beanery Café shoot.</p>
     </div>
 
-    <div class="w-full overflow-x-auto pb-12 pt-4 cursor-grab active:cursor-grabbing relative z-40" id="horizontal-scroll-container" style="scrollbar-width: none;">
+    <!-- Horizontal Scroll Container -->
+    <div class="w-full overflow-x-auto pb-12 pt-4 cursor-grab active:cursor-grabbing relative z-40 beanery-hide-scrollbar" id="horizontal-scroll-container">
         <div class="flex gap-6 md:gap-10 px-6 md:px-[15vw] w-max items-center h-full">
-            <!-- Gallery Item (Light Theme Card) -->
-            <div class="w-[280px] md:w-[450px] aspect-[4/5] rounded-2xl overflow-hidden relative group shrink-0 shadow-xl bg-[#f4f7ff] border border-[#3F9AE6]/30">
-                <Image src="https://brandelier.in/wp-content/uploads/2026/08/TAG@LENSSHIMMMER-00268-scaled.jpg" width={900} height={1125} class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" alt="Camera Setup" />
-                <div class="absolute inset-0 bg-gradient-to-t from-white/95 via-white/40 to-transparent flex flex-col justify-end p-8 translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
-                    <span class="text-[#9B2FCA] text-xs font-bold tracking-widest uppercase mb-1">01 / Setup</span>
-                    <h4 class="text-[#00003E] text-2xl font-bold mb-2">Finding the Light</h4>
-                    <p class="text-[#53647d] text-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300">Dialing in the practical lights to match the café's natural ambient warmth.</p>
+            {galleryItems.map(item => (
+                <div class="w-[280px] md:w-[450px] aspect-[4/5] rounded-2xl overflow-hidden relative group shrink-0 shadow-xl bg-[#f4f7ff] border border-[#3F9AE6]/30">
+                    <Image src={item.src} width={900} height={1125} class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" alt={item.alt} />
+                    <div class="absolute inset-0 bg-gradient-to-t from-white/95 via-white/40 to-transparent flex flex-col justify-end p-6 md:p-8 translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
+                        <span class="text-[#9B2FCA] text-xs font-bold tracking-widest uppercase mb-1">{item.label}</span>
+                        <h4 class="text-[#00003E] text-xl md:text-2xl font-bold mb-2">{item.title}</h4>
+                        <p class="text-[#53647d] text-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-100">{item.description}</p>
+                    </div>
                 </div>
-            </div>
-            <!-- Add other gallery items here -->
+            ))}
         </div>
     </div>
 
-    <div class="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-4 w-full max-w-md px-6 z-50">
-        <div class="w-full h-1 bg-[#3F9AE6]/25 rounded-full overflow-hidden">
+    <!-- Controls / Progress UI -->
+    <div class="absolute bottom-6 md:bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-4 w-full max-w-md px-6 z-50 opacity-0 transition-opacity duration-700 delay-300 pointer-events-none" id="modal-controls">
+        <div class="flex items-center gap-3 text-[#53647d]/60 text-[10px] md:text-xs font-bold tracking-[0.2em] uppercase">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="text-[#DD2EB8] bts-pulse-h-rev"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+            <span class="hidden md:inline">Scroll or Drag to explore</span>
+            <span class="inline md:hidden">Swipe to explore</span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="text-[#DD2EB8] bts-pulse-h"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </div>
+        <div class="w-full h-1 bg-[#3F9AE6]/20 rounded-full overflow-hidden">
             <div id="scroll-progress-bar" class="h-full bg-[#DD2EB8] w-0 transition-all duration-75 ease-out"></div>
         </div>
     </div>
 </div>
+
+<style>
+    /* Hide scrollbar */
+    .beanery-hide-scrollbar::-webkit-scrollbar { display: none; }
+    .beanery-hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+    /* Arrow pulse animations */
+    @keyframes bts-pulseH {
+        0%, 100% { transform: translateX(0); opacity: 0.5; }
+        50% { transform: translateX(4px); opacity: 1; }
+    }
+    .bts-pulse-h { animation: bts-pulseH 2s infinite ease-in-out; }
+    .bts-pulse-h-rev { animation: bts-pulseH 2s infinite ease-in-out reverse; }
+
+    /* Lock scroll when modal is open */
+    body.brandelier-modal-active,
+    html.brandelier-modal-active {
+        overflow: hidden !important;
+        touch-action: none;
+    }
+</style>
 
 <script>
     // Astro isolates this script automatically
@@ -44,33 +107,65 @@ import { Image } from 'astro:assets';
     const slider = document.getElementById('horizontal-scroll-container')! as HTMLDivElement;
     const progressBar = document.getElementById('scroll-progress-bar')! as HTMLDivElement;
     const closeBtn = document.getElementById('close-modal-btn')! as HTMLButtonElement;
-    
+    const modalHeader = document.getElementById('modal-header')! as HTMLDivElement;
+    const modalControls = document.getElementById('modal-controls')! as HTMLDivElement;
+
     let isDown = false;
     let startX = 0;
     let scrollLeft = 0;
 
-    // Ensure triggers open the modal
+    // ---- Move modal to body root to escape any stacking context ----
+    if (modal && modal.parentNode !== document.body) {
+        document.body.appendChild(modal);
+    }
+
+    // ---- OPEN MODAL ----
     document.querySelectorAll('.open-gallery-btn').forEach(btn => {
         btn.addEventListener('click', (e) => {
             e.preventDefault();
             modal.classList.remove('opacity-0', 'pointer-events-none');
-            document.body.style.overflow = 'hidden'; // Lock background scroll
+
+            // Animate header & controls in
+            setTimeout(() => {
+                modalHeader.classList.remove('opacity-0', 'translate-y-8');
+                modalControls.classList.remove('opacity-0');
+                updateProgress();
+            }, 100);
+
+            // Lock background scroll
+            document.body.classList.add('brandelier-modal-active');
+            document.documentElement.classList.add('brandelier-modal-active');
+            document.body.style.setProperty('overflow', 'hidden', 'important');
+            document.documentElement.style.setProperty('overflow', 'hidden', 'important');
         });
     });
 
+    // ---- CLOSE MODAL ----
     closeBtn.addEventListener('click', () => {
         modal.classList.add('opacity-0', 'pointer-events-none');
-        document.body.style.overflow = ''; // Restore scroll
+        modalHeader.classList.add('opacity-0', 'translate-y-8');
+        modalControls.classList.add('opacity-0');
+
+        // Restore scroll
+        document.body.classList.remove('brandelier-modal-active');
+        document.documentElement.classList.remove('brandelier-modal-active');
+        document.body.style.removeProperty('overflow');
+        document.documentElement.style.removeProperty('overflow');
     });
 
+    // Close on background click
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) closeBtn.click();
+    });
+
+    // ---- PROGRESS BAR ----
     function updateProgress() {
         const maxScroll = slider.scrollWidth - slider.clientWidth;
         progressBar.style.width = maxScroll > 0 ? (slider.scrollLeft / maxScroll) * 100 + '%' : '0%';
     }
-
     slider.addEventListener('scroll', updateProgress);
-    
-    // Convert vertical mouse wheel to horizontal scroll inside modal
+
+    // ---- WHEEL → HORIZONTAL SCROLL ----
     modal.addEventListener('wheel', (e) => {
         if (!modal.classList.contains('opacity-0') && Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
             e.preventDefault();
@@ -78,17 +173,24 @@ import { Image } from 'astro:assets';
         }
     }, { passive: false });
 
+    // ---- DRAG TO SCROLL ----
     slider.addEventListener('mousedown', (e) => {
         isDown = true;
+        slider.classList.add('cursor-grabbing');
         startX = e.pageX - slider.offsetLeft;
         scrollLeft = slider.scrollLeft;
     });
-    slider.addEventListener('mouseleave', () => isDown = false);
-    slider.addEventListener('mouseup', () => isDown = false);
+    slider.addEventListener('mouseleave', () => { isDown = false; slider.classList.remove('cursor-grabbing'); });
+    slider.addEventListener('mouseup', () => { isDown = false; slider.classList.remove('cursor-grabbing'); });
     slider.addEventListener('mousemove', (e) => {
         if (!isDown) return;
         e.preventDefault();
         const x = e.pageX - slider.offsetLeft;
         slider.scrollLeft = scrollLeft - (x - startX) * 2;
+    });
+
+    // Resize update
+    window.addEventListener('resize', () => {
+        if (!modal.classList.contains('opacity-0')) updateProgress();
     });
 </script>
