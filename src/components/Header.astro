@@ -23,7 +23,7 @@ const serviceItems = [
 ];
 ---
 
-<header class:list={['site-header', { 'is-dark-hero': !isHome }]} id="site-header">
+<header class:list={['site-header', { 'is-dark-hero': !isHome, 'home-intro-hidden': isHome }]} id="site-header">
   <a class="brand-mark" href="/" aria-label="Brandelier home">BRANDELIER<span>.</span></a>
   
   <nav aria-label="Primary navigation">
@@ -47,7 +47,7 @@ const serviceItems = [
               </div>
               <div class="dropdown-grid">
                 {serviceItems.map(item => (
-                  <a href={item.href} class="dropdown-item">
+                  <a href={item.href} class:list={['dropdown-item', { active: currentPath === item.href }]}>
                     <span class="dropdown-num">{item.num}</span>
                     <div class="dropdown-info">
                       <span class="dropdown-item-title">{item.title}</span>
@@ -164,10 +164,27 @@ const serviceItems = [
     });
   }
 
-  // Sticky header on scroll
+  // Sticky header on scroll & Homepage Intro Reveal
   let lastScroll = 0;
+  const revealContainer = document.getElementById('revealScrollContainer');
+
   window.addEventListener('scroll', () => {
     const y = window.scrollY;
+
+    // On homepage, ensure header only shows after entering the screen / past 3D intro
+    if (header.classList.contains('home-intro-hidden')) {
+      if (revealContainer) {
+        const enterThreshold = (revealContainer.offsetHeight - window.innerHeight) * 0.70;
+        if (y >= enterThreshold) {
+          header.classList.add('entered');
+        } else {
+          header.classList.remove('entered');
+        }
+      } else if (y > 200) {
+        header.classList.add('entered');
+      }
+    }
+
     if (y > 60) {
       header.classList.add('scrolled');
       header.classList.toggle('hide', y > lastScroll && y > 300);
@@ -176,6 +193,26 @@ const serviceItems = [
     }
     lastScroll = y;
   }, { passive: true });
+
+  // Persistent Dropdown Bridge: Keeps hover active when cursor moves down to select a service
+  const dropdownWrapper = document.querySelector('.nav-dropdown-wrapper');
+  if (dropdownWrapper) {
+    let leaveTimer: number | null = null;
+
+    dropdownWrapper.addEventListener('mouseenter', () => {
+      if (leaveTimer) {
+        clearTimeout(leaveTimer);
+        leaveTimer = null;
+      }
+      dropdownWrapper.classList.add('is-open');
+    });
+
+    dropdownWrapper.addEventListener('mouseleave', () => {
+      leaveTimer = window.setTimeout(() => {
+        dropdownWrapper.classList.remove('is-open');
+      }, 300); // 300ms generous grace period prevents dropdown vanishing mid-selection
+    });
+  }
 
   // ========================================================
   // SWIPE TO CALL LOGIC (Robust Pointer Events & Never-Stuck)
@@ -375,35 +412,57 @@ const serviceItems = [
     position: relative;
     display: inline-flex;
     align-items: center;
+    height: 100%;
   }
   .dropdown-trigger {
     display: inline-flex;
     align-items: center;
     gap: 5px;
     cursor: pointer;
+    padding-top: 6px;
+    padding-bottom: 6px;
   }
   .chevron-icon {
     transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   }
-  .nav-dropdown-wrapper:hover .chevron-icon {
+  .nav-dropdown-wrapper:hover .chevron-icon,
+  .nav-dropdown-wrapper.is-open .chevron-icon {
     transform: rotate(180deg);
+    color: var(--pink);
+  }
+  .nav-dropdown-wrapper:hover .dropdown-trigger,
+  .nav-dropdown-wrapper.is-open .dropdown-trigger {
     color: var(--pink);
   }
 
   .dropdown-menu {
     position: absolute;
-    top: calc(100% + 14px);
+    top: 100%;
     left: 50%;
-    transform: translateX(-50%) translateY(10px) scale(0.96);
+    transform: translateX(-50%) translateY(6px) scale(0.98);
     opacity: 0;
     visibility: hidden;
     pointer-events: none;
-    transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: opacity 0.22s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.22s cubic-bezier(0.16, 1, 0.3, 1),
+                visibility 0.22s;
     z-index: 200;
     width: 580px;
-    padding-top: 10px; /* Invisible bridge to prevent mouse-leave */
+    padding-top: 18px; /* Seamless invisible bridge to prevent mouse-leave */
   }
+  /* Physical bridge overlay to prevent any cursor gap */
+  .dropdown-menu::before {
+    content: '';
+    position: absolute;
+    top: -24px;
+    left: -30px;
+    right: -30px;
+    height: 48px;
+    background: transparent;
+  }
+
   .nav-dropdown-wrapper:hover .dropdown-menu,
+  .nav-dropdown-wrapper.is-open .dropdown-menu,
   .nav-dropdown-wrapper:focus-within .dropdown-menu {
     opacity: 1;
     visibility: visible;
@@ -465,9 +524,11 @@ const serviceItems = [
     transition: background 0.2s, transform 0.2s, border-color 0.2s;
     border: 1px solid transparent;
   }
-  .dropdown-item:hover {
-    background: rgba(192, 44, 255, 0.06);
-    border-color: rgba(192, 44, 255, 0.2);
+  .dropdown-item:hover,
+  .dropdown-item.active,
+  .dropdown-item:focus {
+    background: rgba(192, 44, 255, 0.08);
+    border-color: rgba(192, 44, 255, 0.28);
     transform: translateY(-2px);
   }
   .dropdown-num {
@@ -477,6 +538,11 @@ const serviceItems = [
     color: var(--pink);
     line-height: 1.2;
     padding-top: 1px;
+    transition: transform 0.2s;
+  }
+  .dropdown-item:hover .dropdown-num,
+  .dropdown-item.active .dropdown-num {
+    transform: scale(1.1);
   }
   .dropdown-info {
     display: flex;
@@ -492,7 +558,8 @@ const serviceItems = [
     line-height: 1.3;
     transition: color 0.2s;
   }
-  .dropdown-item:hover .dropdown-item-title {
+  .dropdown-item:hover .dropdown-item-title,
+  .dropdown-item.active .dropdown-item-title {
     color: var(--pink);
   }
   .dropdown-item-desc {
@@ -508,7 +575,8 @@ const serviceItems = [
     transform: translate(-3px, 3px);
     transition: opacity 0.2s, transform 0.2s, color 0.2s;
   }
-  .dropdown-item:hover .dropdown-arrow {
+  .dropdown-item:hover .dropdown-arrow,
+  .dropdown-item.active .dropdown-arrow {
     opacity: 1;
     color: var(--pink);
     transform: translate(0, 0);
@@ -718,6 +786,20 @@ const serviceItems = [
   }
   .site-header.scrolled .mobile-menu-btn span {
     background: var(--ink);
+  }
+
+  /* Homepage initial 3D scroll state: hidden until entering screen */
+  .site-header.home-intro-hidden:not(.entered) {
+    transform: translateY(-115%) !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+    transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
+  }
+  .site-header.home-intro-hidden.entered {
+    transform: translateY(0);
+    opacity: 1;
+    pointer-events: auto;
+    transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease, background 0.3s ease, box-shadow 0.3s ease, padding 0.3s ease;
   }
 
   .site-header.hide { transform: translateY(-100%); }

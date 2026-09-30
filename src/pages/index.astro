@@ -166,6 +166,21 @@ const featuredBlogs = [
   <section class="contact-section" id="contact"><p class="section-label">08 — Make a move</p><h2>Have a brand<br /><em>worth talking about?</em></h2><a class="contact-email" href="mailto:Info@brandelier.in">Info@brandelier.in <span aria-hidden="true">↗</span></a><div class="contact-meta"><a href="tel:+917058670837">+91 70586 70837</a><span>Pune, Maharashtra</span></div></section>
 
   <BeaneryModal />
+
+  <script>
+    // Service section interactive active hover state
+    const serviceRows = document.querySelectorAll('.service-row');
+    serviceRows.forEach((row) => {
+      row.addEventListener('mouseenter', () => {
+        serviceRows.forEach((r) => r.classList.remove('active'));
+        row.classList.add('active');
+      });
+      row.addEventListener('focus', () => {
+        serviceRows.forEach((r) => r.classList.remove('active'));
+        row.classList.add('active');
+      });
+    });
+  </script>
 </Layout>
 
 <style>
@@ -248,13 +263,87 @@ const featuredBlogs = [
   .section-heading { display: flex; justify-content: space-between; align-items: flex-end; }
   .section-heading h2 { font-size: clamp(3.5rem, 7vw, 7rem); margin: 0; }
   .service-list { border-top: 1px solid var(--line); margin-top: 7rem; }
-  .service-row { align-items: center; border-bottom: 1px solid var(--line); display: grid; gap: 2rem; grid-template-columns: 5rem 1.2fr 1fr 2rem; padding: 2rem 0; text-decoration: none; color: var(--ink); transition: background .2s; }
-  .service-row:hover { background: rgba(221,46,184,.04); }
-  .service-number, .approach-grid article > span { color: var(--muted); font-family: var(--font-heading); font-size: .75rem; font-weight: 700; }
-  .service-row h3, .approach-grid h3 { font-family: var(--font-heading); font-size: clamp(1.3rem, 2.2vw, 2rem); font-weight: 600; margin: 0; }
-  .service-row p, .approach-grid p, .proof-copy > p:not(.section-label) { color: var(--muted); font-size: 1rem; line-height: 1.5; margin: 0; }
-  .service-arrow { font-size: 1.7rem; text-align: right; transition: transform .2s; }
-  .service-row:hover .service-arrow { transform: translate(3px, -3px); }
+  .service-row {
+    align-items: center;
+    border-bottom: 1px solid var(--line);
+    display: grid;
+    gap: 2rem;
+    grid-template-columns: 5rem 1.2fr 1fr 2rem;
+    padding: 2rem 1.2rem;
+    margin: 0 -1.2rem;
+    border-radius: 16px;
+    text-decoration: none;
+    color: var(--ink);
+    transition: background 0.28s cubic-bezier(0.16, 1, 0.3, 1),
+                padding 0.28s cubic-bezier(0.16, 1, 0.3, 1),
+                border-color 0.28s cubic-bezier(0.16, 1, 0.3, 1),
+                box-shadow 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+    position: relative;
+    cursor: pointer;
+  }
+  .service-row:hover,
+  .service-row.active,
+  .service-row:focus-visible {
+    background: rgba(221, 46, 184, 0.08);
+    border-color: rgba(221, 46, 184, 0.3);
+    padding-left: 2rem;
+    padding-right: 2rem;
+    box-shadow: 0 10px 30px rgba(221, 46, 184, 0.06);
+  }
+  .service-row:active {
+    background: rgba(221, 46, 184, 0.14);
+    transform: scale(0.995);
+  }
+  .service-number, .approach-grid article > span {
+    color: var(--muted);
+    font-family: var(--font-heading);
+    font-size: .75rem;
+    font-weight: 700;
+    transition: color 0.25s, transform 0.25s;
+  }
+  .service-row:hover .service-number,
+  .service-row.active .service-number,
+  .service-row:focus-visible .service-number {
+    color: var(--pink);
+    transform: scale(1.1);
+  }
+  .service-row h3, .approach-grid h3 {
+    font-family: var(--font-heading);
+    font-size: clamp(1.3rem, 2.2vw, 2rem);
+    font-weight: 600;
+    margin: 0;
+    transition: color 0.25s, transform 0.25s;
+  }
+  .service-row:hover h3,
+  .service-row.active h3,
+  .service-row:focus-visible h3 {
+    color: var(--pink);
+    transform: translateX(4px);
+  }
+  .service-row p, .approach-grid p, .proof-copy > p:not(.section-label) {
+    color: var(--muted);
+    font-size: 1rem;
+    line-height: 1.5;
+    margin: 0;
+    transition: color 0.25s;
+  }
+  .service-row:hover p,
+  .service-row.active p,
+  .service-row:focus-visible p {
+    color: var(--ink);
+  }
+  .service-arrow {
+    font-size: 1.7rem;
+    text-align: right;
+    transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), color 0.25s;
+    color: var(--muted);
+  }
+  .service-row:hover .service-arrow,
+  .service-row.active .service-arrow,
+  .service-row:focus-visible .service-arrow {
+    color: var(--pink);
+    transform: translate(6px, -6px) scale(1.15);
+  }
 
   /* =================== PROOF =================== */
   .proof-section { display: grid; grid-template-columns: 1fr 1fr; min-height: 720px; }

@@ -337,13 +337,27 @@ const faqs = [
   const spotlightActionBtn = document.getElementById('spotlightActionBtn');
   const spotlightJumpBtn = document.getElementById('spotlightJumpBtn');
 
-  // Toggle dropdown open/close
+  // Toggle dropdown open/close on click
   if (dropdownBtn && dropdownContainer) {
     dropdownBtn.addEventListener('click', (e) => {
       e.stopPropagation();
       const isOpen = dropdownContainer.classList.contains('open');
       dropdownContainer.classList.toggle('open', !isOpen);
       dropdownBtn.setAttribute('aria-expanded', String(!isOpen));
+    });
+
+    let containerTimer = null;
+    dropdownContainer.addEventListener('mouseenter', () => {
+      if (containerTimer) clearTimeout(containerTimer);
+      dropdownContainer.classList.add('open');
+      dropdownBtn.setAttribute('aria-expanded', 'true');
+    });
+
+    dropdownContainer.addEventListener('mouseleave', () => {
+      containerTimer = window.setTimeout(() => {
+        dropdownContainer.classList.remove('open');
+        dropdownBtn.setAttribute('aria-expanded', 'false');
+      }, 250);
     });
   }
 
@@ -580,7 +594,7 @@ const faqs = [
   /* Animated Dropdown Menu List */
   .explorer-dropdown-list {
     position: absolute;
-    top: calc(100% + 4px);
+    top: 100%;
     left: 0;
     right: 0;
     background: rgba(255, 255, 255, 0.98);
@@ -614,14 +628,20 @@ const faqs = [
     transition: all 0.2s ease;
     border: 1px solid transparent;
   }
-  .explorer-dropdown-item:hover {
-    background: rgba(192, 44, 255, 0.08);
-    border-color: rgba(192, 44, 255, 0.2);
+  .explorer-dropdown-item:hover,
+  .explorer-dropdown-item.selected {
+    background: rgba(221, 46, 184, 0.12);
+    border-color: rgba(221, 46, 184, 0.35);
     transform: translateX(4px);
   }
-  .explorer-dropdown-item.selected {
-    background: rgba(221, 46, 184, 0.1);
-    border-color: rgba(221, 46, 184, 0.3);
+  .explorer-dropdown-item:hover .item-title,
+  .explorer-dropdown-item.selected .item-title {
+    color: var(--pink);
+  }
+  .explorer-dropdown-item:hover .item-num,
+  .explorer-dropdown-item.selected .item-num {
+    color: var(--pink);
+    transform: scale(1.1);
   }
 
   .item-left {

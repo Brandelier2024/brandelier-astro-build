@@ -139,7 +139,10 @@ import heroPhoto from '../assets/images/_uploads/2026/08/Brandelier-.jpg-scaled.
       gsap.set(['#revealLaptop', '#revealPhone'], { autoAlpha: 0, display: 'none' });
       gsap.set('#revealHeroCurtain', { opacity: 1, pointerEvents: 'auto' });
       gsap.set('#revealHeroContent', { opacity: 1, y: 0 });
-      if (header) header.classList.remove('is-dark-hero');
+      if (header) {
+        header.classList.remove('is-dark-hero');
+        header.classList.add('entered');
+      }
     });
 
     // 2. Desktop & Tablet: Sleek 3D Laptop Reveal (>= 768px)
@@ -170,6 +173,9 @@ import heroPhoto from '../assets/images/_uploads/2026/08/Brandelier-.jpg-scaled.
             if (shouldBeDark !== isDarkState) {
               isDarkState = shouldBeDark;
               if (header) header.classList.toggle('is-dark-hero', isDarkState);
+            }
+            if (header) {
+              header.classList.toggle('entered', self.progress >= 0.70);
             }
           }
         }
@@ -283,6 +289,9 @@ import heroPhoto from '../assets/images/_uploads/2026/08/Brandelier-.jpg-scaled.
             if (shouldBeDark !== isDarkState) {
               isDarkState = shouldBeDark;
               if (header) header.classList.toggle('is-dark-hero', isDarkState);
+            }
+            if (header) {
+              header.classList.toggle('entered', self.progress >= 0.70);
             }
           }
         }
