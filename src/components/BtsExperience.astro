@@ -28,7 +28,7 @@ import { Image } from 'astro:assets';
 
             <!-- Hero Text Content -->
             <div class="hero-content text-center max-w-4xl mx-auto pointer-events-none z-30">
-                <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#3F9AE6]/15 border border-[#3F9AE6]/40 backdrop-blur-md mb-8 fade-in-up">
+                <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#3F9AE6]/15 border border-[#3F9AE6]/40 mb-8 fade-in-up">
                     <span class="w-2 h-2 rounded-full bg-[#DD2EB8] shadow-[0_0_8px_#DD2EB8] animate-pulse"></span>
                     <span class="text-xs font-bold tracking-[0.2em] uppercase text-[#9B2FCA]">Behind Brandelier</span>
                 </div>
@@ -56,19 +56,19 @@ import { Image } from 'astro:assets';
         <section class="stack-section relative w-full pb-[10vh]">
             <!-- Card 01: Pre-Production -->
             <div class="stack-card sticky top-0 h-screen w-full flex items-center justify-center p-8">
-                <div class="card-inner relative w-full max-w-[1200px] h-[80vh] rounded-[24px] overflow-hidden shadow-2xl border border-[#3F9AE6]/30 bg-[#f4f7ff]">
+                <div class="card-inner relative w-full max-w-[1200px] h-[80vh] rounded-[24px] overflow-hidden shadow-2xl border border-[#3F9AE6]/30 bg-[#00003E]">
                     <div class="absolute inset-[-10%] w-[120%] h-[120%] z-0">
                         <Image class="gsap-parallax-img w-full h-full object-cover" src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1600&q=80" width={1600} height={1000} alt="Pre-Production Planning" />
                     </div>
-                    <div class="relative z-10 h-full flex flex-col justify-end p-8 md:p-16 bg-gradient-to-t from-white via-white/80 to-transparent">
+                    <div class="relative z-10 h-full flex flex-col justify-end p-8 md:p-16 bg-gradient-to-t from-black/85 via-black/40 to-transparent">
                         <div class="overflow-hidden mb-2">
-                            <span class="block text-[#9B2FCA] font-bold tracking-[0.2em] uppercase text-sm translate-y-full reveal-on-scroll">Phase 01</span>
+                            <span class="block text-[#DD2EB8] font-bold tracking-[0.2em] uppercase text-sm translate-y-full reveal-on-scroll">Phase 01</span>
                         </div>
                         <div class="overflow-hidden mb-4">
-                            <h2 class="text-5xl md:text-7xl font-black text-[#00003E] translate-y-full reveal-on-scroll">The Blueprint.</h2>
+                            <h2 class="text-5xl md:text-7xl font-black text-white translate-y-full reveal-on-scroll">The Blueprint.</h2>
                         </div>
                         <div class="overflow-hidden max-w-xl">
-                            <p class="text-[#53647d] text-lg md:text-xl translate-y-full reveal-on-scroll">Where chaos becomes strategy. Storyboarding, location scouting, and mapping out visual transitions before we ever touch a camera.</p>
+                            <p class="text-white/85 text-lg md:text-xl translate-y-full reveal-on-scroll">Where chaos becomes strategy. Storyboarding, location scouting, and mapping out visual transitions before we ever touch a camera.</p>
                         </div>
                     </div>
                 </div>
@@ -76,19 +76,19 @@ import { Image } from 'astro:assets';
 
             <!-- Card 02: On Set -->
             <div class="stack-card sticky top-0 h-screen w-full flex items-center justify-center p-8">
-                <div class="card-inner relative w-full max-w-[1200px] h-[80vh] rounded-[24px] overflow-hidden shadow-2xl border border-[#3F9AE6]/30 bg-[#f4f7ff]">
+                <div class="card-inner relative w-full max-w-[1200px] h-[80vh] rounded-[24px] overflow-hidden shadow-2xl border border-[#3F9AE6]/30 bg-[#00003E]">
                     <div class="absolute inset-[-10%] w-[120%] h-[120%] z-0">
                         <Image class="gsap-parallax-img w-full h-full object-cover" src="https://brandelier.in/wp-content/uploads/2026/08/TAG@LENSSHIMMMER-08596-scaled.jpg" width={1600} height={1000} alt="On Set Filming" />
                     </div>
-                    <div class="relative z-10 h-full flex flex-col justify-end p-8 md:p-16 bg-gradient-to-t from-white via-white/80 to-transparent">
+                    <div class="relative z-10 h-full flex flex-col justify-end p-8 md:p-16 bg-gradient-to-t from-black/85 via-black/40 to-transparent">
                         <div class="overflow-hidden mb-2">
-                            <span class="block text-[#9B2FCA] font-bold tracking-[0.2em] uppercase text-sm translate-y-full reveal-on-scroll">Phase 02</span>
+                            <span class="block text-[#DD2EB8] font-bold tracking-[0.2em] uppercase text-sm translate-y-full reveal-on-scroll">Phase 02</span>
                         </div>
                         <div class="overflow-hidden mb-4">
-                            <h2 class="text-5xl md:text-7xl font-black text-[#00003E] translate-y-full reveal-on-scroll">The Capture.</h2>
+                            <h2 class="text-5xl md:text-7xl font-black text-white translate-y-full reveal-on-scroll">The Capture.</h2>
                         </div>
                         <div class="overflow-hidden max-w-xl">
-                            <p class="text-[#53647d] text-lg md:text-xl translate-y-full reveal-on-scroll">Rigging lights, framing shadows, and calling action. Every movement on set is intentional, crafting the Brandelier visual signature.</p>
+                            <p class="text-white/85 text-lg md:text-xl translate-y-full reveal-on-scroll">Rigging lights, framing shadows, and calling action. Every movement on set is intentional, crafting the Brandelier visual signature.</p>
                         </div>
                     </div>
                 </div>
@@ -96,19 +96,19 @@ import { Image } from 'astro:assets';
 
             <!-- Card 03: Post-Production -->
             <div class="stack-card sticky top-0 h-screen w-full flex items-center justify-center p-8">
-                <div class="card-inner relative w-full max-w-[1200px] h-[80vh] rounded-[24px] overflow-hidden shadow-2xl border border-[#3F9AE6]/30 bg-[#f4f7ff]">
+                <div class="card-inner relative w-full max-w-[1200px] h-[80vh] rounded-[24px] overflow-hidden shadow-2xl border border-[#3F9AE6]/30 bg-[#00003E]">
                     <div class="absolute inset-[-10%] w-[120%] h-[120%] z-0">
                         <Image class="gsap-parallax-img w-full h-full object-cover" src="https://images.unsplash.com/photo-1601506521937-0121a7fc2a6b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1600&q=80" width={1600} height={1000} alt="Post Production Editing" />
                     </div>
-                    <div class="relative z-10 h-full flex flex-col justify-end p-8 md:p-16 bg-gradient-to-t from-white via-white/80 to-transparent">
+                    <div class="relative z-10 h-full flex flex-col justify-end p-8 md:p-16 bg-gradient-to-t from-black/85 via-black/40 to-transparent">
                         <div class="overflow-hidden mb-2">
-                            <span class="block text-[#9B2FCA] font-bold tracking-[0.2em] uppercase text-sm translate-y-full reveal-on-scroll">Phase 03</span>
+                            <span class="block text-[#DD2EB8] font-bold tracking-[0.2em] uppercase text-sm translate-y-full reveal-on-scroll">Phase 03</span>
                         </div>
                         <div class="overflow-hidden mb-4">
-                            <h2 class="text-5xl md:text-7xl font-black text-[#00003E] translate-y-full reveal-on-scroll">The Polish.</h2>
+                            <h2 class="text-5xl md:text-7xl font-black text-white translate-y-full reveal-on-scroll">The Polish.</h2>
                         </div>
                         <div class="overflow-hidden max-w-xl">
-                            <p class="text-[#53647d] text-lg md:text-xl translate-y-full reveal-on-scroll">Dialing in the colors, sound design, and rhythm in the edit bay. Transforming raw footage into compelling, cinematic narratives.</p>
+                            <p class="text-white/85 text-lg md:text-xl translate-y-full reveal-on-scroll">Dialing in the colors, sound design, and rhythm in the edit bay. Transforming raw footage into compelling, cinematic narratives.</p>
                         </div>
                     </div>
                 </div>
@@ -123,7 +123,7 @@ import { Image } from 'astro:assets';
                 
                 <!-- Text Content -->
                 <div class="text-left beanery-text">
-                    <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#3F9AE6]/10 border border-[#3F9AE6]/30 backdrop-blur-md mb-6">
+                    <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#3F9AE6]/10 border border-[#3F9AE6]/30 mb-6">
                         <span class="text-xs font-bold tracking-[0.2em] uppercase text-[#9B2FCA]">Case Study Spotlight</span>
                     </div>
                     <h2 class="text-4xl md:text-6xl font-black leading-tight mb-6 text-[#00003E]">
@@ -163,14 +163,11 @@ import { Image } from 'astro:assets';
                             <p class="text-white text-xs font-light drop-shadow-md">The perfect pour. #BTS #CoffeeCulture</p>
                             
                             <!-- Play Icon Overlay -->
-                            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-16 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-16 bg-[#DD2EB8] rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 shadow-xl">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="white"><path d="M8 5.14v14l11-7-11-7z"/></svg>
                             </div>
                         </div>
                     </div>
-                    
-                    <!-- Decorative blur behind phone -->
-                    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-[#DD2EB8]/15 blur-[100px] -z-10 rounded-full"></div>
                 </div>
             </div>
         </section>
@@ -193,7 +190,6 @@ import { Image } from 'astro:assets';
         #brandelier-bts-env .floating-img {
             opacity: 0.25;
             z-index: 1;
-            filter: blur(2px);
         }
         #brandelier-bts-env .hero-content {
             z-index: 10;
@@ -325,7 +321,6 @@ import { Image } from 'astro:assets';
             gsap.to(inner, {
                 scale: 0.9,
                 opacity: 0.3,
-                filter: "blur(4px)",
                 scrollTrigger: {
                     trigger: card,
                     start: "top top",

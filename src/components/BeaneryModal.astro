@@ -34,7 +34,7 @@ const galleryItems = [
 ];
 ---
 
-<div id="beanery-modal" class="fixed inset-0 bg-[#f4f7ff]/95 flex flex-col justify-center items-center opacity-0 pointer-events-none transition-opacity duration-500 z-[100]">
+<div id="beanery-modal" class="fixed inset-0 bg-[#f4f7ff] flex flex-col justify-center items-center opacity-0 pointer-events-none transition-opacity duration-500 z-[100]">
     
     <!-- Close Button -->
     <button id="close-modal-btn" class="absolute top-6 right-6 md:top-10 md:right-10 text-[#53647d] hover:text-[#DD2EB8] hover:rotate-90 transition-all duration-300 z-50 p-2" aria-label="Close modal" type="button">
@@ -54,12 +54,12 @@ const galleryItems = [
     <div class="w-full overflow-x-auto pb-12 pt-4 cursor-grab active:cursor-grabbing relative z-40 beanery-hide-scrollbar" id="horizontal-scroll-container">
         <div class="flex gap-6 md:gap-10 px-6 md:px-[15vw] w-max items-center h-full">
             {galleryItems.map(item => (
-                <div class="w-[280px] md:w-[450px] aspect-[4/5] rounded-2xl overflow-hidden relative group shrink-0 shadow-xl bg-[#f4f7ff] border border-[#3F9AE6]/30">
+                <div class="w-[280px] md:w-[450px] aspect-[4/5] rounded-2xl overflow-hidden relative group shrink-0 shadow-xl bg-[#00003E] border border-[#3F9AE6]/30">
                     <Image src={item.src} width={900} height={1125} class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" alt={item.alt} />
-                    <div class="absolute inset-0 bg-gradient-to-t from-white/95 via-white/40 to-transparent flex flex-col justify-end p-6 md:p-8 translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
-                        <span class="text-[#9B2FCA] text-xs font-bold tracking-widest uppercase mb-1">{item.label}</span>
-                        <h4 class="text-[#00003E] text-xl md:text-2xl font-bold mb-2">{item.title}</h4>
-                        <p class="text-[#53647d] text-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-100">{item.description}</p>
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent flex flex-col justify-end p-6 md:p-8 translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
+                        <span class="text-[#DD2EB8] text-xs font-bold tracking-widest uppercase mb-1">{item.label}</span>
+                        <h4 class="text-white text-xl md:text-2xl font-bold mb-2">{item.title}</h4>
+                        <p class="text-white/80 text-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-100">{item.description}</p>
                     </div>
                 </div>
             ))}
