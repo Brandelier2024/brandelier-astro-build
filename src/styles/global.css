@@ -43,6 +43,29 @@ p, span, a, input, select, textarea, button, label {
   font-family: var(--font-body);
 }
 
+/* ========================================================
+   GLOBAL TEXT JUSTIFICATION
+   Apply justified text alignment to all paragraphs & text editor blocks
+   ======================================================== */
+p,
+.text-editor,
+.text-editor p,
+.elementor-text-editor,
+.elementor-text-editor p,
+.elementor-widget-text-editor,
+.elementor-widget-text-editor p,
+[class*="text-editor"],
+[class*="text-editor"] p,
+.entry-content,
+.entry-content p,
+.prose,
+.prose p,
+.rich-text,
+.rich-text p {
+  text-align: justify;
+  text-justify: inter-word;
+}
+
 em, i {
   font-style: normal;
 }

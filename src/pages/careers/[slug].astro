@@ -1,0 +1,1249 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import PageHero from '../../components/PageHero.astro';
+import { getJobs, getJobBySlug, type JobOpening } from '../../lib/wp';
+
+export async function getStaticPaths() {
+  const jobs = await getJobs();
+  return jobs.map((job) => ({
+    params: { slug: job.slug },
+    props: {
+      job,
+      otherJobs: jobs.filter((j) => j.slug !== job.slug).slice(0, 3)
+    }
+  }));
+}
+
+interface Props {
+  job: JobOpening;
+  otherJobs: JobOpening[];
+}
+
+const { job, otherJobs } = Astro.props;
+---
+
+<Layout
+  title={`${job.title} – Careers | Brandelier Media Works`}
+  description={job.excerpt}
+>
+  <!-- Dark Hero with Breadcrumb -->
+  <PageHero
+    title={job.title}
+    highlight={job.department}
+    description={`We are hiring for our Pune studio. Explore the responsibilities, requirements, and apply directly below.`}
+    breadcrumb={[
+      { label: 'Careers', href: '/careers' },
+      { label: job.title, href: job.href }
+    ]}
+  />
+
+  <div class="job-detail-page">
+    <div class="job-container">
+      
+      <!-- Main Content Column -->
+      <main class="job-main-col">
+        <!-- Quick Meta Pills -->
+        <div class="job-meta-bar">
+          <span class="meta-pill dept-pill">{job.department}</span>
+          <span class="meta-pill type-pill">{job.type}</span>
+          <span class="meta-pill loc-pill">{job.location}</span>
+          <span class="meta-pill exp-pill">{job.experience}</span>
+          <span class="meta-date">Posted {job.date}</span>
+        </div>
+
+        <!-- Job Content / Description rendered from WordPress / HireZoot -->
+        <article class="job-prose-content">
+          <div class="prose-body" set:html={job.content} />
+
+          {job.skills && job.skills.length > 0 && (
+            <div class="skills-highlight-box">
+              <h3>Key Competencies & Tools</h3>
+              <div class="skills-tags">
+                {job.skills.map((s) => (
+                  <span class="skill-tag">{s}</span>
+                ))}
+              </div>
+            </div>
+          )}
+        </article>
+
+        <!-- Application Form Section (Connected to HireZoot CMS) -->
+        <section class="application-section" id="apply">
+          <div class="app-card">
+            <div class="app-header">
+              <span class="section-label">Apply Now</span>
+              <h2>Apply for <em>{job.title}</em></h2>
+              <p class="app-desc">
+                Submit your application below. All submissions are processed and stored in our recruitment portal and reviewed by our hiring directors.
+              </p>
+            </div>
+
+            <!-- Native Application Form -->
+            <form
+              id="brandelierApplicationForm"
+              class="application-form"
+              data-job-id={job.id}
+              data-job-title={job.title}
+              data-ajax-url="https://cms.brandelier.in/wp-json/brandelier/v1/apply"
+              enctype="multipart/form-data"
+              novalidate
+            >
+              <div class="form-grid">
+                <!-- Full Name -->
+                <div class="form-group">
+                  <label for="awsm-applicant-name" class="form-label">
+                    Full Name <span class="required-star">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    id="awsm-applicant-name"
+                    name="awsm_applicant_name"
+                    class="form-input"
+                    placeholder="Enter your full name"
+                    required
+                    autocomplete="name"
+                  />
+                  <span class="field-error" id="error-name"></span>
+                </div>
+
+                <!-- Email -->
+                <div class="form-group">
+                  <label for="awsm-applicant-email" class="form-label">
+                    Email Address <span class="required-star">*</span>
+                  </label>
+                  <input
+                    type="email"
+                    id="awsm-applicant-email"
+                    name="awsm_applicant_email"
+                    class="form-input"
+                    placeholder="you@example.com"
+                    required
+                    autocomplete="email"
+                  />
+                  <span class="field-error" id="error-email"></span>
+                </div>
+
+                <!-- Phone -->
+                <div class="form-group">
+                  <label for="awsm-applicant-phone" class="form-label">
+                    Phone Number <span class="required-star">*</span>
+                  </label>
+                  <input
+                    type="tel"
+                    id="awsm-applicant-phone"
+                    name="awsm_applicant_phone"
+                    class="form-input"
+                    placeholder="+91 98765 43210"
+                    required
+                    autocomplete="tel"
+                  />
+                  <span class="field-error" id="error-phone"></span>
+                </div>
+
+                <!-- Resume / CV Upload -->
+                <div class="form-group">
+                  <label for="awsm-application-file" class="form-label">
+                    Upload CV / Resume <span class="required-star">*</span>
+                  </label>
+                  <div class="file-upload-zone" id="fileDropZone">
+                    <input
+                      type="file"
+                      id="awsm-application-file"
+                      name="awsm_file"
+                      class="file-input-hidden"
+                      accept=".pdf,.doc,.docx"
+                      required
+                    />
+                    <div class="upload-placeholder" id="uploadPlaceholder">
+                      <span class="upload-icon">📄</span>
+                      <span class="upload-text">Drag & drop or <strong>browse</strong></span>
+                      <span class="upload-hint">PDF, DOC, DOCX · Max 10 MB</span>
+                    </div>
+                    <div class="upload-preview" id="uploadPreview" style="display:none;">
+                      <span class="preview-icon">✅</span>
+                      <span class="preview-name" id="previewFileName"></span>
+                      <button type="button" class="remove-file-btn" id="removeFileBtn" title="Remove file">✕</button>
+                    </div>
+                  </div>
+                  <span class="field-error" id="error-file"></span>
+                </div>
+
+                <!-- Bio / Cover Message -->
+                <div class="form-group full-width">
+                  <label for="awsm-applicant-letter" class="form-label">
+                    Bio / Cover Message <span class="required-star">*</span>
+                  </label>
+                  <textarea
+                    id="awsm-applicant-letter"
+                    name="awsm_applicant_letter"
+                    class="form-textarea"
+                    rows="5"
+                    placeholder="Tell us a bit about yourself, your experience, and why you'd be a great fit for this role..."
+                    required
+                  ></textarea>
+                  <span class="field-error" id="error-letter"></span>
+                </div>
+              </div>
+
+              <!-- Anti-bot honeypot field -->
+              <div style="display:none!important; position:absolute; left:-9999px;" aria-hidden="true">
+                <input type="text" name="brandelier_hp_catch" tabindex="-1" autocomplete="off" />
+              </div>
+
+              <!-- Security anti-tamper form token -->
+              <input type="hidden" name="form_token" value="bnd_form_9a8b7c6d5e4f3a2b1c0d9e8f7a6b5c4d" />
+
+              <!-- Hidden fields for WP Job Openings -->
+              <input type="hidden" name="jid" value={String(job.id)} />
+
+              <!-- Submit -->
+              <div class="form-actions">
+                <button type="submit" class="submit-application-btn" id="submitBtn">
+                  <span class="btn-text">Submit Application</span>
+                  <span class="btn-loading" style="display:none;">
+                    <span class="spinner"></span> Submitting...
+                  </span>
+                </button>
+              </div>
+
+              <!-- Status Messages -->
+              <div class="form-status" id="formStatus" style="display:none;"></div>
+            </form>
+
+            <!-- Alternate Email Submission Option -->
+            <div class="email-alternate-card">
+              <div class="email-alt-info">
+                <h4>Prefer email?</h4>
+                <p>You can also send your resume, portfolio link, and introduction directly to our recruitment inbox.</p>
+              </div>
+              <a
+                href={`mailto:Info@brandelier.in?subject=Application for ${encodeURIComponent(job.title)}`}
+                class="email-alt-btn"
+              >
+                Apply via Direct Email ✉
+              </a>
+            </div>
+
+            <div class="app-footer-note">
+              <span>🔒 Your data is securely submitted to our recruitment portal</span>
+              <a href={job.link} target="_blank" rel="noopener noreferrer" class="wp-portal-link">
+                View on CMS ↗
+              </a>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <!-- Sticky Sidebar Column -->
+      <aside class="job-sidebar">
+        <!-- Quick Info Card -->
+        <div class="sidebar-card quick-facts-card">
+          <h3>Role Overview</h3>
+          <ul class="facts-list">
+            <li>
+              <span class="fact-label">Department</span>
+              <strong class="fact-val">{job.department}</strong>
+            </li>
+            <li>
+              <span class="fact-label">Employment Type</span>
+              <strong class="fact-val">{job.type}</strong>
+            </li>
+            <li>
+              <span class="fact-label">Location</span>
+              <strong class="fact-val">{job.location}</strong>
+            </li>
+            <li>
+              <span class="fact-label">Experience</span>
+              <strong class="fact-val">{job.experience}</strong>
+            </li>
+            <li>
+              <span class="fact-label">Date Posted</span>
+              <strong class="fact-val">{job.date}</strong>
+            </li>
+          </ul>
+
+          <a href="#apply" class="sidebar-apply-btn">
+            Apply for this Role <span>↓</span>
+          </a>
+
+          <button type="button" id="copyJobLinkBtn" class="sidebar-share-btn">
+            <span>🔗</span> Copy Job Link
+          </button>
+        </div>
+
+        <!-- Studio Culture Card -->
+        <div class="sidebar-card culture-mini-card">
+          <span class="mini-kicker">Studio Perks</span>
+          <h4>Life at Brandelier</h4>
+          <ul class="mini-perks">
+            <li>⚡ Fast-paced & creative autonomy</li>
+            <li>☕ Vibrant Pune studio & team coffee</li>
+            <li>🌱 Work on real-world brands & campaigns</li>
+            <li>🚀 Direct mentorship from founders</li>
+          </ul>
+          <a href="/about-us" class="mini-learn-more">Learn more about our team ↗</a>
+        </div>
+
+        <!-- Other Jobs -->
+        {otherJobs.length > 0 && (
+          <div class="sidebar-card other-jobs-card">
+            <h4>Other Open Roles</h4>
+            <div class="other-jobs-list">
+              {otherJobs.map((item) => (
+                <a href={item.href} class="other-job-item">
+                  <div class="other-job-info">
+                    <span class="other-job-dept">{item.department}</span>
+                    <strong class="other-job-title">{item.title}</strong>
+                    <span class="other-job-type">{item.type} · {item.location}</span>
+                  </div>
+                  <span class="other-job-arrow">↗</span>
+                </a>
+              ))}
+            </div>
+          </div>
+        )}
+      </aside>
+
+    </div>
+  </div>
+</Layout>
+
+<script>
+  // Copy Job Link
+  const copyBtn = document.getElementById('copyJobLinkBtn');
+  if (copyBtn) {
+    copyBtn.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(window.location.href);
+        const original = copyBtn.innerHTML;
+        copyBtn.innerHTML = '<span>✓</span> Copied to Clipboard!';
+        copyBtn.style.borderColor = 'var(--pink)';
+        copyBtn.style.color = 'var(--pink)';
+        setTimeout(() => {
+          copyBtn.innerHTML = original;
+          copyBtn.style.borderColor = '';
+          copyBtn.style.color = '';
+        }, 2500);
+      } catch (e) {
+        alert('Job link copied!');
+      }
+    });
+  }
+</script>
+
+<script>
+  // ============================================================
+  //  Application Form Handler (WP Job Openings / HireZoot)
+  // ============================================================
+  const form = document.getElementById('brandelierApplicationForm') as HTMLFormElement | null;
+  const statusBox = document.getElementById('formStatus') as HTMLDivElement | null;
+  const submitBtn = document.getElementById('submitBtn') as HTMLButtonElement | null;
+  const fileInput = document.getElementById('awsm-application-file') as HTMLInputElement | null;
+  const fileDropZone = document.getElementById('fileDropZone') as HTMLDivElement | null;
+  const uploadPlaceholder = document.getElementById('uploadPlaceholder') as HTMLDivElement | null;
+  const uploadPreview = document.getElementById('uploadPreview') as HTMLDivElement | null;
+  const previewFileName = document.getElementById('previewFileName') as HTMLSpanElement | null;
+  const removeFileBtn = document.getElementById('removeFileBtn') as HTMLButtonElement | null;
+
+  // --- File Upload UX ---
+  function showFilePreview(file: File) {
+    if (uploadPlaceholder) uploadPlaceholder.style.display = 'none';
+    if (uploadPreview) uploadPreview.style.display = 'flex';
+    if (previewFileName) previewFileName.textContent = file.name;
+  }
+
+  function resetFilePreview() {
+    if (uploadPlaceholder) uploadPlaceholder.style.display = 'flex';
+    if (uploadPreview) uploadPreview.style.display = 'none';
+    if (previewFileName) previewFileName.textContent = '';
+    if (fileInput) fileInput.value = '';
+  }
+
+  if (fileInput) {
+    fileInput.addEventListener('change', () => {
+      const file = fileInput.files?.[0];
+      if (file) showFilePreview(file);
+    });
+  }
+
+  if (removeFileBtn) {
+    removeFileBtn.addEventListener('click', resetFilePreview);
+  }
+
+  // Drag & drop
+  if (fileDropZone && fileInput) {
+    fileDropZone.addEventListener('click', () => fileInput.click());
+
+    fileDropZone.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      fileDropZone.classList.add('drag-over');
+    });
+    fileDropZone.addEventListener('dragleave', () => {
+      fileDropZone.classList.remove('drag-over');
+    });
+    fileDropZone.addEventListener('drop', (e) => {
+      e.preventDefault();
+      fileDropZone.classList.remove('drag-over');
+      const droppedFile = e.dataTransfer?.files?.[0];
+      if (droppedFile && fileInput) {
+        const dt = new DataTransfer();
+        dt.items.add(droppedFile);
+        fileInput.files = dt.files;
+        showFilePreview(droppedFile);
+      }
+    });
+  }
+
+  // --- Validation ---
+  function clearErrors() {
+    document.querySelectorAll('.field-error').forEach((el) => {
+      (el as HTMLElement).textContent = '';
+    });
+    document.querySelectorAll('.form-input, .form-textarea, .file-upload-zone').forEach((el) => {
+      el.classList.remove('input-error');
+    });
+  }
+
+  function validateForm(): boolean {
+    clearErrors();
+    let valid = true;
+
+    const nameInput = document.getElementById('awsm-applicant-name') as HTMLInputElement;
+    const emailInput = document.getElementById('awsm-applicant-email') as HTMLInputElement;
+    const phoneInput = document.getElementById('awsm-applicant-phone') as HTMLInputElement;
+    const letterInput = document.getElementById('awsm-applicant-letter') as HTMLTextAreaElement;
+
+    if (!nameInput?.value.trim()) {
+      setFieldError('error-name', 'Full name is required', nameInput);
+      valid = false;
+    }
+    if (!emailInput?.value.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailInput.value)) {
+      setFieldError('error-email', 'A valid email address is required', emailInput);
+      valid = false;
+    }
+    if (!phoneInput?.value.trim()) {
+      setFieldError('error-phone', 'Phone number is required', phoneInput);
+      valid = false;
+    }
+    if (!letterInput?.value.trim()) {
+      setFieldError('error-letter', 'Please write a brief bio or cover message', letterInput);
+      valid = false;
+    }
+    if (!fileInput?.files?.length) {
+      const errEl = document.getElementById('error-file');
+      if (errEl) errEl.textContent = 'Please upload your CV / resume';
+      fileDropZone?.classList.add('input-error');
+      valid = false;
+    } else {
+      const file = fileInput.files[0];
+      if (file.size > 10 * 1024 * 1024) {
+        const errEl = document.getElementById('error-file');
+        if (errEl) errEl.textContent = 'File must be under 10 MB';
+        fileDropZone?.classList.add('input-error');
+        valid = false;
+      }
+    }
+
+    return valid;
+  }
+
+  function setFieldError(errorId: string, message: string, inputEl?: HTMLElement | null) {
+    const errEl = document.getElementById(errorId);
+    if (errEl) errEl.textContent = message;
+    if (inputEl) inputEl.classList.add('input-error');
+  }
+
+  // --- Form Submission ---
+  if (form) {
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (!validateForm()) return;
+
+      const ajaxUrl = form.dataset.ajaxUrl || '';
+      const btnText = submitBtn?.querySelector('.btn-text') as HTMLElement | null;
+      const btnLoading = submitBtn?.querySelector('.btn-loading') as HTMLElement | null;
+
+      // Loading state
+      if (submitBtn) submitBtn.disabled = true;
+      if (btnText) btnText.style.display = 'none';
+      if (btnLoading) btnLoading.style.display = 'inline-flex';
+
+      const formData = new FormData(form);
+
+      try {
+        const response = await fetch(ajaxUrl, {
+          method: 'POST',
+          body: formData,
+          headers: {
+            'X-Requested-With': 'XMLHttpRequest'
+          }
+        });
+
+        let result: any = {};
+        const contentType = response.headers.get('content-type') || '';
+        if (contentType.includes('application/json')) {
+          result = await response.json();
+        } else {
+          const text = await response.text();
+          try { result = JSON.parse(text); } catch { result = { success: response.ok }; }
+        }
+
+        if (response.ok && (result.success !== false)) {
+          showStatus('success', '🎉 Application submitted successfully! We\'ll review your application and get back to you soon.');
+          form.reset();
+          resetFilePreview();
+        } else {
+          const errorMsg = result?.message || result?.data?.message || result?.data || 'Something went wrong. Please try again or use the email option below.';
+          showStatus('error', `❌ ${errorMsg}`);
+        }
+      } catch (err) {
+        // CORS or network error — fall back to direct form submission
+        showStatus('error', '⚠️ Could not submit directly. This may be a network issue. Please try the email option below, or <a href="' + (form.dataset.ajaxUrl?.replace('/wp-admin/admin-ajax.php', '/jobs/') || '#') + '" target="_blank" rel="noopener">apply on our CMS portal ↗</a>.');
+      }
+
+      // Reset button state
+      if (submitBtn) submitBtn.disabled = false;
+      if (btnText) btnText.style.display = 'inline';
+      if (btnLoading) btnLoading.style.display = 'none';
+    });
+  }
+
+  function showStatus(type: 'success' | 'error', message: string) {
+    if (!statusBox) return;
+    statusBox.style.display = 'block';
+    statusBox.className = `form-status status-${type}`;
+    statusBox.innerHTML = message;
+    statusBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+</script>
+
+<style>
+  .job-detail-page {
+    background: var(--paper);
+    color: var(--ink);
+    min-height: 100vh;
+    padding: 5rem 5vw 8rem;
+  }
+
+  .job-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 360px;
+    gap: 4.5rem;
+    align-items: start;
+  }
+
+  /* --------------------------------------------------------
+     Main Column
+     -------------------------------------------------------- */
+  .job-meta-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .meta-pill {
+    font-family: var(--font-heading);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 6px 14px;
+    border-radius: 100px;
+  }
+  .dept-pill { background: rgba(221,46,184,.1); color: var(--pink); border: 1px solid rgba(221,46,184,.25); }
+  .type-pill { background: rgba(63,154,230,.12); color: var(--blue-bell); border: 1px solid rgba(63,154,230,.25); }
+  .loc-pill { background: rgba(0,0,62,.06); color: var(--ink); }
+  .exp-pill { background: rgba(235,173,116,.18); color: #b86214; }
+  .meta-date { font-family: var(--font-body); font-size: 0.82rem; color: var(--muted); margin-left: auto; }
+
+  /* --------------------------------------------------------
+     Prose Content (WordPress / HireZoot HTML)
+     -------------------------------------------------------- */
+  .job-prose-content {
+    background: #ffffff;
+    border: 1px solid var(--line);
+    border-radius: 24px;
+    padding: 3.5rem;
+    box-shadow: 0 10px 30px rgba(0,0,62,.03);
+    margin-bottom: 4rem;
+  }
+
+  .prose-body {
+    font-family: var(--font-body);
+    font-size: 1.05rem;
+    line-height: 1.8;
+    color: #2b3345;
+  }
+
+  .prose-body :global(h2) {
+    font-family: var(--font-heading);
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--ink);
+    margin: 2.5rem 0 1rem;
+    letter-spacing: -0.02em;
+  }
+  .prose-body :global(h2:first-child) {
+    margin-top: 0;
+  }
+
+  .prose-body :global(h3) {
+    font-family: var(--font-heading);
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--ink);
+    margin: 1.8rem 0 0.8rem;
+  }
+
+  .prose-body :global(p) {
+    margin-bottom: 1.4rem;
+    text-align: justify;
+    text-justify: inter-word;
+  }
+
+  .prose-body :global(ul) {
+    margin: 1rem 0 1.8rem 1.4rem;
+    list-style: disc;
+  }
+
+  .prose-body :global(li) {
+    margin-bottom: 0.6rem;
+    line-height: 1.65;
+  }
+
+  .prose-body :global(hr) {
+    border: 0;
+    border-top: 1px solid var(--line);
+    margin: 2.5rem 0;
+  }
+
+  /* Skills Box */
+  .skills-highlight-box {
+    margin-top: 2.5rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--line);
+  }
+  .skills-highlight-box h3 {
+    font-family: var(--font-heading);
+    font-size: 1.15rem;
+    font-weight: 700;
+    margin: 0 0 1rem;
+    color: var(--ink);
+  }
+  .skills-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+  }
+  .skill-tag {
+    font-family: var(--font-body);
+    font-size: 0.8rem;
+    background: rgba(0,0,62,.05);
+    color: var(--ink);
+    padding: 0.45rem 1rem;
+    border-radius: 8px;
+    font-weight: 500;
+    border: 1px solid rgba(0,0,62,.08);
+  }
+
+  /* --------------------------------------------------------
+     Application Form Card
+     -------------------------------------------------------- */
+  .app-card {
+    background: #ffffff;
+    border: 1px solid var(--line);
+    border-radius: 24px;
+    padding: 3.5rem;
+    box-shadow: 0 15px 40px rgba(0,0,62,.04);
+  }
+
+  .app-header .section-label {
+    font-family: var(--font-body);
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--pink);
+    font-weight: 700;
+  }
+  .app-header h2 {
+    font-family: var(--font-heading);
+    font-size: clamp(2rem, 3.5vw, 2.8rem);
+    font-weight: 700;
+    letter-spacing: -0.04em;
+    margin: 0.5rem 0 1rem;
+    color: var(--ink);
+  }
+  .app-header h2 em {
+    color: var(--pink);
+    font-style: normal;
+  }
+  .app-desc {
+    font-family: var(--font-body);
+    font-size: 1rem;
+    line-height: 1.6;
+    color: var(--muted);
+    margin-bottom: 2.5rem;
+  }
+
+  /* --------------------------------------------------------
+     Application Form Fields
+     -------------------------------------------------------- */
+  .application-form {
+    margin-bottom: 2.5rem;
+  }
+
+  .form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem 2rem;
+    margin-bottom: 2rem;
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  .form-group.full-width {
+    grid-column: span 2;
+  }
+
+  .form-label {
+    font-family: var(--font-heading);
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--ink);
+  }
+  .required-star {
+    color: var(--pink);
+  }
+
+  .form-input,
+  .form-textarea {
+    font-family: var(--font-body);
+    font-size: 0.95rem;
+    color: var(--ink);
+    background: #f8f9fc;
+    border: 1.5px solid rgba(0, 0, 62, 0.12);
+    border-radius: 12px;
+    padding: 0.85rem 1.1rem;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  .form-input:focus,
+  .form-textarea:focus {
+    border-color: var(--pink);
+    background: #ffffff;
+    box-shadow: 0 0 0 3px rgba(221, 46, 184, 0.08);
+  }
+  .form-input::placeholder,
+  .form-textarea::placeholder {
+    color: #a0a8b8;
+    font-weight: 400;
+  }
+
+  .form-textarea {
+    resize: vertical;
+    min-height: 120px;
+  }
+
+  /* Error States */
+  .input-error {
+    border-color: #e53e3e !important;
+    box-shadow: 0 0 0 3px rgba(229, 62, 62, 0.1) !important;
+  }
+  .field-error {
+    font-family: var(--font-body);
+    font-size: 0.76rem;
+    color: #e53e3e;
+    min-height: 1rem;
+    display: block;
+  }
+
+  /* File Upload Zone */
+  .file-upload-zone {
+    position: relative;
+    border: 2px dashed rgba(0, 0, 62, 0.15);
+    border-radius: 14px;
+    background: #f8f9fc;
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s;
+    overflow: hidden;
+  }
+  .file-upload-zone:hover,
+  .file-upload-zone.drag-over {
+    border-color: var(--pink);
+    background: rgba(221, 46, 184, 0.04);
+  }
+
+  .file-input-hidden {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    z-index: 2;
+  }
+
+  .upload-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.35rem;
+    padding: 1.8rem 1rem;
+    pointer-events: none;
+  }
+  .upload-icon {
+    font-size: 2rem;
+    line-height: 1;
+  }
+  .upload-text {
+    font-family: var(--font-body);
+    font-size: 0.88rem;
+    color: var(--ink);
+  }
+  .upload-text strong {
+    color: var(--pink);
+  }
+  .upload-hint {
+    font-family: var(--font-body);
+    font-size: 0.72rem;
+    color: var(--muted);
+  }
+
+  .upload-preview {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    padding: 1.2rem 1.5rem;
+    background: rgba(221, 46, 184, 0.06);
+    pointer-events: none;
+  }
+  .preview-icon {
+    font-size: 1.2rem;
+  }
+  .preview-name {
+    font-family: var(--font-body);
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: var(--ink);
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .remove-file-btn {
+    pointer-events: all;
+    position: relative;
+    z-index: 3;
+    background: none;
+    border: 1px solid rgba(0, 0, 62, 0.15);
+    border-radius: 50%;
+    width: 28px;
+    height: 28px;
+    font-size: 0.75rem;
+    color: var(--muted);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: border-color 0.2s, color 0.2s;
+  }
+  .remove-file-btn:hover {
+    border-color: #e53e3e;
+    color: #e53e3e;
+  }
+
+  /* Submit Button */
+  .form-actions {
+    display: flex;
+    justify-content: flex-start;
+  }
+
+  .submit-application-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    font-family: var(--font-heading);
+    font-size: 0.88rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    background: var(--pink);
+    color: #ffffff;
+    border: none;
+    padding: 1.1rem 2.8rem;
+    border-radius: 100px;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+    min-width: 240px;
+  }
+  .submit-application-btn:hover:not(:disabled) {
+    background: #b81c96;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(221, 46, 184, 0.25);
+  }
+  .submit-application-btn:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+  }
+
+  .btn-loading {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .spinner {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-top-color: #ffffff;
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+  }
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+
+  /* Status Messages */
+  .form-status {
+    margin-top: 1.5rem;
+    padding: 1.2rem 1.5rem;
+    border-radius: 14px;
+    font-family: var(--font-body);
+    font-size: 0.92rem;
+    line-height: 1.6;
+  }
+  .form-status a {
+    color: inherit;
+    font-weight: 700;
+    text-decoration: underline;
+  }
+  .status-success {
+    background: rgba(46, 184, 92, 0.08);
+    border: 1px solid rgba(46, 184, 92, 0.25);
+    color: #1a7a3a;
+  }
+  .status-error {
+    background: rgba(229, 62, 62, 0.06);
+    border: 1px solid rgba(229, 62, 62, 0.2);
+    color: #c53030;
+  }
+
+  /* Email Alternate Card */
+  .email-alternate-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1.5rem;
+    background: #ffffff;
+    border: 1px dashed var(--line);
+    border-radius: 16px;
+    padding: 1.5rem 1.8rem;
+    margin-bottom: 2rem;
+  }
+  .email-alt-info h4 {
+    font-family: var(--font-heading);
+    font-size: 0.98rem;
+    margin: 0 0 0.3rem;
+    color: var(--ink);
+  }
+  .email-alt-info p {
+    font-family: var(--font-body);
+    font-size: 0.82rem;
+    color: var(--muted);
+    margin: 0;
+  }
+  .email-alt-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-family: var(--font-body);
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--ink);
+    border: 1px solid var(--line);
+    padding: 0.75rem 1.4rem;
+    border-radius: 100px;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: border-color 0.2s, color 0.2s;
+    flex-shrink: 0;
+  }
+  .email-alt-btn:hover {
+    border-color: var(--pink);
+    color: var(--pink);
+  }
+
+  .app-footer-note {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid var(--line);
+    padding-top: 1.5rem;
+    margin-top: 2.5rem;
+    font-family: var(--font-body);
+    font-size: 0.78rem;
+    color: var(--muted);
+  }
+  .wp-portal-link {
+    color: var(--blue-bell);
+    text-decoration: none;
+    font-weight: 600;
+  }
+  .wp-portal-link:hover {
+    color: var(--pink);
+  }
+
+  /* --------------------------------------------------------
+     Sticky Sidebar
+     -------------------------------------------------------- */
+  .job-sidebar {
+    position: sticky;
+    top: 100px;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .sidebar-card {
+    background: #ffffff;
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    padding: 2rem;
+    box-shadow: 0 8px 24px rgba(0,0,62,.03);
+  }
+
+  .quick-facts-card h3 {
+    font-family: var(--font-heading);
+    font-size: 1.15rem;
+    font-weight: 700;
+    margin: 0 0 1.5rem;
+    color: var(--ink);
+  }
+
+  .facts-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .facts-list li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px dashed rgba(0,0,62,.1);
+    padding-bottom: 0.8rem;
+  }
+  .facts-list li:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+  .fact-label {
+    font-family: var(--font-body);
+    font-size: 0.82rem;
+    color: var(--muted);
+  }
+  .fact-val {
+    font-family: var(--font-heading);
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: var(--ink);
+  }
+
+  .sidebar-apply-btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    width: 100%;
+    font-family: var(--font-heading);
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-decoration: none;
+    background: var(--pink);
+    color: #ffffff;
+    padding: 1rem;
+    border-radius: 100px;
+    margin-bottom: 0.8rem;
+    transition: transform 0.2s, background 0.2s;
+    box-sizing: border-box;
+  }
+  .sidebar-apply-btn:hover {
+    background: #c81ba4;
+    transform: translateY(-2px);
+  }
+
+  .sidebar-share-btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    width: 100%;
+    font-family: var(--font-body);
+    font-size: 0.82rem;
+    font-weight: 600;
+    background: transparent;
+    border: 1px solid var(--line);
+    color: var(--ink);
+    padding: 0.8rem;
+    border-radius: 100px;
+    cursor: pointer;
+    transition: border-color 0.2s, color 0.2s;
+  }
+  .sidebar-share-btn:hover {
+    border-color: var(--pink);
+    color: var(--pink);
+  }
+
+  .mini-kicker {
+    font-family: var(--font-body);
+    font-size: 0.68rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--pink);
+    font-weight: 700;
+    display: block;
+    margin-bottom: 0.3rem;
+  }
+  .culture-mini-card h4 {
+    font-family: var(--font-heading);
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--ink);
+    margin: 0 0 1rem;
+  }
+  .mini-perks {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 1.2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+  .mini-perks li {
+    font-size: 0.85rem;
+    color: #435068;
+    line-height: 1.5;
+  }
+  .mini-learn-more {
+    font-family: var(--font-body);
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--blue-bell);
+    text-decoration: none;
+  }
+  .mini-learn-more:hover {
+    color: var(--pink);
+  }
+
+  .other-jobs-card h4 {
+    font-family: var(--font-heading);
+    font-size: 1.05rem;
+    font-weight: 700;
+    margin: 0 0 1.2rem;
+    color: var(--ink);
+  }
+  .other-jobs-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+  }
+  .other-job-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.8rem 1rem;
+    border-radius: 12px;
+    border: 1px solid rgba(0,0,62,.06);
+    background: #fbfdff;
+    text-decoration: none;
+    transition: border-color 0.2s, transform 0.2s, background 0.2s;
+  }
+  .other-job-item:hover {
+    border-color: var(--pink);
+    background: #ffffff;
+    transform: translateX(4px);
+  }
+  .other-job-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+  .other-job-dept {
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: var(--pink);
+    letter-spacing: 0.06em;
+  }
+  .other-job-title {
+    font-size: 0.88rem;
+    color: var(--ink);
+  }
+  .other-job-type {
+    font-size: 0.72rem;
+    color: var(--muted);
+  }
+  .other-job-arrow {
+    color: var(--muted);
+    font-size: 0.85rem;
+  }
+  .other-job-item:hover .other-job-arrow {
+    color: var(--pink);
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (max-width: 960px) {
+    .job-container {
+      grid-template-columns: 1fr;
+      gap: 3rem;
+    }
+    .form-grid {
+      grid-template-columns: 1fr;
+    }
+    .form-group.full-width {
+      grid-column: span 1;
+    }
+    .job-sidebar {
+      position: static;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .job-detail-page {
+      padding: 3rem 20px 6rem;
+    }
+    .job-prose-content,
+    .app-card {
+      padding: 2rem 1.5rem;
+    }
+    .meta-date {
+      width: 100%;
+      margin-left: 0;
+      margin-top: 0.4rem;
+    }
+  }
+</style>

@@ -1,187 +1,1034 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import { Image } from 'astro:assets';
-import PageHero from '../components/PageHero.astro';
-
-const team = [
-  { name: 'Gaurav Pawar', role: 'Co-Founder', desc: 'Visionary strategist driving brand growth and creative direction.' },
-  { name: 'Rushikesh Patil', role: 'Co-Founder', desc: 'Leads operations and client partnerships with precision.' },
-  { name: 'Roshan Bhise', role: 'Social Media Designer', desc: 'Creates scroll-stopping social media visuals and campaigns.' },
-  { name: 'Rekha Kalje', role: 'Marketing Manager', desc: 'Drives marketing strategies and campaign performance.' },
-  { name: 'Purushottam Raut', role: 'Graphic Designer', desc: 'Crafts compelling brand identities and visual assets.' },
-  { name: 'Sudhanshu Sakhare', role: 'Web Developer', desc: 'Builds high-performance websites and digital experiences.' },
-  { name: 'Shakti Kale', role: 'Content Head', desc: 'Shapes brand narratives and content strategy across platforms.' },
-];
-
-const values = [
-  { icon: '✦', title: 'Innovation First', desc: 'We push boundaries to deliver creative solutions that stand apart.' },
-  { icon: '◉', title: 'Client-Centric', desc: 'Your goals are our goals. We build lasting partnerships, not just projects.' },
-  { icon: '⬡', title: 'Data-Driven', desc: 'Every decision is backed by insights, analytics, and performance data.' },
-  { icon: '◈', title: 'Integrity', desc: 'Transparent communication and honest results — always.' },
-];
-
-const stats = [
-  { number: '6+', label: 'Years of Experience' },
-  { number: '100+', label: 'Happy Clients' },
-  { number: '20+', label: 'Team Members' },
-  { number: '500+', label: 'Projects Delivered' },
-];
+import Layout from "../layouts/Layout.astro";
+import PageHero from "../components/PageHero.astro";
 ---
 
-<Layout title="About Brandelier – A Creative Digital Marketing Agency in Pune" description="Learn more about Brandelier, a leading digital marketing agency in Pune offering SEO, branding, web design, and social media marketing services.">
-
+<Layout
+  title="About Brandelier – A Creative Digital Marketing Agency in Pune"
+  description="Meet the team behind Brandelier, a creative digital marketing company in Pune offering branding, SEO, web design, social media & product shoot services."
+>
+  <!-- Page Hero Banner (Standard Across Whole Site) -->
   <PageHero
-    title="We don't just market."
-    highlight="We make brands matter."
-    description="Brandelier Media Works is a full-service creative digital marketing agency in Pune. We exist to help ambitious brands make noise and mean more."
-    breadcrumb={[{ label: 'About Us', href: '/about-us' }]}
+    title="Creativity"
+    highlight="Served Strong."
+    description="Welcome to Brandelier — where creativity brews stronger than our coffee. We’re a media works company led by two minds: one a storyteller with flair, the other a strategist who speaks fluent tech."
+    breadcrumb={[{ label: "About Us", href: "/about-us" }]}
   />
 
-  <!-- Story Section -->
-  <section class="story-section">
-    <div class="story-grid">
-      <div class="story-left">
-        <p class="section-label">Our Story</p>
-        <h2>Built on passion,<br /><em>driven by results.</em></h2>
-      </div>
-      <div class="story-right">
-        <p class="story-text">What started as a shared passion for creativity and marketing has grown into one of Pune's most dynamic digital agencies. Founded by Gaurav Pawar and Rushikesh Patil, Brandelier was born from a simple belief: every brand deserves to be seen, heard, and remembered.</p>
-        <p class="story-text">Over the past 6+ years, we've partnered with 100+ businesses — from ambitious startups to established enterprises — helping them craft compelling digital identities, execute high-impact campaigns, and achieve measurable growth.</p>
-        <p class="story-text">Today, with a team of 20+ creative minds, we offer end-to-end digital marketing services including SEO, social media marketing, web development, content creation, videography, brand design, and performance marketing.</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- Stats -->
-  <section class="about-stats">
-    <div class="about-stats-grid">
-      {stats.map(stat => (
-        <div class="about-stat">
-          <span class="about-stat-num">{stat.number}</span>
-          <span class="about-stat-label">{stat.label}</span>
-        </div>
-      ))}
-    </div>
-  </section>
-
-  <!-- Image Break -->
-  <section class="about-image-break">
-    <Image src="https://brandelier.in/wp-content/uploads/2025/06/DSC09238-1024x769.webp" alt="Brandelier team at work" width={1600} height={900} loading="lazy" />
-    <div class="image-overlay-text">
-      <span>Where ideas</span>
-      <span>become impact.</span>
-    </div>
-  </section>
-
-  <!-- Values -->
-  <section class="values-section">
-    <div class="values-heading">
-      <p class="section-label">Our Values</p>
-      <h2>What guides<br /><em>everything we do.</em></h2>
-    </div>
-    <div class="values-grid">
-      {values.map(v => (
-        <article class="value-card">
-          <span class="value-icon">{v.icon}</span>
-          <h3>{v.title}</h3>
-          <p>{v.desc}</p>
-        </article>
-      ))}
-    </div>
-  </section>
-
-  <!-- Team -->
-  <section class="team-section">
-    <div class="team-heading">
-      <p class="section-label">Our Team</p>
-      <h2>The people<br /><em>behind the brand.</em></h2>
-    </div>
-    <div class="team-grid">
-      {team.map((member, i) => (
-        <article class="team-card">
-          <div class="team-avatar">
-            <span>{member.name.split(' ').map(n => n[0]).join('')}</span>
+  <div class="about-page-wrapper">
+    <!-- Top Intro Showcase & Swipe to Call Section -->
+    <section class="about-intro-section">
+      <div class="intro-container">
+        <div class="intro-image-col">
+          <div class="intro-image-card">
+            <img
+              src="https://brandelier.in/wp-content/uploads/2025/06/DSC09238-1024x769.webp"
+              alt="best digital marketing services provider team in pune"
+              loading="eager"
+            />
+            <div class="image-badge">Brandelier Team · Pune</div>
           </div>
-          <h3>{member.name}</h3>
-          <p class="team-role">{member.role}</p>
-          <p class="team-desc">{member.desc}</p>
-        </article>
-      ))}
-    </div>
-  </section>
+        </div>
 
-  <!-- CTA -->
+        <div class="intro-content-col">
+          <p class="section-label">01 — Who We Are</p>
+          <h2 class="intro-title">
+            Built on passion,<br /><em>driven by results.</em>
+          </h2>
+          <p class="intro-description">
+            Welcome to Brandelier — where creativity brews stronger than our
+            coffee. What started as a shared passion for storytelling and
+            strategy has grown into one of Pune's most dynamic creative digital
+            agencies.
+          </p>
+          <p class="intro-description secondary">
+            Founded by Gaurav Pawar and Rushikesh Patil, we mix design, human
+            behaviour, and tech geekery to build brands that work (and look
+            extraordinary doing it).
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Leadership / Our Founders Section -->
+    <section class="founders-section">
+      <div class="founders-heading">
+        <p class="section-label">02 — Leadership</p>
+        <h2>Our <em>Founders</em></h2>
+        <p class="founders-sub">
+          The creative visionaries and strategic architects behind Brandelier.
+        </p>
+      </div>
+
+      <div class="founders-grid">
+        <!-- Founder 1: Gaurav Pawar -->
+        <article class="founder-card">
+          <div class="founder-image-box">
+            <img
+              src="https://brandelier.in/wp-content/uploads/2025/06/3D4A4687-683x1024.webp"
+              alt="Gaurav Pawar - Co-founder - Brandelier"
+              loading="lazy"
+            />
+          </div>
+          <div class="founder-details">
+            <div class="founder-header">
+              <h3 class="founder-name">Gaurav Pawar</h3>
+              <span class="founder-designation">Co-Founder</span>
+            </div>
+            <p class="founder-bio">
+              Born into a home where music wasn’t just heard but lived, I’ve
+              always had an ear for detail—literally. Before I could drive, I
+              was performing on stage and composing my own tunes. Fast-forward
+              through a creative detour in AR, VR, and MR (yes, all the Rs), I
+              now lead Brandelier—a media works company where visuals, strategy,
+              and sound collide. I’m the guy who sees the video before it’s
+              shot, hears the soundtrack before it’s composed, and drags the
+              team into the vision (with snacks, of course). A visualiser,
+              music-maker, and chief chaos-organiser — one coffee at a time.
+            </p>
+            <div class="founder-socials">
+              <a
+                href="https://www.instagram.com/gauravmuzic?igsh=MTVrMHJrOHBlcjY2cQ=="
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Gaurav Pawar Instagram"
+              >
+                <svg
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                  <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"
+                  ></path>
+                  <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                </svg>
+                <span>Instagram</span>
+              </a>
+              <a
+                href="https://www.linkedin.com/in/gauravmuzic/"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Gaurav Pawar LinkedIn"
+              >
+                <svg
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path
+                    d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"
+                  ></path>
+                  <rect x="2" y="9" width="4" height="12"></rect>
+                  <circle cx="4" cy="4" r="2"></circle>
+                </svg>
+                <span>LinkedIn</span>
+              </a>
+            </div>
+          </div>
+        </article>
+
+        <!-- Founder 2: Rushikesh Patil -->
+        <article class="founder-card">
+          <div class="founder-image-box">
+            <img
+              src="https://brandelier.in/wp-content/uploads/2025/06/3D4A4683-scaled-e1750241829667-733x1024.webp"
+              alt="Rushikesh Patil - Co-founder - Brandelier"
+              loading="lazy"
+            />
+          </div>
+          <div class="founder-details">
+            <div class="founder-header">
+              <h3 class="founder-name">Rushikesh Patil</h3>
+              <span class="founder-designation">Co-Founder</span>
+            </div>
+            <p class="founder-bio">
+              I don’t talk—I narrate plot twists. From hotel kitchens in
+              Mauritius to wireframes and workflows, my journey’s been one long
+              user experience. Somewhere between obsessing over font spacing and
+              fixing team dynamics, I realised I wasn’t made for rulebooks—I’d
+              rather rewrite them. Now, as co-founder at Brandelier, I mix
+              design, behaviour, tech geekery, and just the right dose of chaos
+              to build brands that work (and look good doing it). Whether it’s a
+              UX flow or a team brainstorm, I live for the “why didn’t we do
+              this sooner?” moments. Bring coffee—I’ll bring metaphors, sticky
+              notes, and way too many tabs open.
+            </p>
+            <div class="founder-socials">
+              <a
+                href="https://www.instagram.com/rushikesh.patil.?igsh=anBpNjZ6ZGNhMGJm"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Rushikesh Patil Instagram"
+              >
+                <svg
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                  <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"
+                  ></path>
+                  <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                </svg>
+                <span>Instagram</span>
+              </a>
+              <a
+                href="https://www.linkedin.com/in/rushikesh-p/"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Rushikesh Patil LinkedIn"
+              >
+                <svg
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path
+                    d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"
+                  ></path>
+                  <rect x="2" y="9" width="4" height="12"></rect>
+                  <circle cx="4" cy="4" r="2"></circle>
+                </svg>
+                <span>LinkedIn</span>
+              </a>
+            </div>
+          </div>
+        </article>
+      </div>
+
+      <!-- Connector line SVG (Styled in brand pink/violet for clean light theme) -->
+      <!-- Desktop Connector -->
+      <div class="team-connector desktop-only">
+        <svg
+          viewBox="0 0 1200 200"
+          class="connector-svg"
+          preserveAspectRatio="none"
+        >
+          <path
+            d="M 300 0 V 60 H 600 V 200"
+            stroke="#dd2eb8"
+            stroke-width="4"
+            fill="none"></path>
+          <path
+            d="M 900 0 V 60 H 600 V 200"
+            stroke="#dd2eb8"
+            stroke-width="4"
+            fill="none"></path>
+        </svg>
+      </div>
+
+      <!-- Mobile Connector -->
+      <div class="team-connector-mobile mobile-only">
+        <svg
+          viewBox="0 0 100 500"
+          class="connector-svg-mobile"
+          preserveAspectRatio="none"
+        >
+          <path
+            d="M 50 0 C 50 60, 50 140, 50 600"
+            stroke="#dd2eb8"
+            stroke-width="8"
+            fill="none"></path>
+        </svg>
+      </div>
+    </section>
+
+    <div class="scratch-wrapper">
+      <div id="scratch-container">
+        <div id="scratch-text">Scratch to Reveal</div>
+        <canvas id="scratchCanvas"></canvas>
+        <img
+          src="https://brandelier.in/wp-content/uploads/2025/06/DSC09256-scaled.webp"
+          alt="Best Digital Marketing agency in Pune"
+          id="scratchImage"
+          loading="lazy"
+        />
+      </div>
+    </div>
+  </div>
+
+  <!-- CTA Section (Consistent with Whole Site) -->
   <section class="about-cta">
     <p class="section-label">Ready to grow?</p>
     <h2>Let's build something<br /><em>extraordinary.</em></h2>
-    <a href="/contact-us" class="cta-button">Get in Touch <span aria-hidden="true">↗</span></a>
+    <a href="/contact-us" class="cta-button"
+      >Get in Touch <span aria-hidden="true">↗</span></a
+    >
   </section>
-
 </Layout>
 
 <style>
-  .section-label { font-family: var(--font-body); font-size: .7rem; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
-  h2 { font-family: var(--font-heading); font-size: clamp(2.8rem, 6vw, 5.5rem); font-weight: 500; letter-spacing: -.04em; line-height: .95; margin: 1.5rem 0 0; }
-  h2 em { color: var(--pink); font-style: normal; }
-
-  /* Story */
-  .story-section { padding: 8rem 10vw; }
-  .story-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8vw; }
-  .story-text { font-size: clamp(1rem, 1.4vw, 1.15rem); line-height: 1.6; color: var(--muted); margin: 0 0 1.5rem; }
-  .story-text:last-child { margin-bottom: 0; }
-
-  /* Stats */
-  .about-stats { background: var(--ink); padding: 5rem 10vw; }
-  .about-stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem; text-align: center; }
-  .about-stat { padding: 2.5rem; border: 1px solid rgba(63,154,230,.15); border-radius: 16px; transition: border-color .3s, transform .3s; }
-  .about-stat:hover { border-color: var(--pink); transform: translateY(-4px); }
-  .about-stat-num { display: block; font-family: var(--font-heading); font-size: clamp(3rem, 5vw, 4.5rem); font-weight: 700; color: var(--paper); letter-spacing: -.04em; line-height: 1; margin-bottom: .5rem; }
-  .about-stat-label { font-family: var(--font-body); font-size: .75rem; letter-spacing: .14em; text-transform: uppercase; color: var(--blue-bell); }
-
-  /* Image Break */
-  .about-image-break { position: relative; height: 60vh; min-height: 400px; overflow: hidden; }
-  .about-image-break img { width: 100%; height: 100%; object-fit: cover; filter: saturate(.85); }
-  .image-overlay-text { position: absolute; bottom: 3rem; left: 5vw; display: flex; flex-direction: column; }
-  .image-overlay-text span { font-family: var(--font-heading); font-size: clamp(2rem, 4vw, 3.5rem); font-weight: 600; color: white; letter-spacing: -.04em; line-height: 1.1; text-shadow: 0 2px 20px rgba(0,0,0,.5); }
-  .image-overlay-text span:last-child { font-style: normal; color: var(--caramel); }
-
-  /* Values */
-  .values-section { padding: 8rem 10vw; }
-  .values-heading { margin-bottom: 5rem; }
-  .values-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem; }
-  .value-card { padding: 2rem; border: 1px solid var(--line); border-radius: 16px; transition: border-color .3s, transform .3s; }
-  .value-card:hover { border-color: var(--pink); transform: translateY(-4px); }
-  .value-icon { display: block; font-size: 1.8rem; color: var(--pink); margin-bottom: 1.5rem; }
-  .value-card h3 { font-family: var(--font-heading); font-size: 1.35rem; font-weight: 600; margin: 0 0 .8rem; }
-  .value-card p { font-family: var(--font-body); font-size: .88rem; line-height: 1.6; color: var(--muted); margin: 0; }
-
-  /* Team */
-  .team-section { background: var(--ink); color: var(--paper); padding: 8rem 10vw; }
-  .team-section .section-label { color: var(--blue-bell); }
-  .team-heading { margin-bottom: 5rem; }
-  .team-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem; }
-  .team-card { text-align: center; padding: 2rem; border: 1px solid rgba(63,154,230,.1); border-radius: 16px; transition: border-color .3s, transform .3s; }
-  .team-card:hover { border-color: var(--pink); transform: translateY(-4px); }
-  .team-avatar { width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(135deg, var(--violet), var(--pink)); display: flex; align-items: center; justify-content: center; margin: 0 auto 1.5rem; }
-  .team-avatar span { font-family: var(--font-heading); font-size: 1.2rem; font-weight: 700; color: white; letter-spacing: .05em; }
-  .team-card h3 { font-family: var(--font-heading); font-size: 1.2rem; font-weight: 600; margin: 0 0 .3rem; }
-  .team-role { font-family: var(--font-body); font-size: .72rem; letter-spacing: .12em; text-transform: uppercase; color: var(--caramel); margin: 0 0 1rem; }
-  .team-desc { font-family: var(--font-body); font-size: .85rem; line-height: 1.55; color: rgba(244,247,255,.6); margin: 0; }
-
-  /* CTA */
-  .about-cta { background: var(--ink); color: var(--paper); padding: 8rem 10vw; border-top: 1px solid rgba(63,154,230,.15); text-align: center; }
-  .about-cta .section-label { color: var(--blue-bell); }
-  .cta-button { display: inline-flex; align-items: center; gap: 1rem; font-family: var(--font-body); font-size: .78rem; letter-spacing: .12em; text-transform: uppercase; text-decoration: none; color: var(--paper); border: 1px solid var(--blue-bell); padding: 1.2rem 2.5rem; margin-top: 3rem; transition: background .3s, border-color .3s; }
-  .cta-button:hover { background: rgba(63,154,230,.15); border-color: var(--paper); }
-
-  @media (max-width: 960px) {
-    .team-grid, .values-grid { grid-template-columns: 1fr 1fr; }
-    .about-stats-grid { grid-template-columns: 1fr 1fr; }
+  /* ========================================================
+     WHITE THEME DESIGN SYSTEM - ABOUT US
+     Consistent with entire Brandelier Rebuild Site
+     ======================================================== */
+  .about-page-wrapper {
+    background: var(--paper);
+    color: var(--ink);
+    overflow-x: hidden;
   }
-  @media (max-width: 760px) {
-    .story-section, .values-section, .team-section, .about-cta { padding: 5rem 20px; }
-    .story-grid { grid-template-columns: 1fr; gap: 3rem; }
-    .about-stats { padding: 4rem 20px; }
-    .team-grid, .values-grid { grid-template-columns: 1fr; }
+
+  .section-label {
+    font-family: var(--font-body);
+    font-size: 0.72rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-weight: 600;
+    margin-bottom: 0.8rem;
+  }
+
+  h2 {
+    font-family: var(--font-heading);
+    font-size: clamp(2.4rem, 4.5vw, 4.2rem);
+    font-weight: 600;
+    letter-spacing: -0.04em;
+    line-height: 1.02;
+    color: var(--ink);
+    margin: 0;
+  }
+
+  h2 em {
+    color: var(--pink);
+    font-style: normal;
+  }
+
+  /* --------------------------------------------------------
+     1. Intro Showcase Section
+     -------------------------------------------------------- */
+  .about-intro-section {
+    padding: 7rem 10vw 4rem;
+    position: relative;
+  }
+
+  .intro-container {
+    max-width: 1300px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1.05fr 1fr;
+    gap: 5vw;
+    align-items: center;
+  }
+
+  .intro-image-card {
+    position: relative;
+    background: #ffffff;
+    padding: 12px;
+    border-radius: 24px;
+    border: 1px solid var(--line);
+    box-shadow: 0 20px 45px rgba(0, 0, 62, 0.06);
+    overflow: hidden;
+  }
+
+  .intro-image-card img {
+    width: 100%;
+    height: 100%;
+    max-height: 480px;
+    object-fit: cover;
+    border-radius: 16px;
+    display: block;
+    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .intro-image-card:hover img {
+    transform: scale(1.02);
+  }
+
+  .image-badge {
+    position: absolute;
+    bottom: 24px;
+    left: 24px;
+    background: rgba(0, 0, 62, 0.85);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    color: var(--paper);
+    font-family: var(--font-body);
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 8px 16px;
+    border-radius: 100px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+  }
+
+  .intro-title {
+    margin: 0.5rem 0 1.5rem;
+  }
+
+  .intro-description {
+    font-size: clamp(1.02rem, 1.3vw, 1.15rem);
+    line-height: 1.7;
+    color: var(--ink);
+    margin: 0 0 1.2rem;
+    text-align: justify;
+    text-justify: inter-word;
+  }
+
+  .intro-description.secondary {
+    color: var(--muted);
+    margin-bottom: 2.2rem;
+  }
+
+  /* Swipe to Call Widget (White Theme) */
+  .swipe-call-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+    margin-top: 1rem;
+  }
+
+  .call-background {
+    width: 320px;
+    height: 68px;
+    background: #ffffff;
+    border-radius: 100px;
+    position: relative;
+    box-shadow:
+      0 10px 25px rgba(0, 0, 62, 0.08),
+      0 0 20px rgba(221, 46, 184, 0.15);
+    border: 1.5px solid rgba(0, 0, 62, 0.12);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 20px;
+    box-sizing: border-box;
+    overflow: hidden;
+    transition:
+      border-color 0.3s ease,
+      box-shadow 0.3s ease;
+  }
+
+  .call-background:hover {
+    border-color: var(--pink);
+    box-shadow: 0 12px 30px rgba(221, 46, 184, 0.22);
+  }
+
+  .call-number {
+    padding-left: 45px !important;
+    font-size: 13px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    font-weight: 700;
+    z-index: 1;
+    pointer-events: none;
+    transition: opacity 0.4s ease;
+    color: transparent;
+    background: linear-gradient(90deg, var(--ink), var(--pink), var(--ink));
+    background-size: 200%;
+    background-clip: text;
+    -webkit-background-clip: text;
+    animation: colorSwipe 2.5s linear infinite;
+  }
+
+  .call-number.hide {
+    opacity: 0;
+  }
+
+  @keyframes colorSwipe {
+    0% {
+      background-position: 200% 0;
+    }
+    100% {
+      background-position: -200% 0;
+    }
+  }
+
+  .call-slider {
+    position: absolute;
+    left: 8px;
+    top: 8px;
+    height: 50px;
+    width: 50px;
+    background: linear-gradient(135deg, var(--violet), var(--pink));
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: grab;
+    box-shadow: 0 4px 15px rgba(221, 46, 184, 0.5);
+    user-select: none;
+    transition: left 0.2s ease;
+    touch-action: none;
+    z-index: 2;
+  }
+
+  .call-slider:active {
+    cursor: grabbing;
+  }
+
+  .call-slider svg {
+    width: 22px;
+    height: 22px;
+    fill: white;
+  }
+
+  .call-hint {
+    font-size: 0.76rem;
+    color: var(--muted);
+    letter-spacing: 0.04em;
+  }
+
+  /* --------------------------------------------------------
+     2. Founders Section (White Theme)
+     -------------------------------------------------------- */
+  .founders-section {
+    padding: 2rem 10vw 0rem;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  .founders-heading {
+    text-align: center;
+    margin-bottom: 4rem;
+  }
+
+  .founders-sub {
+    font-size: 1.05rem;
+    color: var(--muted);
+    margin-top: 0.8rem;
+  }
+
+  .founders-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3.5rem;
+  }
+
+  .founder-card {
+    background: #ffffff;
+    border: 1px solid var(--line);
+    border-radius: 24px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 12px 35px rgba(0, 0, 62, 0.04);
+    transition:
+      transform 0.4s ease,
+      border-color 0.4s ease,
+      box-shadow 0.4s ease;
+  }
+
+  .founder-card:hover {
+    transform: translateY(-5px);
+    border-color: var(--pink);
+    box-shadow: 0 20px 45px rgba(221, 46, 184, 0.12);
+  }
+
+  .founder-image-box {
+    width: 100%;
+    height: 500px;
+    overflow: hidden;
+    background: #e9efff;
+    position: relative;
+  }
+
+  .founder-image-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top center;
+    display: block;
+    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .founder-card:hover .founder-image-box img {
+    transform: scale(1.03);
+  }
+
+  .founder-details {
+    padding: 2.2rem;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+  }
+
+  .founder-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 1.2rem;
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 1rem;
+  }
+
+  .founder-name {
+    font-family: var(--font-heading);
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--ink);
+    margin: 0;
+  }
+
+  .founder-designation {
+    font-size: 0.78rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--pink);
+    font-weight: 700;
+  }
+
+  .founder-bio {
+    font-size: 0.94rem;
+    line-height: 1.72;
+    color: var(--muted);
+    margin: 0 0 2rem;
+    flex-grow: 1;
+    text-align: justify;
+    text-justify: inter-word;
+  }
+
+  .founder-socials {
+    display: flex;
+    gap: 1rem;
+    padding-top: 1rem;
+  }
+
+  .founder-socials a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 8px 16px;
+    border-radius: 100px;
+    background: var(--paper);
+    color: var(--ink);
+    border: 1px solid var(--line);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-decoration: none;
+    transition: all 0.25s ease;
+  }
+
+  .founder-socials a:hover {
+    background: var(--pink);
+    color: #ffffff;
+    border-color: var(--pink);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(221, 46, 184, 0.3);
+  }
+
+  /* --------------------------------------------------------
+     Connector Lines (Vibrant Brand Accent on Light Background)
+     -------------------------------------------------------- */
+  .team-connector {
+    position: relative;
+    width: 100%;
+    height: 180px;
+    margin-top: 0rem;
+    z-index: 1;
+  }
+
+  .connector-svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  .connector-svg path {
+    stroke-linecap: round;
+    stroke-dasharray: 1000;
+    stroke-dashoffset: 1000;
+    transition: stroke-dashoffset 1.5s ease-out;
+  }
+
+  .team-connector-mobile {
+    width: 40px;
+    height: 200px;
+    margin: 2rem auto 0;
+    z-index: 1;
+  }
+
+  .connector-svg-mobile {
+    width: 100%;
+    height: 100%;
+  }
+
+  .connector-svg-mobile path {
+    stroke-linecap: round;
+    stroke-dasharray: 1000;
+    stroke-dashoffset: 1000;
+    transition: stroke-dashoffset 1.5s ease-out;
+  }
+
+  .desktop-only {
+    display: block;
+  }
+
+  .mobile-only {
+    display: none;
+  }
+
+  /* --------------------------------------------------------
+     3. Team Scratch to Reveal Section (White Theme)
+     -------------------------------------------------------- */
+  .scratch-reveal-section {
+    padding: 3rem 10vw 6rem;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  .scratch-header {
+    text-align: center;
+    margin-bottom: 3.5rem;
+  }
+
+  .scratch-sub {
+    font-size: 1.05rem;
+    color: var(--muted);
+    margin-top: 0.8rem;
+  }
+
+  .scratch-wrapper {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    background: #ffffff;
+    padding: 14px;
+    border-radius: 28px;
+    box-shadow: 0 25px 60px rgba(0, 0, 62, 0.08);
+    border: 1px solid var(--line);
+  }
+
+  #scratch-container {
+    position: relative;
+    width: 100%;
+    height: 750px;
+    touch-action: none;
+    overflow: hidden;
+    border-radius: 20px;
+    background: #090910;
+  }
+
+  #scratchImage {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 20px;
+    display: block;
+  }
+
+  #scratchCanvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    cursor: crosshair;
+    z-index: 2;
+    transition: opacity 1s ease;
+    border-radius: 20px;
+  }
+
+  #scratch-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #ffffff;
+    font-size: 24px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-shadow: 0 2px 15px rgba(0, 0, 0, 0.8);
+    z-index: 3;
+    pointer-events: none;
+    user-select: none;
+    animation: floatText 2s ease-in-out infinite;
+  }
+
+  @keyframes floatText {
+    0% {
+      transform: translate(-50%, -50%) translateY(0);
+    }
+    50% {
+      transform: translate(-50%, -50%) translateY(-10px);
+    }
+    100% {
+      transform: translate(-50%, -50%) translateY(0);
+    }
+  }
+
+  /* --------------------------------------------------------
+     4. Call to Action (Standard Whole Site Banner)
+     -------------------------------------------------------- */
+  .about-cta {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 8rem 10vw;
+    border-top: 1px solid rgba(63, 154, 230, 0.15);
+    text-align: center;
+  }
+
+  .about-cta .section-label {
+    color: var(--blue-bell);
+  }
+
+  .about-cta h2 {
+    color: var(--paper);
+  }
+
+  .cta-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 1rem;
+    font-family: var(--font-body);
+    font-size: 0.78rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--paper);
+    border: 1px solid var(--blue-bell);
+    padding: 1.2rem 2.5rem;
+    margin-top: 3rem;
+    transition:
+      background 0.3s,
+      border-color 0.3s;
+  }
+
+  .cta-button:hover {
+    background: rgba(63, 154, 230, 0.15);
+    border-color: var(--paper);
+  }
+
+  /* --------------------------------------------------------
+     Responsive Layout
+     -------------------------------------------------------- */
+  @media (max-width: 1024px) {
+    .intro-container {
+      grid-template-columns: 1fr;
+      gap: 3rem;
+    }
+    .intro-image-card img {
+      max-height: 420px;
+    }
+    .founders-grid {
+      grid-template-columns: 1fr;
+      max-width: 680px;
+      margin: 0 auto;
+    }
+    .founder-image-box {
+      height: 440px;
+    }
+    .desktop-only {
+      display: none;
+    }
+    .mobile-only {
+      display: block;
+    }
+    #scratch-container {
+      height: 520px;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .about-intro-section {
+      padding: 4rem 20px 2rem;
+    }
+    .founders-section {
+      padding: 3rem 20px 1rem;
+    }
+    .scratch-reveal-section {
+      padding: 1rem 20px 4rem;
+    }
+    .about-cta {
+      padding: 5rem 20px;
+    }
+    .founder-image-box {
+      height: 380px;
+    }
+    .founder-details {
+      padding: 1.5rem;
+    }
+    .founder-header {
+      flex-direction: column;
+      gap: 0.3rem;
+    }
+    #scratch-container {
+      height: 400px;
+    }
+    #scratch-text {
+      font-size: 18px;
+    }
+    .swipe-call-wrapper {
+      align-items: center;
+    }
   }
 </style>
+
+<script>
+  // ========================================================
+  // 2. CONNECTOR SVG SCROLL ANIMATION
+  // ========================================================
+  function initConnectorLines() {
+    const paths = document.querySelectorAll<SVGPathElement>(
+      ".connector-svg path, .connector-svg-mobile path",
+    );
+
+    paths.forEach((path) => {
+      const length = path.getTotalLength();
+      path.dataset.length = length.toString();
+      path.style.strokeDasharray = length.toString();
+      path.style.strokeDashoffset = length.toString();
+      path.style.transition = "stroke-dashoffset 1.5s ease-out";
+    });
+
+    function revealLines() {
+      paths.forEach((path) => {
+        const rect = path.getBoundingClientRect();
+        const length = path.dataset.length || "1000";
+
+        if (rect.top < window.innerHeight - 80 && rect.bottom > 0) {
+          path.style.strokeDashoffset = "0";
+        } else {
+          path.style.strokeDashoffset = length;
+        }
+      });
+    }
+
+    window.addEventListener("scroll", revealLines, { passive: true });
+    revealLines();
+  }
+
+  // ========================================================
+  // 3. SCRATCH TO REVEAL CANVAS SCRIPT
+  // ========================================================
+  function initScratchCanvas() {
+    const canvas = document.getElementById(
+      "scratchCanvas",
+    ) as HTMLCanvasElement | null;
+    const scratchText = document.getElementById("scratch-text");
+    const scratchImage = document.getElementById(
+      "scratchImage",
+    ) as HTMLImageElement | null;
+
+    if (!canvas || !scratchImage || !scratchText) return;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    let isDrawing = false;
+    const revealThreshold = 0.2; // 20% scratched to reveal all
+
+    function resizeCanvasAndFill() {
+      if (!canvas || !ctx) return;
+      canvas.width = canvas.offsetWidth;
+      canvas.height = canvas.offsetHeight;
+      ctx.globalCompositeOperation = "source-over";
+      ctx.fillStyle = "#C82AEF"; // Custom violet overlay from brandelier.in
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+    }
+
+    function scratch(x: number, y: number) {
+      if (!ctx || !canvas) return;
+      ctx.globalCompositeOperation = "destination-out";
+      ctx.beginPath();
+      ctx.arc(x, y, 35, 0, Math.PI * 2);
+      ctx.fill();
+      checkScratchPercentage();
+    }
+
+    function checkScratchPercentage() {
+      if (!ctx || !canvas || !scratchText) return;
+      try {
+        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        let scratched = 0;
+        for (let i = 0; i < imageData.data.length; i += 4) {
+          if (imageData.data[i + 3] < 128) scratched++;
+        }
+
+        const scratchedPercent =
+          (scratched / (canvas.width * canvas.height)) * 100;
+        if (scratchedPercent >= revealThreshold * 100) {
+          canvas.style.opacity = "0";
+          scratchText.style.display = "none";
+        }
+      } catch (e) {
+        // Cross-origin fallback
+      }
+    }
+
+    function handleInteraction(x: number, y: number) {
+      scratch(x, y);
+      if (scratchText) {
+        scratchText.style.display = "none";
+      }
+    }
+
+    // Mouse Events
+    canvas.addEventListener("mousedown", () => (isDrawing = true));
+    window.addEventListener("mouseup", () => (isDrawing = false));
+    canvas.addEventListener("mousemove", (e) => {
+      if (!isDrawing) return;
+      const rect = canvas.getBoundingClientRect();
+      handleInteraction(e.clientX - rect.left, e.clientY - rect.top);
+    });
+
+    // Touch Events
+    canvas.addEventListener(
+      "touchstart",
+      (e) => {
+        isDrawing = true;
+        const rect = canvas.getBoundingClientRect();
+        const touch = e.touches[0];
+        handleInteraction(touch.clientX - rect.left, touch.clientY - rect.top);
+      },
+      { passive: true },
+    );
+
+    window.addEventListener("touchend", () => (isDrawing = false));
+    canvas.addEventListener(
+      "touchmove",
+      (e) => {
+        if (!isDrawing) return;
+        e.preventDefault();
+        const rect = canvas.getBoundingClientRect();
+        const touch = e.touches[0];
+        handleInteraction(touch.clientX - rect.left, touch.clientY - rect.top);
+      },
+      { passive: false },
+    );
+
+    // Wait for image layout to settle
+    if (scratchImage.complete) {
+      resizeCanvasAndFill();
+    } else {
+      scratchImage.onload = () => {
+        resizeCanvasAndFill();
+      };
+    }
+
+    window.addEventListener("resize", () => {
+      setTimeout(resizeCanvasAndFill, 150);
+    });
+  }
+
+  // Initialize all features once DOM is ready
+  document.addEventListener("DOMContentLoaded", () => {
+    initConnectorLines();
+    initScratchCanvas();
+  });
+
+  // Re-run on client navigation if Astro View Transitions are active
+  document.addEventListener("astro:page-load", () => {
+    initConnectorLines();
+    initScratchCanvas();
+  });
+</script>

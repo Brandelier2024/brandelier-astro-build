@@ -1,0 +1,1079 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { getPosts, type BlogPost } from "../../lib/wp";
+
+export async function getStaticPaths() {
+  const posts = await getPosts();
+  return posts.map((post) => ({
+    params: { slug: post.slug },
+    props: {
+      post,
+      allPosts: posts.filter((p) => p.slug !== post.slug).slice(0, 3),
+    },
+  }));
+}
+
+interface Props {
+  post: BlogPost;
+  allPosts: BlogPost[];
+}
+
+const { post, allPosts } = Astro.props;
+---
+
+<Layout
+  title={`${post.title} | Brandelier Media Works`}
+  description={post.excerpt}
+  darkHero={false}
+>
+  <div class="single-post-page">
+    <!-- Breadcrumb & Post Header Header -->
+    <header class="post-hero">
+      <div class="post-hero-container">
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+          <a href="/">Home</a>
+          <span class="sep" aria-hidden="true">→</span>
+          <a href="/blog">Blog</a>
+          <span class="sep" aria-hidden="true">→</span>
+          <span class="current" aria-current="page">{post.category}</span>
+        </nav>
+
+        <div class="post-meta-badges">
+          <span class="category-badge">{post.category}</span>
+          <span class="meta-dot">·</span>
+          <time datetime={post.rawDate} class="meta-date">{post.date}</time>
+          <span class="meta-dot">·</span>
+          <span class="meta-readtime">{post.readTime}</span>
+        </div>
+
+        <h1 class="post-title">{post.title}</h1>
+
+        <div class="author-bar">
+          <div class="author-avatar">
+            <span>B</span>
+          </div>
+          <div class="author-info">
+            <span class="author-name">Brandelier Editorial</span>
+            <span class="author-role">Strategy & Creative Direction</span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Featured Image Banner -->
+    {
+      post.image && (
+        <div class="featured-image-container">
+          <div class="featured-image-card">
+            <img
+              src={post.image}
+              alt={post.title}
+              loading="eager"
+              class="post-main-img"
+            />
+          </div>
+        </div>
+      )
+    }
+
+    <!-- Article Content Grid -->
+    <div class="article-layout">
+      <!-- Main Content Area -->
+      <article class="article-body">
+        <!-- Render sanitized WordPress HTML content -->
+        <div class="prose-content" set:html={post.content} />
+
+        <!-- Article Footer / Tags -->
+        {
+          post.categories.length > 0 && (
+            <div class="article-tags-wrap">
+              <span class="tags-label">Topics:</span>
+              <div class="tags-list">
+                {post.categories.map((cat) => (
+                  <span class="tag-chip">#{cat}</span>
+                ))}
+              </div>
+            </div>
+          )
+        }
+
+        <!-- Author Card -->
+        <div class="author-bio-card">
+          <div class="author-bio-avatar">
+            <span>B</span>
+          </div>
+          <div class="author-bio-details">
+            <h3>Written by Brandelier</h3>
+            <p>
+              We are a premier branding, visual storytelling, and digital
+              performance marketing agency based in Pune. We help ambitious
+              businesses build memorable identities and sustainable growth.
+            </p>
+            <a href="/about-us" class="author-learn-more"
+              >Learn more about our team ↗</a
+            >
+          </div>
+        </div>
+
+        <!-- Share / Back Link -->
+        <div class="article-navigation-bar">
+          <a href="/blog" class="back-to-blog-btn">
+            <span aria-hidden="true">←</span> Back to all articles
+          </a>
+          <div class="share-actions">
+            <span class="share-label">Share:</span>
+            <button
+              type="button"
+              class="share-btn copy-link-btn"
+              id="copyLinkBtn"
+              aria-label="Copy article link"
+            >
+              <span>🔗 Copy Link</span>
+            </button>
+          </div>
+        </div>
+      </article>
+
+      <!-- Sticky Sidebar -->
+      <aside class="article-sidebar">
+        <div class="sidebar-card sticky-sidebar">
+          <div class="sidebar-box consultation-box">
+            <span class="sidebar-kicker">Start a Project</span>
+            <h3>Ready to grow your brand?</h3>
+            <p>
+              Let's collaborate to build high-performance campaigns and standout
+              creative work.
+            </p>
+            <a href="/contact-us" class="sidebar-cta-btn">
+              Get in Touch <span>↗</span>
+            </a>
+          </div>
+
+          {
+            allPosts.length > 0 && (
+              <div class="sidebar-box related-box">
+                <h4>More from the Studio</h4>
+                <div class="related-list">
+                  {allPosts.map((related) => (
+                    <a href={related.href} class="related-item">
+                      <span class="related-cat">{related.category}</span>
+                      <span class="related-title">{related.title}</span>
+                      <span class="related-date">{related.date}</span>
+                    </a>
+                  ))}
+                </div>
+              </div>
+            )
+          }
+        </div>
+      </aside>
+    </div>
+
+    <!-- Related Articles Section (Bottom) -->
+    {
+      allPosts.length > 0 && (
+        <section class="bottom-related-section">
+          <div class="bottom-related-container">
+            <div class="bottom-related-heading">
+              <span class="section-label">Keep Reading</span>
+              <h2>
+                Recommended <em>Insights</em>
+              </h2>
+            </div>
+
+            <div class="bottom-related-grid">
+              {allPosts.map((item) => (
+                <a href={item.href} class="related-card">
+                  {item.image && (
+                    <div class="related-card-img">
+                      <img src={item.image} alt={item.title} loading="lazy" />
+                      <span class="related-badge">{item.category}</span>
+                    </div>
+                  )}
+                  <div class="related-card-body">
+                    <span class="related-card-date">{item.date}</span>
+                    <h3>{item.title}</h3>
+                    <span class="related-card-link">Read Story ↗</span>
+                  </div>
+                </a>
+              ))}
+            </div>
+          </div>
+        </section>
+      )
+    }
+
+    <!-- Bottom Conversion Banner -->
+    <section class="post-cta-banner">
+      <div class="cta-inner">
+        <span class="cta-pill">Brandelier Media Works</span>
+        <h2>Have a story worth <em>amplifying?</em></h2>
+        <p>
+          Partner with our Pune studio to craft strategy, branding, and
+          high-impact digital campaigns.
+        </p>
+        <div class="cta-buttons">
+          <a href="/contact-us" class="cta-primary-btn">Let's Talk ↗</a>
+          <a href="/services" class="cta-secondary-btn">Explore Services</a>
+        </div>
+      </div>
+    </section>
+  </div>
+</Layout>
+
+<script>
+  // Copy Link Button handler
+  const copyBtn = document.getElementById("copyLinkBtn");
+  if (copyBtn) {
+    copyBtn.addEventListener("click", async () => {
+      try {
+        await navigator.clipboard.writeText(window.location.href);
+        const originalText = copyBtn.innerHTML;
+        copyBtn.innerHTML = "<span>✓ Copied!</span>";
+        copyBtn.style.background = "#dd2eb8";
+        copyBtn.style.color = "#ffffff";
+        setTimeout(() => {
+          copyBtn.innerHTML = originalText;
+          copyBtn.style.background = "";
+          copyBtn.style.color = "";
+        }, 2000);
+      } catch (e) {
+        alert("URL copied to clipboard!");
+      }
+    });
+  }
+</script>
+
+<style>
+  .single-post-page {
+    background: var(--paper);
+    color: var(--ink);
+    min-height: 100vh;
+  }
+
+  /* --------------------------------------------------------
+     1. Post Hero Header
+     -------------------------------------------------------- */
+  .post-hero {
+    padding: 10rem 10vw 3rem;
+    background: #ffffff;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .post-hero-container {
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .breadcrumb {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.6rem;
+    margin-bottom: 1.8rem;
+  }
+
+  .breadcrumb a {
+    font-family: var(--font-body);
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--blue-bell);
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.2s ease;
+  }
+
+  .breadcrumb a:hover {
+    color: var(--pink);
+  }
+
+  .sep {
+    color: var(--muted);
+    font-size: 0.7rem;
+    opacity: 0.6;
+  }
+
+  .current {
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-weight: 600;
+  }
+
+  .post-meta-badges {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+  }
+
+  .category-badge {
+    background: rgba(221, 46, 184, 0.1);
+    color: var(--pink);
+    font-family: var(--font-heading);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 5px 14px;
+    border-radius: 100px;
+    border: 1px solid rgba(221, 46, 184, 0.25);
+  }
+
+  .meta-dot {
+    color: var(--muted);
+  }
+
+  .meta-date,
+  .meta-readtime {
+    font-family: var(--font-body);
+    font-size: 0.85rem;
+    color: var(--muted);
+    font-weight: 500;
+  }
+
+  .post-title {
+    font-family: var(--font-heading);
+    font-size: clamp(2.2rem, 4.5vw, 3.8rem);
+    font-weight: 700;
+    letter-spacing: -0.04em;
+    line-height: 1.15;
+    color: var(--ink);
+    margin: 0 0 2.2rem;
+  }
+
+  .author-bar {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--line);
+  }
+
+  .author-avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: var(--ink);
+    color: var(--paper);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-heading);
+    font-weight: 800;
+    font-size: 1.1rem;
+  }
+
+  .author-info {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .author-name {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: var(--ink);
+  }
+
+  .author-role {
+    font-size: 0.78rem;
+    color: var(--muted);
+  }
+
+  /* --------------------------------------------------------
+     2. Featured Image
+     -------------------------------------------------------- */
+  .featured-image-container {
+    max-width: 1100px;
+    margin: 3.5rem auto 0;
+    padding: 0 20px;
+  }
+
+  .featured-image-card {
+    border-radius: 24px;
+    overflow: hidden;
+    background: #e9efff;
+    border: 1px solid var(--line);
+    box-shadow: 0 15px 45px rgba(0, 0, 62, 0.08);
+    max-height: 580px;
+  }
+
+  .post-main-img {
+    width: 100%;
+    height: 100%;
+    max-height: 580px;
+    object-fit: cover;
+    display: block;
+  }
+
+  /* --------------------------------------------------------
+     3. Article Layout (Body + Sidebar)
+     -------------------------------------------------------- */
+  .article-layout {
+    max-width: 1200px;
+    margin: 4.5rem auto 0;
+    padding: 0 20px;
+    display: grid;
+    grid-template-columns: 1fr 340px;
+    gap: 4rem;
+    align-items: start;
+  }
+
+  .article-body {
+    background: #ffffff;
+    border: 1px solid var(--line);
+    border-radius: 24px;
+    padding: 3.5rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 62, 0.03);
+  }
+
+  /* --------------------------------------------------------
+     4. WordPress Prose Content Styling
+     -------------------------------------------------------- */
+  .prose-content {
+    font-family: var(--font-body);
+    font-size: 1.08rem;
+    line-height: 1.85;
+    color: #2b3345;
+  }
+
+  /* Strictly apply justified text to all content paragraphs */
+  .prose-content p {
+    text-align: justify;
+    text-justify: inter-word;
+    margin-bottom: 1.8rem;
+    color: #2b3345;
+  }
+
+  .prose-content h2 {
+    font-family: var(--font-heading);
+    font-size: clamp(1.6rem, 2.8vw, 2.2rem);
+    font-weight: 700;
+    color: var(--ink);
+    margin: 3rem 0 1.2rem;
+    line-height: 1.25;
+    letter-spacing: -0.03em;
+  }
+
+  .prose-content h3 {
+    font-family: var(--font-heading);
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: var(--ink);
+    margin: 2.2rem 0 1rem;
+    line-height: 1.3;
+  }
+
+  .prose-content a {
+    color: var(--pink);
+    text-decoration: underline;
+    text-underline-offset: 4px;
+    transition: color 0.2s ease;
+  }
+
+  .prose-content a:hover {
+    color: var(--ink);
+  }
+
+  .prose-content strong {
+    font-weight: 700;
+    color: var(--ink);
+  }
+
+  .prose-content ul,
+  .prose-content ol {
+    margin: 1.5rem 0 2rem 1.5rem;
+    padding-left: 1rem;
+  }
+
+  .prose-content li {
+    margin-bottom: 0.8rem;
+    line-height: 1.7;
+    text-align: justify;
+    text-justify: inter-word;
+  }
+
+  .prose-content blockquote {
+    border-left: 4px solid var(--pink);
+    background: rgba(221, 46, 184, 0.05);
+    padding: 1.5rem 2rem;
+    margin: 2.5rem 0;
+    border-radius: 0 16px 16px 0;
+    font-style: italic;
+    color: var(--ink);
+  }
+
+  .prose-content img {
+    border-radius: 16px;
+    margin: 2rem 0;
+    max-width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  /* --------------------------------------------------------
+     5. Article Meta & Author Box
+     -------------------------------------------------------- */
+  .article-tags-wrap {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--line);
+    flex-wrap: wrap;
+  }
+
+  .tags-label {
+    font-family: var(--font-heading);
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--ink);
+  }
+
+  .tags-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+  }
+
+  .tag-chip {
+    background: var(--paper);
+    border: 1px solid var(--line);
+    padding: 4px 12px;
+    border-radius: 100px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--muted);
+  }
+
+  .author-bio-card {
+    background:
+      linear-gradient(
+        135deg,
+        rgba(63, 154, 230, 0.06) 0%,
+        rgba(221, 46, 184, 0.06) 100%
+      ),
+      #ffffff;
+    border: 1px solid rgba(221, 46, 184, 0.2);
+    border-radius: 20px;
+    padding: 2.2rem;
+    display: flex;
+    gap: 1.8rem;
+    align-items: center;
+    margin-top: 3.5rem;
+  }
+
+  .author-bio-avatar {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: var(--ink);
+    color: var(--paper);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-heading);
+    font-weight: 800;
+    font-size: 1.6rem;
+    flex-shrink: 0;
+  }
+
+  .author-bio-details h3 {
+    font-family: var(--font-heading);
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--ink);
+    margin: 0 0 0.5rem;
+  }
+
+  .author-bio-details p {
+    font-size: 0.92rem;
+    line-height: 1.6;
+    color: var(--muted);
+    margin: 0 0 1rem;
+    text-align: justify;
+    text-justify: inter-word;
+  }
+
+  .author-learn-more {
+    font-family: var(--font-body);
+    font-size: 0.78rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: var(--pink);
+    text-decoration: none;
+  }
+
+  .author-learn-more:hover {
+    text-decoration: underline;
+  }
+
+  .article-navigation-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1.5rem;
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--line);
+    flex-wrap: wrap;
+  }
+
+  .back-to-blog-btn {
+    font-family: var(--font-body);
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink);
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+
+  .back-to-blog-btn:hover {
+    color: var(--pink);
+  }
+
+  .share-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+  }
+
+  .share-label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+
+  .copy-link-btn {
+    background: var(--paper);
+    border: 1px solid var(--line);
+    padding: 8px 16px;
+    border-radius: 100px;
+    font-family: var(--font-body);
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--ink);
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .copy-link-btn:hover {
+    border-color: var(--pink);
+    color: var(--pink);
+  }
+
+  /* --------------------------------------------------------
+     6. Sidebar
+     -------------------------------------------------------- */
+  .sticky-sidebar {
+    position: sticky;
+    top: 6rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .sidebar-box {
+    background: #ffffff;
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    padding: 2rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 62, 0.03);
+  }
+
+  .consultation-box {
+    background:
+      linear-gradient(
+        135deg,
+        rgba(221, 46, 184, 0.08) 0%,
+        rgba(63, 154, 230, 0.08) 100%
+      ),
+      #ffffff;
+    border: 1.5px solid rgba(221, 46, 184, 0.25);
+  }
+
+  .sidebar-kicker {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--pink);
+    display: block;
+    margin-bottom: 0.6rem;
+  }
+
+  .consultation-box h3 {
+    font-family: var(--font-heading);
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: var(--ink);
+    margin: 0 0 0.8rem;
+    line-height: 1.3;
+  }
+
+  .consultation-box p {
+    font-size: 0.9rem;
+    line-height: 1.6;
+    color: var(--muted);
+    margin: 0 0 1.5rem;
+    text-align: justify;
+    text-justify: inter-word;
+  }
+
+  .sidebar-cta-btn {
+    display: block;
+    text-align: center;
+    background: var(--ink);
+    color: var(--paper);
+    font-family: var(--font-body);
+    font-size: 0.8rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-weight: 700;
+    padding: 0.9rem 1.5rem;
+    border-radius: 100px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+  }
+
+  .sidebar-cta-btn:hover {
+    background: var(--pink);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(221, 46, 184, 0.3);
+  }
+
+  .related-box h4 {
+    font-family: var(--font-heading);
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--ink);
+    margin: 0 0 1.2rem;
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 0.8rem;
+  }
+
+  .related-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+  }
+
+  .related-item {
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    transition: transform 0.2s ease;
+  }
+
+  .related-item:hover {
+    transform: translateX(4px);
+  }
+
+  .related-cat {
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--pink);
+  }
+
+  .related-title {
+    font-family: var(--font-heading);
+    font-size: 0.92rem;
+    font-weight: 600;
+    color: var(--ink);
+    line-height: 1.35;
+    transition: color 0.2s ease;
+  }
+
+  .related-item:hover .related-title {
+    color: var(--pink);
+  }
+
+  .related-date {
+    font-size: 0.72rem;
+    color: var(--muted);
+  }
+
+  /* --------------------------------------------------------
+     7. Bottom Related Section
+     -------------------------------------------------------- */
+  .bottom-related-section {
+    padding: 6rem 10vw 4rem;
+    max-width: 1300px;
+    margin: 0 auto;
+  }
+
+  .bottom-related-heading {
+    margin-bottom: 3.5rem;
+  }
+
+  .bottom-related-heading .section-label {
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--pink);
+    font-weight: 700;
+  }
+
+  .bottom-related-heading h2 {
+    font-family: var(--font-heading);
+    font-size: clamp(2rem, 3.5vw, 3rem);
+    font-weight: 700;
+    color: var(--ink);
+    margin: 0.5rem 0 0;
+  }
+
+  .bottom-related-heading h2 em {
+    color: var(--pink);
+    font-style: normal;
+  }
+
+  .bottom-related-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2.5rem;
+  }
+
+  .related-card {
+    background: #ffffff;
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    overflow: hidden;
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 8px 25px rgba(0, 0, 62, 0.03);
+    transition:
+      transform 0.3s ease,
+      border-color 0.3s ease,
+      box-shadow 0.3s ease;
+  }
+
+  .related-card:hover {
+    transform: translateY(-6px);
+    border-color: var(--pink);
+    box-shadow: 0 15px 40px rgba(221, 46, 184, 0.12);
+  }
+
+  .related-card-img {
+    height: 200px;
+    position: relative;
+    overflow: hidden;
+    background: #e9efff;
+  }
+
+  .related-card-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+  }
+
+  .related-card:hover .related-card-img img {
+    transform: scale(1.05);
+  }
+
+  .related-badge {
+    position: absolute;
+    bottom: 12px;
+    left: 12px;
+    background: rgba(0, 0, 62, 0.85);
+    backdrop-filter: blur(8px);
+    color: white;
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 100px;
+  }
+
+  .related-card-body {
+    padding: 1.8rem;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+  }
+
+  .related-card-date {
+    font-size: 0.72rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+  }
+
+  .related-card-body h3 {
+    font-family: var(--font-heading);
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--ink);
+    line-height: 1.35;
+    margin: 0 0 1.2rem;
+    flex-grow: 1;
+  }
+
+  .related-card-link {
+    font-family: var(--font-body);
+    font-size: 0.76rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--pink);
+  }
+
+  /* --------------------------------------------------------
+     8. Bottom CTA Banner
+     -------------------------------------------------------- */
+  .post-cta-banner {
+    padding: 5rem 10vw 8rem;
+    max-width: 1300px;
+    margin: 0 auto;
+  }
+
+  .cta-inner {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 5rem 4rem;
+    border-radius: 28px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cta-pill {
+    display: inline-block;
+    background: rgba(221, 46, 184, 0.15);
+    border: 1px solid rgba(221, 46, 184, 0.4);
+    color: var(--pink);
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 6px 16px;
+    border-radius: 100px;
+    font-weight: 700;
+    margin-bottom: 1.2rem;
+  }
+
+  .cta-inner h2 {
+    font-family: var(--font-heading);
+    font-size: clamp(2.2rem, 4vw, 3.8rem);
+    font-weight: 700;
+    letter-spacing: -0.04em;
+    margin: 0 0 1rem;
+    color: var(--paper);
+  }
+
+  .cta-inner h2 em {
+    color: var(--pink);
+    font-style: normal;
+  }
+
+  .cta-inner p {
+    font-size: 1.05rem;
+    line-height: 1.6;
+    color: rgba(244, 247, 255, 0.7);
+    max-width: 600px;
+    margin: 0 auto 2.5rem;
+    text-align: center;
+  }
+
+  .cta-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 1.2rem;
+    flex-wrap: wrap;
+  }
+
+  .cta-primary-btn {
+    background: var(--pink);
+    color: white;
+    padding: 1rem 2.2rem;
+    border-radius: 100px;
+    font-family: var(--font-body);
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: all 0.3s ease;
+  }
+
+  .cta-primary-btn:hover {
+    background: white;
+    color: var(--ink);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(221, 46, 184, 0.4);
+  }
+
+  .cta-secondary-btn {
+    background: transparent;
+    border: 1px solid rgba(244, 247, 255, 0.3);
+    color: var(--paper);
+    padding: 1rem 2.2rem;
+    border-radius: 100px;
+    font-family: var(--font-body);
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: all 0.3s ease;
+  }
+
+  .cta-secondary-btn:hover {
+    border-color: white;
+    color: white;
+  }
+
+  /* --------------------------------------------------------
+     Responsive Breakpoints
+     -------------------------------------------------------- */
+  @media (max-width: 1024px) {
+    .article-layout {
+      grid-template-columns: 1fr;
+      gap: 3rem;
+    }
+    .sticky-sidebar {
+      position: static;
+    }
+    .bottom-related-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .post-hero {
+      padding: 7.5rem 1.25rem 2.5rem;
+    }
+    .article-body {
+      padding: 2rem 1.25rem;
+    }
+    .author-bio-card {
+      flex-direction: column;
+      text-align: center;
+      padding: 1.8rem 1.25rem;
+    }
+    .author-bio-details p {
+      text-align: left;
+    }
+    .bottom-related-grid {
+      grid-template-columns: 1fr;
+    }
+    .cta-inner {
+      padding: 3.5rem 1.5rem;
+    }
+  }
+</style>

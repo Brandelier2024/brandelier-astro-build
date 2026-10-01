@@ -8,9 +8,14 @@ import '../styles/global.css';
 interface Props {
   title: string;
   description?: string;
+  darkHero?: boolean;
 }
 
-const { title, description = 'Brandelier Media Works is a results-driven digital marketing company in Pune offering SEO, social media, branding & web services to grow your business online.' } = Astro.props;
+const { 
+  title, 
+  description = 'Brandelier Media Works is a results-driven digital marketing company in Pune offering SEO, social media, branding & web services to grow your business online.',
+  darkHero,
+} = Astro.props;
 ---
 <!doctype html>
 <html lang="en">
@@ -33,7 +38,7 @@ const { title, description = 'Brandelier Media Works is a results-driven digital
     </noscript>
   </head>
   <body>
-    <Header />
+    <Header darkHero={darkHero} />
     <main>
       <slot />
     </main>

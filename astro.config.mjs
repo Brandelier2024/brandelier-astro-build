@@ -8,7 +8,7 @@ export default defineConfig({
     inlineStylesheets: 'always'
   },
   image: {
-    domains: ['brandelier.in', 'images.unsplash.com']
+    domains: ['brandelier.in', 'cms.brandelier.in', 'images.unsplash.com']
   },
   vite: {
     plugins: [tailwindcss()]

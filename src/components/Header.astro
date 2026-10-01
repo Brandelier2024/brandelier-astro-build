@@ -1,7 +1,15 @@
 ---
 // Header.astro — Shared site header with interactive Services dropdown & Swipe-to-Call UI
+interface Props {
+  darkHero?: boolean;
+}
+
+const { darkHero } = Astro.props;
+
 const currentPath = Astro.url.pathname;
 const isHome = currentPath === '/' || currentPath === '';
+const isInnerBlogPost = currentPath.startsWith('/blog/') && currentPath !== '/blog' && currentPath !== '/blog/';
+const isDarkHero = darkHero !== undefined ? darkHero : (!isHome && !isInnerBlogPost);
 
 const navLinks = [
   { label: 'Home', href: '/' },
@@ -23,7 +31,7 @@ const serviceItems = [
 ];
 ---
 
-<header class:list={['site-header', { 'is-dark-hero': !isHome, 'home-intro-hidden': isHome }]} id="site-header">
+<header class:list={['site-header', { 'is-dark-hero': isDarkHero, 'home-intro-hidden': isHome }]} id="site-header">
   <a class="brand-mark" href="/" aria-label="Brandelier home">BRANDELIER<span>.</span></a>
   
   <nav aria-label="Primary navigation">
