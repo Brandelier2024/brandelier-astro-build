@@ -15,6 +15,16 @@ export interface BlogPost {
   readTime: string;
   author: string;
   href: string;
+  seo?: {
+    title?: string;
+    description?: string;
+    canonical?: string;
+    focusKeyword?: string;
+    ogTitle?: string;
+    ogDescription?: string;
+    ogImage?: string;
+    robots?: string[];
+  };
 }
 
 const WP_API_URL = 'https://cms.brandelier.in/wp-json/wp/v2';
@@ -147,7 +157,17 @@ function transformWpPost(post: any): BlogPost {
     image,
     readTime: calculateReadTime(content || excerpt),
     author,
-    href: `/blog/${post.slug}`
+    href: `/blog/${post.slug}`,
+    seo: post.seo ? {
+      title: post.seo.title || title,
+      description: post.seo.description || excerpt,
+      canonical: post.seo.canonical,
+      focusKeyword: post.seo.focusKeyword,
+      ogTitle: post.seo.ogTitle || title,
+      ogDescription: post.seo.ogDescription || excerpt,
+      ogImage: post.seo.ogImage || image,
+      robots: post.seo.robots
+    } : undefined
   };
 }
 

@@ -22,8 +22,11 @@ const { post, allPosts } = Astro.props;
 ---
 
 <Layout
-  title={`${post.title} | Brandelier Media Works`}
-  description={post.excerpt}
+  title={post.seo?.title || `${post.title} | Brandelier Media Works`}
+  description={post.seo?.description || post.excerpt}
+  image={post.seo?.ogImage || post.image}
+  canonical={post.seo?.canonical || `https://brandelier.in/blog/${post.slug}`}
+  type="article"
   darkHero={false}
 >
   <div class="single-post-page">

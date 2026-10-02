@@ -8,14 +8,22 @@ import '../styles/global.css';
 interface Props {
   title: string;
   description?: string;
+  image?: string;
+  canonical?: string;
+  type?: string;
   darkHero?: boolean;
 }
 
 const { 
   title, 
   description = 'Brandelier Media Works is a results-driven digital marketing company in Pune offering SEO, social media, branding & web services to grow your business online.',
+  image = 'https://brandelier.in/wp-content/uploads/2025/08/Gemini_Generated_Image_6vcxf86vcxf86vcx.png',
+  canonical,
+  type = 'website',
   darkHero,
 } = Astro.props;
+
+const canonicalUrl = canonical || (Astro.site ? new URL(Astro.url.pathname, Astro.site).href : `https://brandelier.in${Astro.url.pathname}`);
 ---
 <!doctype html>
 <html lang="en">
@@ -24,9 +32,25 @@ const {
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" href="/favicon.ico" />
-    <meta name="description" content={description} />
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalUrl} />
+    <meta name="theme-color" content="#00003e" />
+
+    <!-- Open Graph (Facebook / LinkedIn) -->
+    <meta property="og:site_name" content="Brandelier Media Works" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:type" content={type} />
+    <meta property="og:image" content={image} />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={image} />
 
     <!-- Google Fonts: Montserrat (Headings) & Open Sans (Body/UI) with non-blocking async loading -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />

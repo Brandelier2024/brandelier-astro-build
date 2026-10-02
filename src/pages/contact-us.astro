@@ -17,47 +17,69 @@ import PageHero from '../components/PageHero.astro';
       <!-- Contact Form -->
       <div class="contact-form-wrap">
         <h2>Send us a message</h2>
-        <form class="contact-form" id="contact-form">
+        <form
+          class="contact-form"
+          id="contact-form"
+          data-ajax-url="https://cms.brandelier.in/wp-json/brandelier/v1/contact"
+          novalidate
+        >
           <div class="form-row">
             <div class="form-group">
-              <label for="name">Full Name</label>
-              <input type="text" id="name" name="name" placeholder="Your name" required />
+              <label for="name">Full Name <span class="required-star">*</span></label>
+              <input type="text" id="name" name="name" placeholder="Your name" required autocomplete="name" />
+              <span class="field-error" id="error-name"></span>
             </div>
             <div class="form-group">
-              <label for="email">Email Address</label>
-              <input type="email" id="email" name="email" placeholder="you@company.com" required />
+              <label for="email">Email Address <span class="required-star">*</span></label>
+              <input type="email" id="email" name="email" placeholder="you@company.com" required autocomplete="email" />
+              <span class="field-error" id="error-email"></span>
             </div>
           </div>
           
           <div class="form-row">
             <div class="form-group">
               <label for="phone">Phone Number</label>
-              <input type="tel" id="phone" name="phone" placeholder="+91 XXXXX XXXXX" />
+              <input type="tel" id="phone" name="phone" placeholder="+91 XXXXX XXXXX" autocomplete="tel" />
+              <span class="field-error" id="error-phone"></span>
             </div>
             <div class="form-group">
               <label for="service">Service Interested In</label>
               <div class="select-wrapper">
                 <select id="service" name="service">
                   <option value="">Select a service</option>
-                  <option>Social Media Marketing</option>
-                  <option>Web Development</option>
-                  <option>SEO Optimization</option>
-                  <option>Videography & Photography</option>
-                  <option>Content Marketing</option>
-                  <option>Brand Design</option>
+                  <option value="Social Media Marketing">Social Media Marketing</option>
+                  <option value="Web Development">Web Development</option>
+                  <option value="SEO Optimization">SEO Optimization</option>
+                  <option value="Videography & Photography">Videography & Photography</option>
+                  <option value="Content Marketing">Content Marketing</option>
+                  <option value="Brand Design">Brand Design</option>
                 </select>
               </div>
             </div>
           </div>
 
           <div class="form-group message-group">
-            <label for="message">Your Message</label>
+            <label for="message">Your Message <span class="required-star">*</span></label>
             <textarea id="message" name="message" rows="5" placeholder="Tell us about your brand, goals, or timeline..." required></textarea>
+            <span class="field-error" id="error-message"></span>
           </div>
 
-          <button type="submit" class="submit-btn">
-            Send Message <span aria-hidden="true">↗</span>
+          <!-- Anti-bot honeypot field -->
+          <div style="display:none!important; position:absolute; left:-9999px;" aria-hidden="true">
+            <input type="text" name="brandelier_hp_catch" tabindex="-1" autocomplete="off" />
+          </div>
+
+          <!-- Security anti-tamper token -->
+          <input type="hidden" name="form_token" value="bnd_form_9a8b7c6d5e4f3a2b1c0d9e8f7a6b5c4d" />
+
+          <button type="submit" class="submit-btn" id="contactSubmitBtn">
+            <span class="btn-text">Send Message <span aria-hidden="true">↗</span></span>
+            <span class="btn-loading" style="display:none;">
+              <span class="spinner"></span> Sending...
+            </span>
           </button>
+
+          <div class="form-status" id="formStatus" style="display:none;" role="alert"></div>
         </form>
       </div>
 
@@ -218,9 +240,28 @@ import PageHero from '../components/PageHero.astro';
     line-height: 1.5;
   }
 
+  .required-star {
+    color: var(--pink);
+  }
+
+  .field-error {
+    display: block;
+    font-family: var(--font-body);
+    font-size: 0.72rem;
+    color: #e53e3e;
+    margin-top: 0.4rem;
+    min-height: 1rem;
+  }
+
+  .input-error {
+    border-color: #e53e3e !important;
+    background-color: rgba(229, 62, 62, 0.03) !important;
+  }
+
   .submit-btn {
     display: inline-flex;
     align-items: center;
+    justify-content: center;
     gap: 1rem;
     font-family: var(--font-body);
     font-size: .78rem;
@@ -234,9 +275,60 @@ import PageHero from '../components/PageHero.astro';
     border-radius: 100px;
     transition: background .3s ease, transform .2s ease;
   }
-  .submit-btn:hover {
+  .submit-btn:hover:not(:disabled) {
     background: var(--pink);
     transform: translateY(-2px);
+  }
+  .submit-btn:disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
+    transform: none;
+  }
+
+  .btn-loading {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+
+  .spinner {
+    width: 14px;
+    height: 14px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top-color: #fff;
+    animation: spin 0.7s linear infinite;
+    display: inline-block;
+  }
+
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+
+  /* Status Message */
+  .form-status {
+    margin-top: 1.5rem;
+    padding: 1.2rem 1.4rem;
+    border-radius: 12px;
+    font-family: var(--font-body);
+    font-size: 0.88rem;
+    line-height: 1.5;
+    animation: fadeIn 0.3s ease-out;
+  }
+  .form-status.success {
+    background: rgba(34, 197, 94, 0.1);
+    border: 1px solid rgba(34, 197, 94, 0.3);
+    color: #15803d;
+  }
+  .form-status.error {
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    color: #b91c1c;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-6px); }
+    to { opacity: 1; transform: translateY(0); }
   }
 
   /* Info Sidebar */
@@ -373,3 +465,113 @@ import PageHero from '../components/PageHero.astro';
     }
   }
 </style>
+
+<script>
+  // ============================================================
+  //  Contact Us Form Handler (Elementor Pro & Email Gateway)
+  // ============================================================
+  const form = document.getElementById('contact-form') as HTMLFormElement | null;
+  const statusBox = document.getElementById('formStatus') as HTMLDivElement | null;
+  const submitBtn = document.getElementById('contactSubmitBtn') as HTMLButtonElement | null;
+
+  function clearErrors() {
+    document.querySelectorAll('.field-error').forEach((el) => {
+      (el as HTMLElement).textContent = '';
+    });
+    document.querySelectorAll('#contact-form input, #contact-form textarea, #contact-form select').forEach((el) => {
+      el.classList.remove('input-error');
+    });
+  }
+
+  function setFieldError(errorId: string, message: string, inputEl?: HTMLElement | null) {
+    const errEl = document.getElementById(errorId);
+    if (errEl) errEl.textContent = message;
+    if (inputEl) inputEl.classList.add('input-error');
+  }
+
+  function showStatus(type: 'success' | 'error', message: string) {
+    if (!statusBox) return;
+    statusBox.className = `form-status ${type}`;
+    statusBox.textContent = message;
+    statusBox.style.display = 'block';
+    statusBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+
+  function validateForm(): boolean {
+    clearErrors();
+    let valid = true;
+
+    const nameInput = document.getElementById('name') as HTMLInputElement | null;
+    const emailInput = document.getElementById('email') as HTMLInputElement | null;
+    const messageInput = document.getElementById('message') as HTMLTextAreaElement | null;
+
+    if (!nameInput?.value.trim()) {
+      setFieldError('error-name', 'Please enter your full name', nameInput);
+      valid = false;
+    }
+
+    if (!emailInput?.value.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailInput.value)) {
+      setFieldError('error-email', 'Please enter a valid email address', emailInput);
+      valid = false;
+    }
+
+    if (!messageInput?.value.trim()) {
+      setFieldError('error-message', 'Please write your message', messageInput);
+      valid = false;
+    }
+
+    return valid;
+  }
+
+  if (form) {
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (!validateForm()) return;
+
+      const ajaxUrl = form.dataset.ajaxUrl || 'https://cms.brandelier.in/wp-json/brandelier/v1/contact';
+      const btnText = submitBtn?.querySelector('.btn-text') as HTMLElement | null;
+      const btnLoading = submitBtn?.querySelector('.btn-loading') as HTMLElement | null;
+
+      // Loading state
+      if (submitBtn) submitBtn.disabled = true;
+      if (btnText) btnText.style.display = 'none';
+      if (btnLoading) btnLoading.style.display = 'inline-flex';
+      if (statusBox) statusBox.style.display = 'none';
+
+      const formData = new FormData(form);
+
+      try {
+        const response = await fetch(ajaxUrl, {
+          method: 'POST',
+          body: formData,
+          headers: {
+            'X-Requested-With': 'XMLHttpRequest'
+          }
+        });
+
+        let result: any = {};
+        const contentType = response.headers.get('content-type') || '';
+        if (contentType.includes('application/json')) {
+          result = await response.json();
+        } else {
+          const text = await response.text();
+          try { result = JSON.parse(text); } catch { result = { success: response.ok }; }
+        }
+
+        if (response.ok && (result.success !== false)) {
+          showStatus('success', '🎉 Thank you for reaching out! Your message has been sent successfully. We will get back to you shortly.');
+          form.reset();
+        } else {
+          const errorMsg = result?.message || result?.data?.message || 'Something went wrong. Please try again or reach out to us at Info@brandelier.in.';
+          showStatus('error', `❌ ${errorMsg}`);
+        }
+      } catch (err) {
+        showStatus('error', '❌ Network error connecting to server. Please try again or email us directly at Info@brandelier.in.');
+      } finally {
+        if (submitBtn) submitBtn.disabled = false;
+        if (btnText) btnText.style.display = 'inline';
+        if (btnLoading) btnLoading.style.display = 'none';
+      }
+    });
+  }
+</script>
