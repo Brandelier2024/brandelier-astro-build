@@ -2,7 +2,45 @@
 // BrandReveal.astro — Scroll-driven 3D brand reveal intro
 // High-performance, GPU-accelerated, responsive with gsap.matchMedia
 import { Image } from 'astro:assets';
-import heroPhoto from '../assets/images/_uploads/2026/08/Brandelier-.jpg-scaled.jpeg';
+import heroPhoto1 from '../assets/images/_uploads/2026/08/Brandelier-.jpg-scaled.jpeg';
+import heroPhoto2 from '../assets/images/_uploads/2026/08/Brandelier-1.jpg-scaled.jpeg';
+import heroPhoto3 from '../assets/images/_uploads/2026/08/Brandelier-2.jpg-scaled.jpeg';
+import heroPhoto4 from '../assets/images/_uploads/2026/08/Brandelier-3.jpg-scaled.jpeg';
+
+const heroCards = [
+  {
+    id: 1,
+    image: heroPhoto1,
+    alt: "Brandelier commercial camera production setup",
+    index: "01 / 04",
+    note: "Ideas in<br />motion",
+    tag: "Production",
+  },
+  {
+    id: 2,
+    image: heroPhoto2,
+    alt: "Brandelier cinematography and filming crew on set",
+    index: "02 / 04",
+    note: "Lights on<br />camera ready",
+    tag: "Cinematography",
+  },
+  {
+    id: 3,
+    image: heroPhoto3,
+    alt: "Brandelier studio interview and video production setup",
+    index: "03 / 04",
+    note: "Real stories<br />real impact",
+    tag: "Storytelling",
+  },
+  {
+    id: 4,
+    image: heroPhoto4,
+    alt: "Brandelier close-up detail and product cinematography",
+    index: "04 / 04",
+    note: "Every detail<br />matters",
+    tag: "Creative Craft",
+  },
+];
 ---
 
 <section class="reveal-scroll-container" id="revealScrollContainer">
@@ -79,21 +117,70 @@ import heroPhoto from '../assets/images/_uploads/2026/08/Brandelier-.jpg-scaled.
           </div>
         </div>
 
-        <div class="reveal-hero-visual" aria-label="Brandelier production team at work">
-          <Image
-            src={heroPhoto}
-            alt="Brandelier production camera setup"
-            class="reveal-hero-img"
-            width={900}
-            height={1100}
-            format="webp"
-            quality={82}
-            loading="eager"
-            decoding="async"
-            fetchpriority="high"
-          />
-          <span class="reveal-visual-note">Ideas in<br />motion</span>
-          <span class="reveal-visual-index">01 / 04</span>
+        <!-- Automatic Card Stacking Showcase (Multiple Photos) -->
+        <div class="reveal-hero-deck" id="revealHeroDeck" aria-label="Brandelier creative production photo cards">
+          <div class="deck-cards-viewport" id="deckCardsViewport">
+            {heroCards.map((card, idx) => (
+              <article
+                class="deck-photo-card"
+                data-card-idx={idx}
+                data-depth={idx}
+                tabindex="0"
+                role="button"
+                aria-label={`Photo ${idx + 1} of ${heroCards.length}: ${card.tag}. Click to view next photo.`}
+              >
+                <div class="deck-photo-inner">
+                  <Image
+                    src={card.image}
+                    alt={card.alt}
+                    class="deck-card-img"
+                    width={900}
+                    height={1100}
+                    format="webp"
+                    quality={82}
+                    loading={idx === 0 ? "eager" : "lazy"}
+                    decoding="async"
+                    fetchpriority={idx === 0 ? "high" : "auto"}
+                  />
+                  <div class="deck-card-vignette" aria-hidden="true"></div>
+                  <span class="deck-card-tag">{card.tag}</span>
+                  <span class="reveal-visual-note"><Fragment set:html={card.note} /></span>
+                  <span class="reveal-visual-index">{card.index}</span>
+                </div>
+              </article>
+            ))}
+          </div>
+
+          <!-- Deck controls (Dots with auto-timer progress + sleek Prev/Next controls) -->
+          <div class="deck-controls">
+            <div class="deck-dots" role="tablist" aria-label="Deck photo selection">
+              {heroCards.map((_, idx) => (
+                <button
+                  type="button"
+                  class={`deck-dot ${idx === 0 ? 'is-active' : ''}`}
+                  data-target-idx={idx}
+                  aria-label={`Switch to photo ${idx + 1}`}
+                  role="tab"
+                  aria-selected={idx === 0 ? "true" : "false"}
+                >
+                  <span class="deck-dot-progress"></span>
+                </button>
+              ))}
+            </div>
+
+            <div class="deck-arrows">
+              <button type="button" class="deck-arrow-btn" id="deckPrevBtn" aria-label="Previous card">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M15 18l-6-6 6-6"/>
+                </svg>
+              </button>
+              <button type="button" class="deck-arrow-btn" id="deckNextBtn" aria-label="Next card">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M9 18l6-6-6-6"/>
+                </svg>
+              </button>
+            </div>
+          </div>
         </div>
 
       </div>
@@ -114,7 +201,268 @@ import heroPhoto from '../assets/images/_uploads/2026/08/Brandelier-.jpg-scaled.
 
   let mm: ReturnType<typeof gsap.matchMedia> | null = null;
 
+  // ================= AUTOMATIC STACKED CARD CONTROLLER =================
+  let deckTimer: ReturnType<typeof setInterval> | null = null;
+  let activeDeckIndex = 0;
+  let isDeckAnimating = false;
+  let isDeckPaused = false;
+  let deckTouchStartX = 0;
+  let deckTouchStartY = 0;
+  let visibilityListenerAttached = false;
+  const DECK_CYCLE_MS = 3800;
+
+  function stopDeckAutoplay() {
+    if (deckTimer) {
+      clearInterval(deckTimer);
+      deckTimer = null;
+    }
+  }
+
+  function startDeckAutoplay() {
+    stopDeckAutoplay();
+    if (isDeckPaused) return;
+
+    deckTimer = setInterval(() => {
+      dealDeckNext();
+    }, DECK_CYCLE_MS);
+
+    resetProgressAnimation();
+  }
+
+  function resetProgressAnimation() {
+    const dots = document.querySelectorAll<HTMLElement>('.deck-dot');
+    dots.forEach((dot, idx) => {
+      const fill = dot.querySelector<HTMLElement>('.deck-dot-progress');
+      if (!fill) return;
+      if (idx === activeDeckIndex) {
+        fill.style.animation = 'none';
+        void fill.offsetHeight; // trigger reflow
+        fill.style.animation = `deckProgress ${DECK_CYCLE_MS}ms linear forwards`;
+        fill.style.animationPlayState = isDeckPaused ? 'paused' : 'running';
+      } else {
+        fill.style.animation = 'none';
+        fill.style.transform = idx < activeDeckIndex ? 'scaleX(1)' : 'scaleX(0)';
+      }
+    });
+  }
+
+  function updateDeckSlots(dealOutCardIdx: number | null = null) {
+    const cards = document.querySelectorAll<HTMLElement>('.deck-photo-card');
+    const total = cards.length;
+    if (total === 0) return;
+
+    cards.forEach((card, idx) => {
+      if (idx === dealOutCardIdx) return;
+      const depth = (idx - activeDeckIndex + total) % total;
+      card.setAttribute('data-depth', String(depth));
+      card.setAttribute('aria-hidden', depth === 0 ? 'false' : 'true');
+      card.classList.remove('is-dealing-out', 'is-dealing-in', 'is-swooping-in');
+    });
+
+    const dots = document.querySelectorAll<HTMLElement>('.deck-dot');
+    dots.forEach((dot, idx) => {
+      const isActive = idx === activeDeckIndex;
+      dot.classList.toggle('is-active', isActive);
+      dot.setAttribute('aria-selected', isActive ? 'true' : 'false');
+    });
+  }
+
+  function dealDeckNext() {
+    const cards = document.querySelectorAll<HTMLElement>('.deck-photo-card');
+    const total = cards.length;
+    if (total <= 1 || isDeckAnimating) return;
+
+    isDeckAnimating = true;
+    const oldActiveIdx = activeDeckIndex;
+    const oldCard = cards[oldActiveIdx];
+    const newActiveIdx = (activeDeckIndex + 1) % total;
+
+    if (oldCard) {
+      oldCard.classList.add('is-dealing-out');
+    }
+
+    activeDeckIndex = newActiveIdx;
+    updateDeckSlots(oldActiveIdx);
+    resetProgressAnimation();
+
+    setTimeout(() => {
+      if (oldCard) {
+        oldCard.classList.remove('is-dealing-out');
+        oldCard.classList.add('is-dealing-in');
+        oldCard.setAttribute('data-depth', String(total - 1));
+        oldCard.setAttribute('aria-hidden', 'true');
+        void oldCard.offsetHeight; // force reflow
+        oldCard.classList.remove('is-dealing-in');
+      }
+      isDeckAnimating = false;
+    }, 450);
+
+    startDeckAutoplay();
+  }
+
+  function dealDeckPrev() {
+    const cards = document.querySelectorAll<HTMLElement>('.deck-photo-card');
+    const total = cards.length;
+    if (total <= 1 || isDeckAnimating) return;
+
+    isDeckAnimating = true;
+    const prevIdx = (activeDeckIndex - 1 + total) % total;
+    const incomingCard = cards[prevIdx];
+
+    if (incomingCard) {
+      incomingCard.classList.add('is-swooping-in');
+      incomingCard.setAttribute('data-depth', '0');
+      incomingCard.setAttribute('aria-hidden', 'false');
+    }
+
+    activeDeckIndex = prevIdx;
+    updateDeckSlots(prevIdx);
+    resetProgressAnimation();
+
+    setTimeout(() => {
+      if (incomingCard) {
+        incomingCard.classList.remove('is-swooping-in');
+      }
+      isDeckAnimating = false;
+      updateDeckSlots();
+    }, 450);
+
+    startDeckAutoplay();
+  }
+
+  function jumpToDeckIndex(targetIdx: number) {
+    if (targetIdx === activeDeckIndex || isDeckAnimating) return;
+    const cards = document.querySelectorAll<HTMLElement>('.deck-photo-card');
+    const total = cards.length;
+    if (targetIdx < 0 || targetIdx >= total) return;
+
+    isDeckAnimating = true;
+    const oldCard = cards[activeDeckIndex];
+    if (oldCard) {
+      oldCard.classList.add('is-dealing-out');
+    }
+    activeDeckIndex = targetIdx;
+    updateDeckSlots(targetIdx);
+    resetProgressAnimation();
+
+    setTimeout(() => {
+      if (oldCard) {
+        oldCard.classList.remove('is-dealing-out');
+      }
+      updateDeckSlots();
+      isDeckAnimating = false;
+    }, 420);
+
+    startDeckAutoplay();
+  }
+
+  function setupDeckInteractions() {
+    const deckElement = document.getElementById('revealHeroDeck');
+    if (!deckElement) return;
+
+    // Hover pause / play
+    deckElement.addEventListener('mouseenter', () => {
+      isDeckPaused = true;
+      stopDeckAutoplay();
+      const activeFill = document.querySelector<HTMLElement>('.deck-dot.is-active .deck-dot-progress');
+      if (activeFill) activeFill.style.animationPlayState = 'paused';
+    });
+
+    deckElement.addEventListener('mouseleave', () => {
+      isDeckPaused = false;
+      const activeFill = document.querySelector<HTMLElement>('.deck-dot.is-active .deck-dot-progress');
+      if (activeFill) activeFill.style.animationPlayState = 'running';
+      startDeckAutoplay();
+    });
+
+    // Click cards viewport to deal next card
+    const viewport = document.getElementById('deckCardsViewport');
+    if (viewport) {
+      viewport.addEventListener('click', (e) => {
+        const target = e.target as HTMLElement;
+        if (target.closest('.deck-arrow-btn') || target.closest('.deck-dot')) return;
+        dealDeckNext();
+      });
+    }
+
+    // Touch swipe support
+    deckElement.addEventListener('touchstart', (e) => {
+      if (e.touches.length > 0) {
+        deckTouchStartX = e.touches[0].clientX;
+        deckTouchStartY = e.touches[0].clientY;
+      }
+    }, { passive: true });
+
+    deckElement.addEventListener('touchend', (e) => {
+      if (e.changedTouches.length > 0) {
+        const dx = e.changedTouches[0].clientX - deckTouchStartX;
+        const dy = e.changedTouches[0].clientY - deckTouchStartY;
+        if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 40) {
+          if (dx < 0) {
+            dealDeckNext();
+          } else {
+            dealDeckPrev();
+          }
+        }
+      }
+    }, { passive: true });
+
+    // Prev / Next button clicks
+    const prevBtn = document.getElementById('deckPrevBtn');
+    const nextBtn = document.getElementById('deckNextBtn');
+    if (prevBtn) {
+      prevBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        dealDeckPrev();
+      });
+    }
+    if (nextBtn) {
+      nextBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        dealDeckNext();
+      });
+    }
+
+    // Dot navigation clicks
+    const dots = document.querySelectorAll<HTMLElement>('.deck-dot');
+    dots.forEach((dot) => {
+      dot.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const target = Number(dot.dataset.targetIdx);
+        if (!isNaN(target)) jumpToDeckIndex(target);
+      });
+    });
+
+    // Keyboard support on card deck
+    deckElement.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === ' ') {
+        e.preventDefault();
+        dealDeckNext();
+      } else if (e.key === 'ArrowLeft') {
+        e.preventDefault();
+        dealDeckPrev();
+      }
+    });
+
+    // Handle tab visibility so background tab doesn't cycle rapidly
+    if (!visibilityListenerAttached) {
+      visibilityListenerAttached = true;
+      document.addEventListener('visibilitychange', () => {
+        if (document.hidden) {
+          stopDeckAutoplay();
+        } else {
+          if (!isDeckPaused) startDeckAutoplay();
+        }
+      });
+    }
+
+    // Initialize initial visual slots & start timer
+    updateDeckSlots();
+    startDeckAutoplay();
+  }
+
   function cleanupBrandReveal() {
+    stopDeckAutoplay();
     if (mm) {
       mm.revert();
       mm = null;
@@ -371,6 +719,7 @@ import heroPhoto from '../assets/images/_uploads/2026/08/Brandelier-.jpg-scaled.
     });
 
     ScrollTrigger.refresh();
+    setupDeckInteractions();
   }
 
   // Initialize on load and on Astro view transition navigation
@@ -771,25 +1120,172 @@ import heroPhoto from '../assets/images/_uploads/2026/08/Brandelier-.jpg-scaled.
     border-color: var(--pink, #dd2eb8);
   }
 
-  /* Right column: Tilted Visual Card */
-  .reveal-hero-visual {
+  /* ================= AUTOMATIC STACKED PHOTO DECK ================= */
+  .reveal-hero-deck {
     position: relative;
-    min-height: 460px;
-    height: 56vh;
-    max-height: 600px;
-    border-radius: 12px;
-    overflow: hidden;
-    transform: rotate(3deg);
-    background: var(--caramel, #f1a966);
-    box-shadow: 0 20px 45px rgba(0, 0, 62, 0.12);
+    width: 100%;
+    max-width: 440px;
+    margin: 0 auto;
+    user-select: none;
+    -webkit-user-select: none;
   }
 
-  .reveal-hero-img {
+  .deck-cards-viewport {
+    position: relative;
+    width: 100%;
+    height: 540px;
+    perspective: 1200px;
+    cursor: pointer;
+  }
+
+  .deck-photo-card {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 16px;
+    overflow: hidden;
+    will-change: transform, opacity, filter;
+    transition:
+      transform 0.52s cubic-bezier(0.22, 1, 0.36, 1),
+      opacity 0.45s ease,
+      filter 0.45s ease,
+      box-shadow 0.45s ease;
+    outline: none;
+  }
+
+  .deck-photo-card:focus-visible {
+    box-shadow: 0 0 0 3px var(--pink, #dd2eb8), 0 24px 50px rgba(0, 0, 62, 0.25);
+  }
+
+  .deck-photo-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    border-radius: 16px;
+    overflow: hidden;
+    background: var(--ink, #00003e);
+  }
+
+  /* Specific border/accent cues for each card when peeking */
+  .deck-photo-card[data-card-idx="0"] .deck-photo-inner {
+    background: var(--caramel, #f1a966);
+  }
+  .deck-photo-card[data-card-idx="1"] .deck-photo-inner {
+    background: var(--pink, #dd2eb8);
+  }
+  .deck-photo-card[data-card-idx="2"] .deck-photo-inner {
+    background: var(--blue-bell, #9bb8ed);
+  }
+  .deck-photo-card[data-card-idx="3"] .deck-photo-inner {
+    background: var(--ink, #00003e);
+  }
+
+  .deck-card-img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    filter: saturate(0.9);
     display: block;
+    filter: saturate(0.92);
+    transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .deck-photo-card[data-depth="0"]:hover .deck-card-img {
+    transform: scale(1.03);
+  }
+
+  .deck-card-vignette {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      180deg,
+      rgba(0, 0, 62, 0.35) 0%,
+      transparent 30%,
+      transparent 55%,
+      rgba(0, 0, 62, 0.75) 100%
+    );
+    pointer-events: none;
+  }
+
+  .deck-card-tag {
+    position: absolute;
+    top: 1.1rem;
+    left: 1.1rem;
+    background: rgba(0, 0, 62, 0.72);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    color: var(--paper, #f4f7ff);
+    font-family: var(--font-body, 'Open Sans', sans-serif);
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    padding: 0.45rem 0.9rem;
+    border-radius: 100px;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    z-index: 2;
+  }
+
+  /* Physical Card Depth Layouts */
+  .deck-photo-card[data-depth="0"] {
+    transform: translate3d(0, 0, 0) rotate(2.5deg) scale(1);
+    z-index: 10;
+    opacity: 1;
+    filter: brightness(1);
+    box-shadow:
+      0 26px 52px -12px rgba(0, 0, 62, 0.28),
+      0 0 0 1px rgba(0, 0, 62, 0.08);
+    pointer-events: auto;
+  }
+
+  .deck-photo-card[data-depth="1"] {
+    transform: translate3d(20px, 16px, 0) rotate(-3.5deg) scale(0.95);
+    z-index: 8;
+    opacity: 0.92;
+    filter: brightness(0.90);
+    box-shadow: 0 20px 40px -12px rgba(0, 0, 62, 0.20);
+    pointer-events: none;
+  }
+
+  .deck-photo-card[data-depth="2"] {
+    transform: translate3d(36px, 32px, 0) rotate(4deg) scale(0.90);
+    z-index: 6;
+    opacity: 0.75;
+    filter: brightness(0.80);
+    box-shadow: 0 14px 28px -10px rgba(0, 0, 62, 0.14);
+    pointer-events: none;
+  }
+
+  .deck-photo-card[data-depth="3"] {
+    transform: translate3d(48px, 46px, 0) rotate(-2deg) scale(0.85);
+    z-index: 4;
+    opacity: 0.45;
+    filter: brightness(0.70);
+    box-shadow: 0 8px 18px -6px rgba(0, 0, 62, 0.10);
+    pointer-events: none;
+  }
+
+  /* Deal out animation */
+  .deck-photo-card.is-dealing-out {
+    transform: translate3d(-110px, -24px, 0) rotate(-14deg) scale(1.04) !important;
+    opacity: 0 !important;
+    z-index: 15 !important;
+    pointer-events: none !important;
+    transition:
+      transform 0.44s cubic-bezier(0.22, 1, 0.36, 1),
+      opacity 0.40s ease !important;
+  }
+
+  .deck-photo-card.is-dealing-in {
+    transition: none !important;
+    opacity: 0 !important;
+  }
+
+  .deck-photo-card.is-swooping-in {
+    transform: translate3d(-110px, -24px, 0) rotate(-14deg) scale(1.04) !important;
+    opacity: 0 !important;
+    z-index: 15 !important;
+    transition: none !important;
   }
 
   .reveal-visual-note {
@@ -804,6 +1300,8 @@ import heroPhoto from '../assets/images/_uploads/2026/08/Brandelier-.jpg-scaled.
     text-transform: uppercase;
     padding: 0.8rem 1.2rem;
     font-weight: 600;
+    border-radius: 4px;
+    z-index: 2;
   }
 
   .reveal-visual-index {
@@ -815,6 +1313,91 @@ import heroPhoto from '../assets/images/_uploads/2026/08/Brandelier-.jpg-scaled.
     font-size: 0.7rem;
     letter-spacing: 0.14em;
     text-transform: uppercase;
+    z-index: 2;
+  }
+
+  /* Deck UI Controls */
+  .deck-controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 1.5rem;
+    padding: 0 0.5rem;
+  }
+
+  .deck-dots {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .deck-dot {
+    position: relative;
+    width: 28px;
+    height: 5px;
+    border-radius: 100px;
+    background: rgba(0, 0, 62, 0.12);
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    overflow: hidden;
+    transition: width 0.3s ease, background-color 0.3s ease;
+  }
+
+  .deck-dot.is-active {
+    width: 48px;
+    background: rgba(0, 0, 62, 0.22);
+  }
+
+  .deck-dot-progress {
+    position: absolute;
+    inset: 0;
+    background: var(--pink, #dd2eb8);
+    border-radius: 100px;
+    transform: scaleX(0);
+    transform-origin: left center;
+  }
+
+  @keyframes deckProgress {
+    0% {
+      transform: scaleX(0);
+    }
+    100% {
+      transform: scaleX(1);
+    }
+  }
+
+  .deck-arrows {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .deck-arrow-btn {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    border: 1px solid rgba(0, 0, 62, 0.15);
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    color: var(--ink, #00003e);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .deck-arrow-btn:hover {
+    background: var(--ink, #00003e);
+    color: var(--paper, #f4f7ff);
+    border-color: var(--ink, #00003e);
+    transform: scale(1.05);
+  }
+
+  .deck-arrow-btn:active {
+    transform: scale(0.95);
   }
 
   .reveal-hero-scroll-cue {
@@ -844,15 +1427,21 @@ import heroPhoto from '../assets/images/_uploads/2026/08/Brandelier-.jpg-scaled.
     .reveal-hero-content {
       grid-template-columns: 1fr;
       text-align: left;
+      gap: 2rem;
     }
-    .reveal-hero-visual {
-      display: none;
+    .reveal-hero-deck {
+      max-width: 380px;
+      margin: 1.5rem auto 0;
+      display: block;
+    }
+    .deck-cards-viewport {
+      height: 480px;
     }
   }
 
   @media (max-width: 767px) {
     .reveal-hero-curtain {
-      padding: 100px 6vw 40px;
+      padding: 95px 6vw 35px;
       justify-content: flex-start;
       overflow-y: auto;
     }
@@ -863,6 +1452,25 @@ import heroPhoto from '../assets/images/_uploads/2026/08/Brandelier-.jpg-scaled.
     .reveal-hero-intro {
       font-size: 1rem;
       margin-bottom: 1.5rem;
+    }
+    .reveal-hero-deck {
+      max-width: 310px;
+      margin: 1.2rem auto 2rem;
+    }
+    .deck-cards-viewport {
+      height: 400px;
+    }
+    .deck-photo-card[data-depth="0"] {
+      transform: translate3d(0, 0, 0) rotate(1.5deg) scale(1);
+    }
+    .deck-photo-card[data-depth="1"] {
+      transform: translate3d(12px, 10px, 0) rotate(-2.5deg) scale(0.96);
+    }
+    .deck-photo-card[data-depth="2"] {
+      transform: translate3d(22px, 20px, 0) rotate(2.5deg) scale(0.92);
+    }
+    .deck-photo-card[data-depth="3"] {
+      transform: translate3d(30px, 28px, 0) rotate(-1.5deg) scale(0.88);
     }
     .reveal-hero-scroll-cue {
       display: none;
@@ -893,6 +1501,14 @@ import heroPhoto from '../assets/images/_uploads/2026/08/Brandelier-.jpg-scaled.
     .reveal-hero-content {
       opacity: 1 !important;
       transform: none !important;
+    }
+    .deck-photo-card {
+      transition: opacity 0.3s ease !important;
+      transform: none !important;
+    }
+    .deck-photo-card.is-dealing-out {
+      transform: none !important;
+      opacity: 0 !important;
     }
   }
 </style>
