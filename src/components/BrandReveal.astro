@@ -1440,26 +1440,44 @@ const heroCards = [
   }
 
   @media (max-width: 767px) {
+    .reveal-scroll-container {
+      height: 420vh;
+    }
+
     .reveal-hero-curtain {
-      padding: 95px 6vw 35px;
-      justify-content: flex-start;
-      overflow-y: auto;
+      padding: clamp(65px, 9vh, 85px) 6vw clamp(15px, 3vh, 30px);
+      justify-content: center;
+      overflow: visible;
+      overflow-y: visible;
     }
+
+    .reveal-hero-content {
+      gap: clamp(0.75rem, 1.8vh, 1.3rem);
+    }
+
     .reveal-hero-heading {
-      font-size: clamp(2.5rem, 11vw, 3.8rem);
-      margin-bottom: 1.2rem;
+      font-size: clamp(1.95rem, 7.8vw, 2.75rem);
+      line-height: 0.94;
+      margin-bottom: clamp(0.4rem, 1vh, 0.75rem);
     }
+
     .reveal-hero-intro {
-      font-size: 1rem;
-      margin-bottom: 1.5rem;
+      font-size: clamp(0.85rem, 2.9vw, 0.95rem);
+      line-height: 1.45;
+      margin-bottom: clamp(0.6rem, 1.2vh, 1rem);
+      max-width: 25rem;
     }
+
     .reveal-hero-deck {
-      max-width: 310px;
-      margin: 1.2rem auto 2rem;
+      width: 100%;
+      max-width: clamp(270px, 78vw, 340px);
+      margin: 0.5rem auto 1rem;
     }
+
     .deck-cards-viewport {
-      height: 400px;
+      height: clamp(340px, 48vh, 430px);
     }
+
     .deck-photo-card[data-depth="0"] {
       transform: translate3d(0, 0, 0) rotate(1.5deg) scale(1);
     }
