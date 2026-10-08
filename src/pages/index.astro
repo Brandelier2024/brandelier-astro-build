@@ -71,7 +71,7 @@ const approach = [
 const stats = [
   { number: "3+", label: "Years of Experience" },
   { number: "100+", label: "Happy Clients" },
-  { number: "20+", label: "Team Members" },
+  { number: "15+", label: "Team Members" },
   { number: "500+", label: "Projects Delivered" },
 ];
 
@@ -120,7 +120,8 @@ const featuredBlogs = allWpPosts.slice(0, 3);
           years of experience and a team of 20+ professionals, we make brands
           impossible to ignore.
         </p><a class="text-link dark-link" href="/contact-us"
-          >Let's make something matter <span aria-hidden="true">↗</span></a>
+          >Let's make something matter <span aria-hidden="true">↗</span></a
+        >
       </div>
     </div>
   </section>
@@ -196,7 +197,8 @@ const featuredBlogs = allWpPosts.slice(0, 3);
           feel alive. Every frame was thoughtfully crafted to reflect a premium
           yet inviting identity.
         </p><button class="outline-button open-gallery-btn" type="button"
-          >Explore Beanery BTS <span aria-hidden="true">↗</span></button>
+          >Explore Beanery BTS <span aria-hidden="true">↗</span></button
+        >
       </div><div class="case-image">
         <Image
           src="https://brandelier.in/wp-content/uploads/2026/08/WhatsApp-Image-2026-08-25-at-2.02.42-AM.jpeg"
@@ -294,7 +296,8 @@ const featuredBlogs = allWpPosts.slice(0, 3);
       >Info@brandelier.in <span aria-hidden="true">↗</span></a
     ><div class="contact-meta">
       <a href="tel:+917058670837">+91 70586 70837</a><span
-        >Pune, Maharashtra</span>
+        >Pune, Maharashtra</span
+      >
     </div>
   </section>
 
@@ -355,8 +358,10 @@ const featuredBlogs = allWpPosts.slice(0, 3);
     font-size: clamp(3.5rem, 8.5vw, 8.5rem);
     font-weight: 500;
     letter-spacing: -0.05em;
-    line-height: 0.88;
-    margin: 2rem 0;
+    line-height: 0.98;
+    padding-bottom: 0.12em;
+    overflow: visible;
+    margin: 1.25rem 0 2rem;
   }
   h1 em,
   h2 em,
@@ -487,11 +492,16 @@ const featuredBlogs = allWpPosts.slice(0, 3);
     gap: 10vw;
     grid-template-columns: 1fr 1fr;
   }
-  .statement-grid h2,
-  .case-grid h2,
+  .statement-grid {
+    margin-top: 1.25rem;
+  }
+  .statement-grid h2 {
+    font-size: clamp(3.5rem, 7vw, 7rem);
+    margin: 0;
+  }
   .careers-teaser-grid h2 {
     font-size: clamp(3.5rem, 7vw, 7rem);
-    margin: 4rem 0 0;
+    margin: 1.25rem 0 0;
   }
   .large-copy {
     font-size: clamp(1.25rem, 2vw, 1.8rem);
@@ -676,6 +686,7 @@ const featuredBlogs = allWpPosts.slice(0, 3);
   }
   .proof-copy h2 {
     font-size: clamp(3.5rem, 6vw, 6.5rem);
+    margin: 1.25rem 0 2rem;
   }
   .proof-stats {
     align-items: center;
@@ -700,11 +711,12 @@ const featuredBlogs = allWpPosts.slice(0, 3);
 
   /* =================== CASE =================== */
   .case-grid {
-    margin-top: 4rem;
+    margin-top: 2.5rem;
   }
   .case-grid h2 {
     color: var(--paper);
     font-size: clamp(3rem, 6vw, 6rem);
+    margin: 1.25rem 0 2rem;
   }
   .case-kicker {
     color: var(--caramel);
@@ -773,6 +785,9 @@ const featuredBlogs = allWpPosts.slice(0, 3);
   /* =================== LATEST BLOG =================== */
   .home-blog-section {
     border-top: 1px solid var(--line);
+  }
+  .home-blog-section .section-heading h2 {
+    margin: 1.25rem 0 0;
   }
   .view-all-link {
     margin-bottom: 1rem;
@@ -865,6 +880,7 @@ const featuredBlogs = allWpPosts.slice(0, 3);
   }
   .contact-section h2 {
     font-size: clamp(4rem, 10vw, 10rem);
+    margin: 1.25rem 0 3rem;
   }
   .contact-email {
     color: var(--caramel);
@@ -929,16 +945,23 @@ const featuredBlogs = allWpPosts.slice(0, 3);
     .contact-section {
       padding: 5rem 20px;
     }
-    .statement-grid h2,
-    .case-grid h2,
+    .statement-grid h2 {
+      margin-top: 1.25rem;
+      margin-bottom: 1.5rem;
+    }
+    .case-grid h2 {
+      margin-top: 1.25rem;
+      margin-bottom: 2rem;
+    }
     .careers-teaser-grid h2 {
-      margin-top: 3rem;
+      margin-top: 1.25rem;
+      margin-bottom: 2rem;
     }
     .section-heading {
       display: block;
     }
     .section-heading h2 {
-      margin-top: 3rem;
+      margin-top: 1.25rem;
     }
     .service-list,
     .approach-grid {

@@ -33,7 +33,7 @@ import { Image } from 'astro:assets';
                     <span class="text-xs font-bold tracking-[0.2em] uppercase text-[#9B2FCA]">Behind Brandelier</span>
                 </div>
 
-                <h1 class="text-6xl md:text-8xl lg:text-9xl font-black tracking-tighter leading-[1] mb-6 gsap-reveal-text" style="clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);">
+                <h1 class="text-6xl md:text-8xl lg:text-9xl font-black tracking-tighter leading-[1] mb-6 gsap-reveal-text" style="clip-path: polygon(0 0, 100% 0, 100% 130%, 0% 130%);">
                     <span class="line block translate-y-[110%] opacity-0">The Making</span>
                     <span class="line block translate-y-[110%] opacity-0 text-transparent bg-clip-text bg-gradient-to-r from-[#9B2FCA] to-[#DD2EB8]">Of Magic.</span>
                 </h1>
@@ -243,7 +243,10 @@ import { Image } from 'astro:assets';
         opacity: 1,
         duration: 1.2,
         stagger: 0.15,
-        delay: 0.2
+        delay: 0.2,
+        onComplete: () => {
+            gsap.set(".gsap-reveal-text", { clearProps: "clipPath" });
+        }
     })
     .fromTo(".fade-in-up",
         { y: 30, opacity: 0 },
