@@ -1,9 +1,9 @@
 ---
 // Layout.astro — Shared page layout
-import Header from '../components/Header.astro';
-import Footer from '../components/Footer.astro';
-import ScrollAnimations from '../components/ScrollAnimations.astro';
-import '../styles/global.css';
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import ScrollAnimations from "../components/ScrollAnimations.astro";
+import "../styles/global.css";
 
 interface Props {
   title: string;
@@ -14,24 +14,29 @@ interface Props {
   darkHero?: boolean;
 }
 
-const { 
-  title, 
-  description = 'Brandelier Media Works is a results-driven digital marketing company in Pune offering SEO, social media, branding & web services to grow your business online.',
-  image = 'https://brandelier.in/wp-content/uploads/2025/08/Gemini_Generated_Image_6vcxf86vcxf86vcx.png',
+const {
+  title,
+  description = "Brandelier Media Works is a results-driven digital marketing company in Pune offering SEO, social media, branding & web services to grow your business online.",
+  image = "https://brandelier.in/wp-content/uploads/2025/08/Gemini_Generated_Image_6vcxf86vcxf86vcx.png",
   canonical,
-  type = 'website',
+  type = "website",
   darkHero,
 } = Astro.props;
 
-const canonicalUrl = canonical || (Astro.site ? new URL(Astro.url.pathname, Astro.site).href : `https://brandelier.in${Astro.url.pathname}`);
+const canonicalUrl =
+  canonical ||
+  (Astro.site
+    ? new URL(Astro.url.pathname, Astro.site).href
+    : `https://brandelier.in${Astro.url.pathname}`);
 ---
+
 <!doctype html>
 <html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="apple-touch-icon" href="/favicon.png" />
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
     <meta name="description" content={description} />
@@ -55,10 +60,22 @@ const canonicalUrl = canonical || (Astro.site ? new URL(Astro.url.pathname, Astr
     <!-- Google Fonts: Montserrat (Headings) & Open Sans (Body/UI) with non-blocking async loading -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Open+Sans:wght@300;400;500;600;700&display=swap" />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Open+Sans:wght@300;400;500;600;700&display=swap" media="print" onload="this.media='all'" />
+    <link
+      rel="preload"
+      as="style"
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Open+Sans:wght@300;400;500;600;700&display=swap"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Open+Sans:wght@300;400;500;600;700&display=swap"
+      media="print"
+      onload="this.media='all'"
+    />
     <noscript>
-      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Open+Sans:wght@300;400;500;600;700&display=swap" />
+      <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Open+Sans:wght@300;400;500;600;700&display=swap"
+      />
     </noscript>
   </head>
   <body>

@@ -3,6 +3,7 @@ import Layout from "../layouts/Layout.astro";
 import { Image } from "astro:assets";
 import BtsExperience from "../components/BtsExperience.astro";
 import BeaneryModal from "../components/BeaneryModal.astro";
+import CampaignAnalytics from "../components/CampaignAnalytics.astro";
 import BrandReveal from "../components/BrandReveal.astro";
 import { getPosts } from "../lib/wp";
 
@@ -186,30 +187,7 @@ const featuredBlogs = allWpPosts.slice(0, 3);
 
   <BtsExperience />
 
-  <section class="case-section" id="work">
-    <div class="section-label">04 — Case study spotlight</div>
-    <div class="case-grid">
-      <div>
-        <p class="case-kicker">Beanery Café · Content production</p><h2>
-          Crafting the story<br /><em>behind the brand.</em>
-        </h2><p class="large-copy">
-          We captured the energy, details, and personality that make Beanery
-          feel alive. Every frame was thoughtfully crafted to reflect a premium
-          yet inviting identity.
-        </p><button class="outline-button open-gallery-btn" type="button"
-          >Explore Beanery BTS <span aria-hidden="true">↗</span></button
-        >
-      </div><div class="case-image">
-        <Image
-          src="https://brandelier.in/wp-content/uploads/2026/08/WhatsApp-Image-2026-08-25-at-2.37.00-AM.jpeg"
-          alt="Beanery Café content production"
-          width={900}
-          height={900}
-          loading="lazy"
-        /><span>@beanerycafe</span>
-      </div>
-    </div>
-  </section>
+  <CampaignAnalytics />
 
   <section class="approach-section">
     <div class="section-heading">

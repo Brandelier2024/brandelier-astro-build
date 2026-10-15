@@ -36,7 +36,7 @@ const defaultHeaders: Record<string, string> = {
 };
 
 // Clean HTML tags and decode basic HTML entities
-function cleanHtml(html: string): string {
+export function cleanHtml(html: string): string {
   if (!html) return '';
   return html
     .replace(/<[^>]*>/g, '')
@@ -49,22 +49,24 @@ function cleanHtml(html: string): string {
     .replace(/&#8216;/g, "'")
     .replace(/&#8220;/g, '"')
     .replace(/&#8221;/g, '"')
-    .replace(/&hellip;/g, '...')
     .replace(/\[&hellip;\]/g, '...')
+    .replace(/&hellip;/g, '...')
+    .replace(/\[\.\.\.\]/g, '...')
     .trim();
 }
 
 // Calculate approximate read time
-function calculateReadTime(text: string): string {
+export function calculateReadTime(text: string): string {
   const words = cleanHtml(text).split(/\s+/).filter(Boolean).length;
   const minutes = Math.max(1, Math.ceil(words / 200));
   return `${minutes} min read`;
 }
 
 // Format WordPress ISO date to human friendly string
-function formatDate(isoDate: string): string {
+export function formatDate(isoDate: string): string {
   try {
     const d = new Date(isoDate);
+    if (isNaN(d.getTime())) return isoDate;
     return d.toLocaleDateString('en-US', {
       month: 'short',
       day: 'numeric',
@@ -76,7 +78,7 @@ function formatDate(isoDate: string): string {
 }
 
 // Fallback cache in case WordPress is temporarily unreachable during build
-const FALLBACK_POSTS: BlogPost[] = [
+export const FALLBACK_POSTS: BlogPost[] = [
   {
     id: 5964,
     slug: 'what-you-need-to-know-to-launch-your-brand-on-social-media',
@@ -124,7 +126,7 @@ const FALLBACK_POSTS: BlogPost[] = [
   }
 ];
 
-function transformWpPost(post: any): BlogPost {
+export function transformWpPost(post: any): BlogPost {
   const title = cleanHtml(post.title?.rendered || 'Untitled Post');
   const content = post.content?.rendered || '';
   const excerpt = cleanHtml(post.excerpt?.rendered || '');
@@ -243,7 +245,7 @@ export interface JobOpening {
   skills: string[];
 }
 
-function parseDepartment(classList: string[], title: string): string {
+export function parseDepartment(classList: string[], title: string): string {
   const list = classList || [];
   if (list.some(c => c.includes('videography') || c.includes('photography'))) return 'Production';
   if (list.some(c => c.includes('social-media'))) return 'Social Media';
@@ -256,7 +258,7 @@ function parseDepartment(classList: string[], title: string): string {
   return 'Creative Agency';
 }
 
-function parseJobType(classList: string[], title: string): string {
+export function parseJobType(classList: string[], title: string): string {
   const list = classList || [];
   const isIntern = list.some(c => c.includes('intern')) || /intern/i.test(title);
   const isFullTime = list.some(c => c.includes('full-time')) || /fulltime|full-time/i.test(title);
@@ -266,19 +268,19 @@ function parseJobType(classList: string[], title: string): string {
   return 'Full Time';
 }
 
-function parseLocation(classList: string[]): string {
+export function parseLocation(classList: string[]): string {
   const list = classList || [];
   if (list.some(c => c.includes('remote'))) return 'Remote';
   if (list.some(c => c.includes('hybrid'))) return 'Pune (Hybrid)';
   return 'Pune (On-site)';
 }
 
-function parseExperience(title: string): string {
+export function parseExperience(title: string): string {
   if (/intern/i.test(title)) return '0–2 Years';
   return '1–3 Years';
 }
 
-function extractKeySkills(title: string): string[] {
+export function extractKeySkills(title: string): string[] {
   const t = title.toLowerCase();
   if (t.includes('videographer') || t.includes('photographer')) {
     return ['Camera Operation (Sony/Canon)', 'Lighting & Audio Setup', 'Gimbal / Drone Operation', 'Visual Composition'];
@@ -299,7 +301,7 @@ function extractKeySkills(title: string): string[] {
 }
 
 // Fallback jobs from HireZoot in case WordPress is temporarily unreachable during build
-const FALLBACK_JOBS: JobOpening[] = [
+export const FALLBACK_JOBS: JobOpening[] = [
   {
     id: 6484,
     slug: 'videographer-photographer',
@@ -382,7 +384,7 @@ const FALLBACK_JOBS: JobOpening[] = [
   }
 ];
 
-function transformWpJob(raw: any): JobOpening {
+export function transformWpJob(raw: any): JobOpening {
   const title = cleanHtml(raw.title?.rendered || 'Open Role');
   const classList = raw.class_list || [];
   

@@ -1,0 +1,1308 @@
+---
+// CampaignAnalytics.astro — Dynamic Monthly Velocity & Studio Performance Engine for Section 04
+// Showcases Brandelier's verified output and impact in the last one month (30 days)
+import { Image } from "astro:assets";
+
+// Local WebP visual assets from Brandelier studio productions
+import reelImg1 from "../assets/images/hero/WhatsApp Image 2026-10-11 at 3.03.19 AM.webp";
+import reelImg2 from "../assets/images/hero/WhatsApp Image 2026-10-11 at 3.05.28 AM.webp";
+import postImg1 from "../assets/images/hero/WhatsApp Image 2026-10-11 at 3.04.52 AM.webp";
+import postImg2 from "../assets/images/hero/WhatsApp Image 2026-10-11 at 3.07.31 AM.webp";
+---
+
+<section class="stats-dashboard-section" id="work" aria-label="Brandelier Studio Performance — Last 30 Days">
+  <!-- Atmospheric Ambient Glows -->
+  <div class="ambient-glow glow-pink" aria-hidden="true"></div>
+  <div class="ambient-glow glow-cyan" aria-hidden="true"></div>
+
+  <div class="dashboard-container">
+    
+    <!-- Header -->
+    <header class="dashboard-header">
+      <div class="header-badge-row">
+        <span class="studio-pill">
+          <span class="pill-dot"></span>
+          04 — Studio Performance Engine
+        </span>
+        <div class="live-sync-badge">
+          <span class="sync-dot"></span>
+          <span>LAST 30 DAYS VELOCITY</span>
+          <span class="sync-sep">•</span>
+          <span id="live-sync-clock">Live Verified Feed</span>
+        </div>
+      </div>
+
+      <div class="header-content-grid">
+        <div class="header-titles">
+          <h2>
+            One month of impact.<br />
+            <em>Everything Brandelier delivered.</em>
+          </h2>
+          <p class="header-subtitle">
+            A real-time overview of Brandelier's creative output over the past 30 days. Track millions of verified views, viral engagement spikes, and our top-performing video reels and editorial stills.
+          </p>
+        </div>
+
+        <!-- Dynamic Output Stream Switcher -->
+        <div class="campaign-selector-box">
+          <span class="selector-label">Filter Production Stream:</span>
+          <div class="campaign-pill-group" role="tablist">
+            <button
+              type="button"
+              class="campaign-tab-btn active"
+              data-stream="all"
+              id="tab-all"
+              role="tab"
+              aria-selected="true"
+            >
+              <span class="tab-indicator"></span>
+              <span class="tab-name">All Studio Output</span>
+              <span class="tab-tag">Combined 30 Days</span>
+            </button>
+            <button
+              type="button"
+              class="campaign-tab-btn"
+              data-stream="video"
+              id="tab-video"
+              role="tab"
+              aria-selected="false"
+            >
+              <span class="tab-indicator"></span>
+              <span class="tab-name">Reels & Cinema</span>
+              <span class="tab-tag">Short-Form Video</span>
+            </button>
+            <button
+              type="button"
+              class="campaign-tab-btn"
+              data-stream="design"
+              id="tab-design"
+              role="tab"
+              aria-selected="false"
+            >
+              <span class="tab-indicator"></span>
+              <span class="tab-name">Editorial & Visuals</span>
+              <span class="tab-tag">Carousels & Stills</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- KPI STATS CARDS GRID (Views, Interaction, Rate, Content Shipped) -->
+    <div class="kpi-cards-grid">
+      
+      <!-- Card 1: Total Views in Last Month -->
+      <article class="kpi-card" id="kpi-views-card">
+        <div class="kpi-top">
+          <div class="kpi-icon-wrap icon-cyan">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+          </div>
+          <span class="growth-badge positive" id="kpi-views-growth">
+            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="18 15 12 9 6 15"></polyline></svg>
+            <span id="kpi-views-growth-txt">+44.8% vs last month</span>
+          </span>
+        </div>
+        <div class="kpi-body">
+          <span class="kpi-label">Verified Views (Last 30 Days)</span>
+          <div class="kpi-number-wrap">
+            <span class="kpi-value" id="kpi-views-val">28.6M</span>
+          </div>
+          <p class="kpi-subtext" id="kpi-views-sub">Across all Reels, Shorts, and Brand Films</p>
+        </div>
+        <!-- Sparkline Visualization -->
+        <div class="sparkline-container" aria-hidden="true">
+          <div class="sparkline-bar" style="height: 42%"></div>
+          <div class="sparkline-bar" style="height: 56%"></div>
+          <div class="sparkline-bar" style="height: 50%"></div>
+          <div class="sparkline-bar" style="height: 74%"></div>
+          <div class="sparkline-bar" style="height: 68%"></div>
+          <div class="sparkline-bar" style="height: 88%"></div>
+          <div class="sparkline-bar highlight" style="height: 100%"></div>
+        </div>
+      </article>
+
+      <!-- Card 2: Total Interactions in Last Month -->
+      <article class="kpi-card" id="kpi-interactions-card">
+        <div class="kpi-top">
+          <div class="kpi-icon-wrap icon-pink">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+          </div>
+          <span class="growth-badge positive" id="kpi-interaction-growth">
+            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="18 15 12 9 6 15"></polyline></svg>
+            <span id="kpi-interaction-growth-txt">+51.2% surge</span>
+          </span>
+        </div>
+        <div class="kpi-body">
+          <span class="kpi-label">Audience Interactions (Last 30 Days)</span>
+          <div class="kpi-number-wrap">
+            <span class="kpi-value" id="kpi-interaction-val">2.84M</span>
+          </div>
+          <p class="kpi-subtext" id="kpi-interaction-sub">Shares, Saves, Comments & Inquiries</p>
+        </div>
+        <!-- Sparkline Visualization -->
+        <div class="sparkline-container" aria-hidden="true">
+          <div class="sparkline-bar" style="height: 48%"></div>
+          <div class="sparkline-bar" style="height: 52%"></div>
+          <div class="sparkline-bar" style="height: 64%"></div>
+          <div class="sparkline-bar" style="height: 60%"></div>
+          <div class="sparkline-bar" style="height: 78%"></div>
+          <div class="sparkline-bar" style="height: 92%"></div>
+          <div class="sparkline-bar highlight" style="height: 100%"></div>
+        </div>
+      </article>
+
+      <!-- Card 3: Average Engagement Rate -->
+      <article class="kpi-card" id="kpi-rate-card">
+        <div class="kpi-top">
+          <div class="kpi-icon-wrap icon-purple">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
+          </div>
+          <span class="metric-tier-tag" id="kpi-tier-tag">Top 1% Tier</span>
+        </div>
+        <div class="kpi-body">
+          <span class="kpi-label">Avg. Engagement Rate (Last 30 Days)</span>
+          <div class="kpi-number-wrap">
+            <span class="kpi-value" id="kpi-rate-val">10.8%</span>
+          </div>
+          <p class="kpi-subtext" id="kpi-rate-sub">vs 1.8% Industry Benchmark</p>
+        </div>
+        <!-- Progress Meter -->
+        <div class="meter-bar-track">
+          <div class="meter-bar-fill" id="kpi-meter-fill" style="width: 88%"></div>
+        </div>
+      </article>
+
+      <!-- Card 4: Total Content Shipped -->
+      <article class="kpi-card" id="kpi-audience-card">
+        <div class="kpi-top">
+          <div class="kpi-icon-wrap icon-yellow">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line></svg>
+          </div>
+          <span class="growth-badge positive" id="kpi-audience-growth">
+            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="18 15 12 9 6 15"></polyline></svg>
+            <span id="kpi-audience-growth-txt">100% On-Time</span>
+          </span>
+        </div>
+        <div class="kpi-body">
+          <span class="kpi-label">Content Pieces Delivered</span>
+          <div class="kpi-number-wrap">
+            <span class="kpi-value" id="kpi-audience-val">48 Drops</span>
+          </div>
+          <p class="kpi-subtext" id="kpi-audience-sub">Produced, Color-Graded & Published</p>
+        </div>
+        <!-- Sparkline Visualization -->
+        <div class="sparkline-container" aria-hidden="true">
+          <div class="sparkline-bar" style="height: 35%"></div>
+          <div class="sparkline-bar" style="height: 50%"></div>
+          <div class="sparkline-bar" style="height: 55%"></div>
+          <div class="sparkline-bar" style="height: 70%"></div>
+          <div class="sparkline-bar" style="height: 75%"></div>
+          <div class="sparkline-bar" style="height: 92%"></div>
+          <div class="sparkline-bar highlight" style="height: 100%"></div>
+        </div>
+      </article>
+
+    </div>
+
+    <!-- MAIN MEDIA SHOWCASE: EXPANSIVE 2-COLUMN DUAL SPOTLIGHT -->
+    <div class="hall-of-fame-wrapper">
+      
+      <div class="column-header-row">
+        <h3 class="column-title">
+          <span class="title-accent"></span>
+          Monthly Studio Hall of Fame
+        </h3>
+        <span class="column-meta-tag">Ranked by Social Velocity (Past 30 Days)</span>
+      </div>
+
+      <div class="media-duo-grid">
+        
+        <!-- SPOTLIGHT 1: MOST VIEWED REEL OF THE MONTH -->
+        <article class="media-feature-card reel-card" id="card-top-reel">
+          <div class="card-badge-header">
+            <span class="media-type-pill reel-pill">
+              <span class="reel-icon">▶</span>
+              <span>#1 MOST VIEWED REEL</span>
+            </span>
+            <span class="viral-score-tag" id="reel-viral-score">★ 99.8 VIRAL INDEX</span>
+          </div>
+
+          <!-- Reel Visual Media Frame -->
+          <div class="media-frame">
+            <Image
+              id="reel-media-img"
+              src={reelImg1}
+              alt="Most viewed reel of the month"
+              class="media-cover-img"
+              width={700}
+              height={950}
+              loading="lazy"
+            />
+            <div class="media-frame-overlay">
+              <!-- Floating Metrics Overlay -->
+              <div class="overlay-stats-bar">
+                <div class="overlay-stat-item">
+                  <span class="overlay-stat-label">Views</span>
+                  <strong class="overlay-stat-val text-cyan" id="reel-views-count">6.42M</strong>
+                </div>
+                <div class="overlay-stat-sep"></div>
+                <div class="overlay-stat-item">
+                  <span class="overlay-stat-label">Watch Time</span>
+                  <strong class="overlay-stat-val text-pink" id="reel-watch-retention">92.8%</strong>
+                </div>
+                <div class="overlay-stat-sep"></div>
+                <div class="overlay-stat-item">
+                  <span class="overlay-stat-label">Shares</span>
+                  <strong class="overlay-stat-val text-white" id="reel-shares-count">248.5K</strong>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Reel Info Footer -->
+          <div class="media-card-footer">
+            <div class="footer-title-row">
+              <h4 id="reel-title-txt">Cinematic Macro Lighting & Foley Extraction</h4>
+              <span class="campaign-handle" id="reel-handle-txt">@brandelier.in</span>
+            </div>
+            <p class="footer-desc" id="reel-desc-txt">
+              Shot on anamorphic cinema lenses with custom studio Foley sound design. Generated over 6.4M organic views in under 3 weeks.
+            </p>
+            <div class="audio-track-row">
+              <span class="audio-disc-icon">♫</span>
+              <span class="audio-name" id="reel-audio-txt">Original Audio — Brandelier Soundworks</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- SPOTLIGHT 2: MOST LIKED POST OF THE MONTH -->
+        <article class="media-feature-card post-card" id="card-top-post">
+          <div class="card-badge-header">
+            <span class="media-type-pill post-pill">
+              <span class="heart-icon">♥</span>
+              <span>#1 MOST LIKED POST</span>
+            </span>
+            <span class="save-rate-tag" id="post-save-rate">32.6% SAVE RATE</span>
+          </div>
+
+          <!-- Post Visual Media Frame -->
+          <div class="media-frame">
+            <Image
+              id="post-media-img"
+              src={postImg1}
+              alt="Most liked post of the month"
+              class="media-cover-img"
+              width={700}
+              height={950}
+              loading="lazy"
+            />
+            <div class="media-frame-overlay">
+              <!-- Floating Metrics Overlay -->
+              <div class="overlay-stats-bar">
+                <div class="overlay-stat-item">
+                  <span class="overlay-stat-label">Likes</span>
+                  <strong class="overlay-stat-val text-pink" id="post-likes-count">418.6K</strong>
+                </div>
+                <div class="overlay-stat-sep"></div>
+                <div class="overlay-stat-item">
+                  <span class="overlay-stat-label">Comments</span>
+                  <strong class="overlay-stat-val text-cyan" id="post-comments-count">22.4K</strong>
+                </div>
+                <div class="overlay-stat-sep"></div>
+                <div class="overlay-stat-item">
+                  <span class="overlay-stat-label">Bookmarks</span>
+                  <strong class="overlay-stat-val text-white" id="post-saves-count">118.2K</strong>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Post Info Footer -->
+          <div class="media-card-footer">
+            <div class="footer-title-row">
+              <h4 id="post-title-txt">Behind The Frame: Lighting & Art Direction</h4>
+              <span class="campaign-handle" id="post-handle-txt">@brandelier.in</span>
+            </div>
+            <p class="footer-desc" id="post-desc-txt">
+              10-slide visual masterclass breaking down studio set architecture, color grading palettes, and high-contrast photography.
+            </p>
+            <div class="content-tag-pills" id="post-tags-container">
+              <span class="mini-tag">#BrandelierCraft</span>
+              <span class="mini-tag">#VisualIdentity</span>
+              <span class="mini-tag">#ArtDirection</span>
+              <span class="mini-tag">#ProductionDesign</span>
+            </div>
+          </div>
+        </article>
+
+      </div>
+    </div><!-- /.hall-of-fame-wrapper -->
+
+    <!-- BOTTOM STUDIO CONTROLS & AGENCY CTAS -->
+    <div class="studio-bottom-action-bar">
+      
+      <!-- Live Status Callout -->
+      <div class="live-activity-callout">
+        <span class="activity-pulse-dot"></span>
+        <div class="activity-text">
+          <strong>Brandelier Live Campaign Engine</strong>
+          <span>Real-time organic metrics verified across all active brand productions</span>
+        </div>
+      </div>
+
+      <!-- Simulator Button -->
+      <div class="simulator-wrap">
+        <button type="button" class="simulate-surge-btn" id="simulate-surge-btn">
+          <span class="surge-icon">⚡</span>
+          <span>Trigger Live Spike</span>
+        </button>
+      </div>
+
+      <!-- Action Links -->
+      <div class="bottom-ctas-wrap">
+        <a href="/contact-us" class="pipeline-cta-primary">
+          <span>Scale Your Brand's Reach</span>
+          <span aria-hidden="true">↗</span>
+        </a>
+        <a href="/services/social-media-marketing" class="pipeline-cta-secondary">
+          <span>Explore Marketing Systems</span>
+        </a>
+      </div>
+
+    </div>
+
+  </div><!-- /.dashboard-container -->
+</section>
+
+<script>
+  import { getStreamData } from "../lib/campaign-analytics-data";
+
+  // ==============================================================
+  // DYNAMIC STUDIO PERFORMANCE ENGINE (LAST 30 DAYS)
+  // ==============================================================
+  document.addEventListener("DOMContentLoaded", initStatsDashboard);
+  if (document.readyState === "complete" || document.readyState === "interactive") {
+    initStatsDashboard();
+  }
+
+  function initStatsDashboard() {
+    const dashboardSection = document.getElementById("work");
+    if (!dashboardSection || dashboardSection.dataset.initialized === "true") return;
+    dashboardSection.dataset.initialized = "true";
+
+    // -------------------------------------------------------------
+    // TAB SWITCHING LOGIC WITH ANIMATION
+    // -------------------------------------------------------------
+    const tabButtons = document.querySelectorAll<HTMLButtonElement>(".campaign-tab-btn");
+
+    tabButtons.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const streamKey = btn.dataset.stream || "all";
+        
+        tabButtons.forEach((b) => {
+          b.classList.toggle("active", b === btn);
+          b.setAttribute("aria-selected", b === btn ? "true" : "false");
+        });
+
+        applyStreamData(streamKey);
+      });
+    });
+
+    function applyStreamData(key: string) {
+      const data = getStreamData(key);
+      if (!data) return;
+
+      // Animate KPI cards with subtle pulse
+      const kpiCards = document.querySelectorAll(".kpi-card");
+      kpiCards.forEach((card) => {
+        card.classList.remove("fade-pulse");
+        void (card as HTMLElement).offsetWidth; // Trigger reflow
+        card.classList.add("fade-pulse");
+      });
+
+      // 1. Update KPI Values
+      const viewsEl = document.getElementById("kpi-views-val");
+      const viewsGrowthEl = document.getElementById("kpi-views-growth-txt");
+      const viewsSubEl = document.getElementById("kpi-views-sub");
+      if (viewsEl) viewsEl.textContent = data.views.num;
+      if (viewsGrowthEl) viewsGrowthEl.textContent = data.views.growth;
+      if (viewsSubEl) viewsSubEl.textContent = data.views.sub;
+
+      const interEl = document.getElementById("kpi-interaction-val");
+      const interGrowthEl = document.getElementById("kpi-interaction-growth-txt");
+      const interSubEl = document.getElementById("kpi-interaction-sub");
+      if (interEl) interEl.textContent = data.interactions.num;
+      if (interGrowthEl) interGrowthEl.textContent = data.interactions.growth;
+      if (interSubEl) interSubEl.textContent = data.interactions.sub;
+
+      const rateEl = document.getElementById("kpi-rate-val");
+      const rateSubEl = document.getElementById("kpi-rate-sub");
+      const rateFillEl = document.getElementById("kpi-meter-fill");
+      const rateTierEl = document.getElementById("kpi-tier-tag");
+      if (rateEl) rateEl.textContent = data.rate.num;
+      if (rateSubEl) rateSubEl.textContent = data.rate.benchmark;
+      if (rateFillEl) rateFillEl.style.width = data.rate.fill;
+      if (rateTierEl) rateTierEl.textContent = data.rate.tier;
+
+      const audEl = document.getElementById("kpi-audience-val");
+      const audGrowthEl = document.getElementById("kpi-audience-growth-txt");
+      const audSubEl = document.getElementById("kpi-audience-sub");
+      if (audEl) audEl.textContent = data.audience.num;
+      if (audGrowthEl) audGrowthEl.textContent = data.audience.growth;
+      if (audSubEl) audSubEl.textContent = data.audience.sub;
+
+      // 2. Update Most Viewed Reel
+      const reelTitle = document.getElementById("reel-title-txt");
+      const reelHandle = document.getElementById("reel-handle-txt");
+      const reelDesc = document.getElementById("reel-desc-txt");
+      const reelAudio = document.getElementById("reel-audio-txt");
+      const reelViews = document.getElementById("reel-views-count");
+      const reelWatch = document.getElementById("reel-watch-retention");
+      const reelShares = document.getElementById("reel-shares-count");
+      const reelViral = document.getElementById("reel-viral-score");
+      const reelImg = document.getElementById("reel-media-img") as HTMLImageElement;
+
+      if (reelTitle) reelTitle.textContent = data.reel.title;
+      if (reelHandle) reelHandle.textContent = data.reel.handle;
+      if (reelDesc) reelDesc.textContent = data.reel.desc;
+      if (reelAudio) reelAudio.textContent = data.reel.audio;
+      if (reelViews) reelViews.textContent = data.reel.views;
+      if (reelWatch) reelWatch.textContent = data.reel.watch;
+      if (reelShares) reelShares.textContent = data.reel.shares;
+      if (reelViral) reelViral.textContent = data.reel.viralScore;
+      if (reelImg && data.reel.imgSrc) reelImg.src = data.reel.imgSrc;
+
+      // 3. Update Most Liked Post
+      const postTitle = document.getElementById("post-title-txt");
+      const postHandle = document.getElementById("post-handle-txt");
+      const postDesc = document.getElementById("post-desc-txt");
+      const postLikes = document.getElementById("post-likes-count");
+      const postComments = document.getElementById("post-comments-count");
+      const postSaves = document.getElementById("post-saves-count");
+      const postSaveRate = document.getElementById("post-save-rate");
+      const postImg = document.getElementById("post-media-img") as HTMLImageElement;
+      const tagsContainer = document.getElementById("post-tags-container");
+
+      if (postTitle) postTitle.textContent = data.post.title;
+      if (postHandle) postHandle.textContent = data.post.handle;
+      if (postDesc) postDesc.textContent = data.post.desc;
+      if (postLikes) postLikes.textContent = data.post.likes;
+      if (postComments) postComments.textContent = data.post.comments;
+      if (postSaves) postSaves.textContent = data.post.saves;
+      if (postSaveRate) postSaveRate.textContent = data.post.saveRate;
+      if (postImg && data.post.imgSrc) postImg.src = data.post.imgSrc;
+
+      if (tagsContainer) {
+        tagsContainer.innerHTML = data.post.tags
+          .map((t: string) => `<span class="mini-tag">${t}</span>`)
+          .join("");
+      }
+    }
+
+    // -------------------------------------------------------------
+    // VIRAL WAVE SIMULATION (User clicks "Trigger Live Spike")
+    // -------------------------------------------------------------
+    const surgeBtn = document.getElementById("simulate-surge-btn");
+    if (surgeBtn) {
+      surgeBtn.addEventListener("click", () => {
+        surgeBtn.classList.add("firing");
+        surgeBtn.innerHTML = `<span>⚡ Wave Triggered! +145K Views</span>`;
+
+        // Temporarily boost views counter
+        const viewsEl = document.getElementById("kpi-views-val");
+        if (viewsEl) {
+          const original = viewsEl.textContent || "28.6M";
+          viewsEl.textContent = "30.1M (+1.5M)";
+          viewsEl.style.color = "#00ff88";
+
+          // Floating notification badge
+          const floatNotice = document.createElement("div");
+          floatNotice.className = "floating-viral-toast";
+          floatNotice.innerHTML = `🔥 <strong>Live Studio Surge Active</strong> · 18,420 viewers engaged now!`;
+          document.body.appendChild(floatNotice);
+
+          setTimeout(() => {
+            viewsEl.textContent = original;
+            viewsEl.style.color = "";
+            surgeBtn.classList.remove("firing");
+            surgeBtn.innerHTML = `<span class="surge-icon">⚡</span><span>Trigger Live Spike</span>`;
+            floatNotice.remove();
+          }, 3500);
+        }
+      });
+    }
+  }
+</script>
+
+<style>
+  /* ==========================================================
+     BRANDELIER MONTHLY STUDIO PERFORMANCE ENGINE STYLING
+     ========================================================== */
+  .stats-dashboard-section {
+    position: relative;
+    background: #00003e; /* Brandelier signature midnight navy */
+    color: #f4f7ff;
+    padding: 7rem 5vw 8rem;
+    overflow: hidden;
+    font-family: var(--font-body, system-ui, -apple-system, sans-serif);
+  }
+
+  /* Atmospheric glow backdrops */
+  .ambient-glow {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(140px);
+    pointer-events: none;
+    z-index: 0;
+  }
+  .glow-pink {
+    width: 650px;
+    height: 650px;
+    background: radial-gradient(circle, rgba(221, 46, 184, 0.16) 0%, transparent 70%);
+    top: 5%;
+    right: -10%;
+  }
+  .glow-cyan {
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(63, 154, 230, 0.15) 0%, transparent 70%);
+    bottom: -10%;
+    left: -5%;
+  }
+
+  .dashboard-container {
+    max-width: 1440px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 10;
+  }
+
+  /* ---------------- HEADER ---------------- */
+  .dashboard-header {
+    margin-bottom: 3.5rem;
+  }
+  .header-badge-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+  .studio-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.4rem 1.1rem;
+    border-radius: 100px;
+    background: rgba(63, 154, 230, 0.12);
+    border: 1px solid rgba(63, 154, 230, 0.32);
+    color: #3f9ae6;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+  .pill-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #dd2eb8;
+    box-shadow: 0 0 8px #dd2eb8;
+    animation: pulseDot 2s infinite ease-in-out;
+  }
+  @keyframes pulseDot {
+    0%, 100% { transform: scale(1); opacity: 0.8; }
+    50% { transform: scale(1.35); opacity: 1; }
+  }
+
+  .live-sync-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.4rem 1rem;
+    border-radius: 100px;
+    background: rgba(0, 255, 136, 0.08);
+    border: 1px solid rgba(0, 255, 136, 0.3);
+    color: #00ff88;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  .sync-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #00ff88;
+    box-shadow: 0 0 8px #00ff88;
+    animation: pulseDot 1.5s infinite;
+  }
+  .sync-sep {
+    color: rgba(255, 255, 255, 0.3);
+  }
+
+  .header-content-grid {
+    display: grid;
+    grid-template-columns: 1.25fr 1fr;
+    gap: 2.5rem;
+    align-items: flex-end;
+  }
+  .header-titles h2 {
+    font-family: var(--font-heading, inherit);
+    font-size: clamp(2.8rem, 5.2vw, 5rem);
+    font-weight: 600;
+    letter-spacing: -0.04em;
+    line-height: 1.05;
+    margin: 0 0 1rem;
+    color: #ffffff;
+  }
+  .header-titles h2 em {
+    font-style: normal;
+    background: linear-gradient(135deg, #dd2eb8 0%, #9b2fca 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .header-subtitle {
+    max-width: 44rem;
+    font-size: 1.05rem;
+    line-height: 1.65;
+    color: rgba(244, 247, 255, 0.75);
+    margin: 0;
+  }
+
+  /* Output Stream Selector Pill Box */
+  .campaign-selector-box {
+    background: rgba(10, 10, 42, 0.7);
+    backdrop-filter: blur(16px);
+    border: 1px solid rgba(63, 154, 230, 0.22);
+    border-radius: 18px;
+    padding: 1.2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  .selector-label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #3f9ae6;
+  }
+  .campaign-pill-group {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.5rem;
+  }
+  .campaign-tab-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0.75rem 0.85rem;
+    border-radius: 12px;
+    background: rgba(0, 0, 30, 0.45);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .campaign-tab-btn:hover {
+    background: rgba(63, 154, 230, 0.12);
+    border-color: rgba(63, 154, 230, 0.4);
+    transform: translateY(-2px);
+  }
+  .campaign-tab-btn.active {
+    background: linear-gradient(135deg, rgba(221, 46, 184, 0.22) 0%, rgba(155, 47, 202, 0.28) 100%);
+    border-color: #dd2eb8;
+    box-shadow: 0 4px 20px rgba(221, 46, 184, 0.3);
+  }
+  .tab-name {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: #ffffff;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 100%;
+  }
+  .tab-tag {
+    font-size: 0.65rem;
+    color: rgba(244, 247, 255, 0.6);
+    margin-top: 2px;
+  }
+  .campaign-tab-btn.active .tab-tag {
+    color: #dd2eb8;
+    font-weight: 600;
+  }
+
+  /* ---------------- KPI CARDS ---------------- */
+  .kpi-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+  }
+  .kpi-card {
+    background: rgba(10, 10, 42, 0.75);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(63, 154, 230, 0.2);
+    border-radius: 20px;
+    padding: 1.6rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 0 10px 30px rgba(0, 0, 20, 0.4);
+  }
+  .kpi-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(221, 46, 184, 0.45);
+    box-shadow: 0 15px 40px rgba(0, 0, 30, 0.6);
+  }
+  .kpi-card.fade-pulse {
+    animation: kpiPulse 0.4s ease-out;
+  }
+  @keyframes kpiPulse {
+    0% { transform: scale(0.98); opacity: 0.7; }
+    100% { transform: scale(1); opacity: 1; }
+  }
+
+  .kpi-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.25rem;
+  }
+  .kpi-icon-wrap {
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .icon-cyan {
+    background: rgba(63, 154, 230, 0.15);
+    color: #3f9ae6;
+    border: 1px solid rgba(63, 154, 230, 0.3);
+  }
+  .icon-pink {
+    background: rgba(221, 46, 184, 0.15);
+    color: #dd2eb8;
+    border: 1px solid rgba(221, 46, 184, 0.3);
+  }
+  .icon-purple {
+    background: rgba(155, 47, 202, 0.15);
+    color: #9b2fca;
+    border: 1px solid rgba(155, 47, 202, 0.3);
+  }
+  .icon-yellow {
+    background: rgba(255, 221, 0, 0.15);
+    color: #ffdd00;
+    border: 1px solid rgba(255, 221, 0, 0.3);
+  }
+
+  .growth-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 0.25rem 0.65rem;
+    border-radius: 100px;
+  }
+  .growth-badge.positive {
+    background: rgba(0, 255, 136, 0.12);
+    color: #00ff88;
+    border: 1px solid rgba(0, 255, 136, 0.3);
+  }
+  .metric-tier-tag {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #dd2eb8;
+    background: rgba(221, 46, 184, 0.12);
+    border: 1px solid rgba(221, 46, 184, 0.3);
+    padding: 0.25rem 0.65rem;
+    border-radius: 100px;
+  }
+
+  .kpi-body {
+    margin-bottom: 1.25rem;
+  }
+  .kpi-label {
+    display: block;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgba(244, 247, 255, 0.6);
+    margin-bottom: 0.4rem;
+  }
+  .kpi-value {
+    font-family: var(--font-heading, inherit);
+    font-size: clamp(2.2rem, 3.2vw, 3.4rem);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: 1;
+    color: #ffffff;
+    transition: color 0.3s;
+  }
+  .kpi-subtext {
+    font-size: 0.75rem;
+    color: rgba(244, 247, 255, 0.65);
+    margin: 0.5rem 0 0;
+  }
+
+  /* Sparkline mini visualizer */
+  .sparkline-container {
+    display: flex;
+    align-items: flex-end;
+    gap: 6px;
+    height: 32px;
+    padding-top: 6px;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+  }
+  .sparkline-bar {
+    flex: 1;
+    background: rgba(63, 154, 230, 0.25);
+    border-radius: 4px;
+    transition: height 0.4s ease;
+  }
+  .sparkline-bar.highlight {
+    background: linear-gradient(to top, #9b2fca, #dd2eb8);
+    box-shadow: 0 0 10px rgba(221, 46, 184, 0.4);
+  }
+
+  .meter-bar-track {
+    width: 100%;
+    height: 6px;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 10px;
+    overflow: hidden;
+    margin-top: 10px;
+  }
+  .meter-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #3f9ae6, #dd2eb8);
+    border-radius: 10px;
+    transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  /* ---------------- EXPANSIVE 2-COLUMN MAIN SHOWCASE ---------------- */
+  .hall-of-fame-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+  }
+  .column-header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .column-title {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: #ffffff;
+    margin: 0;
+  }
+  .title-accent {
+    width: 4px;
+    height: 22px;
+    border-radius: 4px;
+    background: #dd2eb8;
+    box-shadow: 0 0 10px #dd2eb8;
+  }
+  .column-meta-tag {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgba(244, 247, 255, 0.5);
+  }
+
+  /* Dual 2-Column Grid */
+  .media-duo-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+  }
+
+  .media-feature-card {
+    background: rgba(10, 10, 42, 0.85);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(63, 154, 230, 0.22);
+    border-radius: 28px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 20px 50px rgba(0, 0, 25, 0.45);
+    transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .media-feature-card:hover {
+    transform: translateY(-5px);
+    border-color: rgba(221, 46, 184, 0.55);
+    box-shadow: 0 25px 60px rgba(0, 0, 30, 0.65);
+  }
+
+  .card-badge-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.2rem 1.5rem;
+    background: rgba(5, 5, 25, 0.7);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  }
+  .media-type-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 0.3rem 0.85rem;
+    border-radius: 100px;
+  }
+  .reel-pill {
+    background: rgba(63, 154, 230, 0.15);
+    color: #3f9ae6;
+    border: 1px solid rgba(63, 154, 230, 0.35);
+  }
+  .reel-icon {
+    font-size: 0.65rem;
+  }
+  .post-pill {
+    background: rgba(221, 46, 184, 0.15);
+    color: #dd2eb8;
+    border: 1px solid rgba(221, 46, 184, 0.35);
+  }
+  .heart-icon {
+    font-size: 0.75rem;
+  }
+
+  .viral-score-tag {
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: #00ff88;
+    letter-spacing: 0.06em;
+  }
+  .save-rate-tag {
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: #ffdd00;
+    letter-spacing: 0.06em;
+  }
+
+  /* Media Frame */
+  .media-frame {
+    position: relative;
+    aspect-ratio: 16/11;
+    background: #050514;
+    overflow: hidden;
+  }
+  .media-cover-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .media-feature-card:hover .media-cover-img {
+    transform: scale(1.05);
+  }
+
+  .media-frame-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0, 0, 30, 0.95) 0%, rgba(0, 0, 30, 0.25) 60%, transparent 100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 1.5rem;
+  }
+  .overlay-stats-bar {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    background: rgba(0, 0, 30, 0.8);
+    backdrop-filter: blur(14px);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 14px;
+    padding: 0.75rem 1rem;
+  }
+  .overlay-stat-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .overlay-stat-label {
+    font-size: 0.62rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: rgba(244, 247, 255, 0.6);
+  }
+  .overlay-stat-val {
+    font-size: 1.05rem;
+    font-weight: 800;
+  }
+  .text-cyan { color: #3f9ae6; }
+  .text-pink { color: #dd2eb8; }
+  .text-white { color: #ffffff; }
+  .overlay-stat-sep {
+    width: 1px;
+    height: 24px;
+    background: rgba(255, 255, 255, 0.12);
+  }
+
+  .media-card-footer {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  .footer-title-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 0.75rem;
+  }
+  .footer-title-row h4 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #ffffff;
+    margin: 0;
+    line-height: 1.35;
+  }
+  .campaign-handle {
+    font-size: 0.75rem;
+    font-family: monospace;
+    color: #dd2eb8;
+    flex-shrink: 0;
+    font-weight: 600;
+  }
+  .footer-desc {
+    font-size: 0.85rem;
+    line-height: 1.55;
+    color: rgba(244, 247, 255, 0.75);
+    margin: 0;
+  }
+
+  .audio-track-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.72rem;
+    color: #3f9ae6;
+    margin-top: 0.25rem;
+  }
+  .audio-disc-icon {
+    animation: spinDisc 4s linear infinite;
+  }
+  @keyframes spinDisc {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+
+  .content-tag-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 0.25rem;
+  }
+  .mini-tag {
+    font-size: 0.65rem;
+    color: rgba(244, 247, 255, 0.65);
+    background: rgba(255, 255, 255, 0.06);
+    padding: 3px 10px;
+    border-radius: 100px;
+  }
+
+  /* ---------------- BOTTOM ACTION BAR ---------------- */
+  .studio-bottom-action-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(10, 10, 42, 0.75);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(63, 154, 230, 0.22);
+    border-radius: 24px;
+    padding: 1.5rem 2rem;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    box-shadow: 0 15px 40px rgba(0, 0, 25, 0.35);
+  }
+
+  .live-activity-callout {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  .activity-pulse-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #00ff88;
+    box-shadow: 0 0 10px #00ff88;
+    animation: pulseDot 1.5s infinite;
+  }
+  .activity-text {
+    display: flex;
+    flex-direction: column;
+  }
+  .activity-text strong {
+    font-size: 0.88rem;
+    color: #ffffff;
+  }
+  .activity-text span {
+    font-size: 0.72rem;
+    color: rgba(244, 247, 255, 0.6);
+  }
+
+  .simulate-surge-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 0.75rem 1.4rem;
+    border-radius: 100px;
+    background: rgba(221, 46, 184, 0.15);
+    border: 1px dashed rgba(221, 46, 184, 0.5);
+    color: #dd2eb8;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    cursor: pointer;
+    transition: all 0.25s;
+    white-space: nowrap;
+  }
+  .simulate-surge-btn:hover {
+    background: rgba(221, 46, 184, 0.25);
+    border-color: #dd2eb8;
+    transform: translateY(-2px);
+  }
+  .simulate-surge-btn.firing {
+    background: #00ff88;
+    border-color: #00ff88;
+    color: #00003e;
+    box-shadow: 0 0 25px rgba(0, 255, 136, 0.6);
+  }
+
+  .bottom-ctas-wrap {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  .pipeline-cta-primary {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.9rem 1.6rem;
+    border-radius: 100px;
+    background: linear-gradient(135deg, #dd2eb8 0%, #9b2fca 100%);
+    color: #ffffff;
+    font-size: 0.82rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: all 0.25s;
+    box-shadow: 0 8px 25px rgba(221, 46, 184, 0.4);
+  }
+  .pipeline-cta-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 32px rgba(221, 46, 184, 0.6);
+  }
+  .pipeline-cta-secondary {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0.85rem 1.4rem;
+    border-radius: 100px;
+    background: transparent;
+    border: 1px solid rgba(63, 154, 230, 0.35);
+    color: rgba(244, 247, 255, 0.8);
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-decoration: none;
+    transition: all 0.2s;
+  }
+  .pipeline-cta-secondary:hover {
+    border-color: #3f9ae6;
+    color: #ffffff;
+    background: rgba(63, 154, 230, 0.12);
+  }
+
+  /* Global floating toast notification for viral surge */
+  :global(.floating-viral-toast) {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    background: rgba(10, 10, 42, 0.95);
+    backdrop-filter: blur(16px);
+    border: 1px solid #00ff88;
+    box-shadow: 0 10px 35px rgba(0, 255, 136, 0.3);
+    color: #ffffff;
+    padding: 1rem 1.4rem;
+    border-radius: 16px;
+    font-size: 0.85rem;
+    z-index: 9999;
+    animation: toastSlideUp 0.3s ease-out;
+  }
+  @keyframes toastSlideUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ---------------- RESPONSIVE STYLES ---------------- */
+  @media (max-width: 1200px) {
+    .kpi-cards-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 900px) {
+    .header-content-grid {
+      grid-template-columns: 1fr;
+    }
+    .media-duo-grid {
+      grid-template-columns: 1fr;
+    }
+    .studio-bottom-action-bar {
+      flex-direction: column;
+      align-items: stretch;
+      text-align: center;
+    }
+    .live-activity-callout {
+      justify-content: center;
+    }
+    .bottom-ctas-wrap {
+      flex-direction: column;
+      width: 100%;
+    }
+    .pipeline-cta-primary,
+    .pipeline-cta-secondary {
+      width: 100%;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .stats-dashboard-section {
+      padding: 5rem 5vw 6rem;
+    }
+    .kpi-cards-grid {
+      grid-template-columns: 1fr;
+    }
+    .campaign-pill-group {
+      grid-template-columns: 1fr;
+    }
+    .media-frame {
+      aspect-ratio: 4/3;
+    }
+  }
+</style>
