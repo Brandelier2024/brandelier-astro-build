@@ -33,6 +33,7 @@ jobs:
         run: npm run build
         env:
           WP_API_KEY: ${{ secrets.WP_API_KEY }}
+          PUBLIC_BRANDELIER_FORM_TOKEN: ${{ secrets.PUBLIC_BRANDELIER_FORM_TOKEN }}
 
       - name: 🚀 Deploy to Hostinger via FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5

@@ -1,6 +1,11 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import PageHero from "../components/PageHero.astro";
+
+const formToken = import.meta.env.PUBLIC_BRANDELIER_FORM_TOKEN;
+if (!formToken) {
+  throw new Error("Missing required environment variable: PUBLIC_BRANDELIER_FORM_TOKEN");
+}
 ---
 
 <Layout
@@ -118,7 +123,7 @@ import PageHero from "../components/PageHero.astro";
           <input
             type="hidden"
             name="form_token"
-            value={import.meta.env.PUBLIC_BRANDELIER_FORM_TOKEN || ""}
+            value={formToken}
           />
 
           <button type="submit" class="submit-btn" id="contactSubmitBtn">

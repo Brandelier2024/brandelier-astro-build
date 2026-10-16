@@ -20,6 +20,11 @@ interface Props {
 }
 
 const { job, otherJobs } = Astro.props;
+
+const formToken = import.meta.env.PUBLIC_BRANDELIER_FORM_TOKEN;
+if (!formToken) {
+  throw new Error("Missing required environment variable: PUBLIC_BRANDELIER_FORM_TOKEN");
+}
 ---
 
 <Layout
@@ -216,7 +221,7 @@ const { job, otherJobs } = Astro.props;
               <input
                 type="hidden"
                 name="form_token"
-                value={import.meta.env.PUBLIC_BRANDELIER_FORM_TOKEN || ""}
+                value={formToken}
               />
 
               <!-- Hidden fields for WP Job Openings -->
