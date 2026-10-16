@@ -28,7 +28,7 @@ export interface BlogPost {
 }
 
 const WP_API_URL = 'https://cms.brandelier.in/wp-json/wp/v2';
-const WP_API_KEY = (import.meta.env && import.meta.env.WP_API_KEY) || 'bnd_sec_7f9c4e2a8d1b6e5f3c0a4e7d9b2a1c8f5e6d3a2b1c0e9f8a7b6c5d4e3f2a1b0c';
+const WP_API_KEY = (import.meta.env && import.meta.env.WP_API_KEY) || '';
 
 const defaultHeaders: Record<string, string> = {
   'Accept': 'application/json',
@@ -130,7 +130,7 @@ export function transformWpPost(post: any): BlogPost {
   const title = cleanHtml(post.title?.rendered || 'Untitled Post');
   const content = post.content?.rendered || '';
   const excerpt = cleanHtml(post.excerpt?.rendered || '');
-  
+
   // Extract category from embedded terms
   const terms = post._embedded?.['wp:term']?.[0] || [];
   const categories = terms.map((t: any) => t.name).filter(Boolean);
@@ -138,9 +138,9 @@ export function transformWpPost(post: any): BlogPost {
 
   // Extract featured image from embedded media
   const media = post._embedded?.['wp:featuredmedia']?.[0];
-  const image = media?.source_url || 
-                media?.media_details?.sizes?.large?.source_url || 
-                'https://cms.brandelier.in/wp-content/uploads/2025/08/Gemini_Generated_Image_6vcxf86vcxf86vcx.png';
+  const image = media?.source_url ||
+    media?.media_details?.sizes?.large?.source_url ||
+    'https://cms.brandelier.in/wp-content/uploads/2025/08/Gemini_Generated_Image_6vcxf86vcxf86vcx.png';
 
   // Extract author name
   const authorData = post._embedded?.author?.[0];
@@ -387,7 +387,7 @@ export const FALLBACK_JOBS: JobOpening[] = [
 export function transformWpJob(raw: any): JobOpening {
   const title = cleanHtml(raw.title?.rendered || 'Open Role');
   const classList = raw.class_list || [];
-  
+
   // Clean content or use default fallback if empty
   let content = raw.content?.rendered || '';
   if (!content.trim()) {

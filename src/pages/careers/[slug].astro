@@ -1,7 +1,7 @@
 ---
-import Layout from '../../layouts/Layout.astro';
-import PageHero from '../../components/PageHero.astro';
-import { getJobs, getJobBySlug, type JobOpening } from '../../lib/wp';
+import Layout from "../../layouts/Layout.astro";
+import PageHero from "../../components/PageHero.astro";
+import { getJobs, getJobBySlug, type JobOpening } from "../../lib/wp";
 
 export async function getStaticPaths() {
   const jobs = await getJobs();
@@ -9,8 +9,8 @@ export async function getStaticPaths() {
     params: { slug: job.slug },
     props: {
       job,
-      otherJobs: jobs.filter((j) => j.slug !== job.slug).slice(0, 3)
-    }
+      otherJobs: jobs.filter((j) => j.slug !== job.slug).slice(0, 3),
+    },
   }));
 }
 
@@ -32,14 +32,13 @@ const { job, otherJobs } = Astro.props;
     highlight={job.department}
     description={`We are hiring for our Pune studio. Explore the responsibilities, requirements, and apply directly below.`}
     breadcrumb={[
-      { label: 'Careers', href: '/careers' },
-      { label: job.title, href: job.href }
+      { label: "Careers", href: "/careers" },
+      { label: job.title, href: job.href },
     ]}
   />
 
   <div class="job-detail-page">
     <div class="job-container">
-      
       <!-- Main Content Column -->
       <main class="job-main-col">
         <!-- Quick Meta Pills -->
@@ -55,16 +54,18 @@ const { job, otherJobs } = Astro.props;
         <article class="job-prose-content">
           <div class="prose-body" set:html={job.content} />
 
-          {job.skills && job.skills.length > 0 && (
-            <div class="skills-highlight-box">
-              <h3>Key Competencies & Tools</h3>
-              <div class="skills-tags">
-                {job.skills.map((s) => (
-                  <span class="skill-tag">{s}</span>
-                ))}
+          {
+            job.skills && job.skills.length > 0 && (
+              <div class="skills-highlight-box">
+                <h3>Key Competencies & Tools</h3>
+                <div class="skills-tags">
+                  {job.skills.map((s) => (
+                    <span class="skill-tag">{s}</span>
+                  ))}
+                </div>
               </div>
-            </div>
-          )}
+            )
+          }
         </article>
 
         <!-- Application Form Section (Connected to HireZoot CMS) -->
@@ -74,7 +75,9 @@ const { job, otherJobs } = Astro.props;
               <span class="section-label">Apply Now</span>
               <h2>Apply for <em>{job.title}</em></h2>
               <p class="app-desc">
-                Submit your application below. All submissions are processed and stored in our recruitment portal and reviewed by our hiring directors.
+                Submit your application below. All submissions are processed and
+                stored in our recruitment portal and reviewed by our hiring
+                directors.
               </p>
             </div>
 
@@ -156,13 +159,25 @@ const { job, otherJobs } = Astro.props;
                     />
                     <div class="upload-placeholder" id="uploadPlaceholder">
                       <span class="upload-icon">📄</span>
-                      <span class="upload-text">Drag & drop or <strong>browse</strong></span>
-                      <span class="upload-hint">PDF, DOC, DOCX · Max 10 MB</span>
+                      <span class="upload-text"
+                        >Drag & drop or <strong>browse</strong></span
+                      >
+                      <span class="upload-hint">PDF, DOC, DOCX · Max 10 MB</span
+                      >
                     </div>
-                    <div class="upload-preview" id="uploadPreview" style="display:none;">
+                    <div
+                      class="upload-preview"
+                      id="uploadPreview"
+                      style="display:none;"
+                    >
                       <span class="preview-icon">✅</span>
                       <span class="preview-name" id="previewFileName"></span>
-                      <button type="button" class="remove-file-btn" id="removeFileBtn" title="Remove file">✕</button>
+                      <button
+                        type="button"
+                        class="remove-file-btn"
+                        id="removeFileBtn"
+                        title="Remove file">✕</button
+                      >
                     </div>
                   </div>
                   <span class="field-error" id="error-file"></span>
@@ -179,26 +194,41 @@ const { job, otherJobs } = Astro.props;
                     class="form-textarea"
                     rows="5"
                     placeholder="Tell us a bit about yourself, your experience, and why you'd be a great fit for this role..."
-                    required
-                  ></textarea>
+                    required></textarea>
                   <span class="field-error" id="error-letter"></span>
                 </div>
               </div>
 
               <!-- Anti-bot honeypot field -->
-              <div style="display:none!important; position:absolute; left:-9999px;" aria-hidden="true">
-                <input type="text" name="brandelier_hp_catch" tabindex="-1" autocomplete="off" />
+              <div
+                style="display:none!important; position:absolute; left:-9999px;"
+                aria-hidden="true"
+              >
+                <input
+                  type="text"
+                  name="brandelier_hp_catch"
+                  tabindex="-1"
+                  autocomplete="off"
+                />
               </div>
 
               <!-- Security anti-tamper form token -->
-              <input type="hidden" name="form_token" value="bnd_form_9a8b7c6d5e4f3a2b1c0d9e8f7a6b5c4d" />
+              <input
+                type="hidden"
+                name="form_token"
+                value={import.meta.env.PUBLIC_BRANDELIER_FORM_TOKEN || ""}
+              />
 
               <!-- Hidden fields for WP Job Openings -->
               <input type="hidden" name="jid" value={String(job.id)} />
 
               <!-- Submit -->
               <div class="form-actions">
-                <button type="submit" class="submit-application-btn" id="submitBtn">
+                <button
+                  type="submit"
+                  class="submit-application-btn"
+                  id="submitBtn"
+                >
                   <span class="btn-text">Submit Application</span>
                   <span class="btn-loading" style="display:none;">
                     <span class="spinner"></span> Submitting...
@@ -207,14 +237,18 @@ const { job, otherJobs } = Astro.props;
               </div>
 
               <!-- Status Messages -->
-              <div class="form-status" id="formStatus" style="display:none;"></div>
+              <div class="form-status" id="formStatus" style="display:none;">
+              </div>
             </form>
 
             <!-- Alternate Email Submission Option -->
             <div class="email-alternate-card">
               <div class="email-alt-info">
                 <h4>Prefer email?</h4>
-                <p>You can also send your resume, portfolio link, and introduction directly to our recruitment inbox.</p>
+                <p>
+                  You can also send your resume, portfolio link, and
+                  introduction directly to our recruitment inbox.
+                </p>
               </div>
               <a
                 href={`mailto:Info@brandelier.in?subject=Application for ${encodeURIComponent(job.title)}`}
@@ -226,9 +260,6 @@ const { job, otherJobs } = Astro.props;
 
             <div class="app-footer-note">
               <span>🔒 Your data is securely submitted to our recruitment portal</span>
-              <a href={job.link} target="_blank" rel="noopener noreferrer" class="wp-portal-link">
-                View on CMS ↗
-              </a>
             </div>
           </div>
         </section>
@@ -281,51 +312,56 @@ const { job, otherJobs } = Astro.props;
             <li>🌱 Work on real-world brands & campaigns</li>
             <li>🚀 Direct mentorship from founders</li>
           </ul>
-          <a href="/about-us" class="mini-learn-more">Learn more about our team ↗</a>
+          <a href="/about-us" class="mini-learn-more"
+            >Learn more about our team ↗</a
+          >
         </div>
 
         <!-- Other Jobs -->
-        {otherJobs.length > 0 && (
-          <div class="sidebar-card other-jobs-card">
-            <h4>Other Open Roles</h4>
-            <div class="other-jobs-list">
-              {otherJobs.map((item) => (
-                <a href={item.href} class="other-job-item">
-                  <div class="other-job-info">
-                    <span class="other-job-dept">{item.department}</span>
-                    <strong class="other-job-title">{item.title}</strong>
-                    <span class="other-job-type">{item.type} · {item.location}</span>
-                  </div>
-                  <span class="other-job-arrow">↗</span>
-                </a>
-              ))}
+        {
+          otherJobs.length > 0 && (
+            <div class="sidebar-card other-jobs-card">
+              <h4>Other Open Roles</h4>
+              <div class="other-jobs-list">
+                {otherJobs.map((item) => (
+                  <a href={item.href} class="other-job-item">
+                    <div class="other-job-info">
+                      <span class="other-job-dept">{item.department}</span>
+                      <strong class="other-job-title">{item.title}</strong>
+                      <span class="other-job-type">
+                        {item.type} · {item.location}
+                      </span>
+                    </div>
+                    <span class="other-job-arrow">↗</span>
+                  </a>
+                ))}
+              </div>
             </div>
-          </div>
-        )}
+          )
+        }
       </aside>
-
     </div>
   </div>
 </Layout>
 
 <script>
   // Copy Job Link
-  const copyBtn = document.getElementById('copyJobLinkBtn');
+  const copyBtn = document.getElementById("copyJobLinkBtn");
   if (copyBtn) {
-    copyBtn.addEventListener('click', async () => {
+    copyBtn.addEventListener("click", async () => {
       try {
         await navigator.clipboard.writeText(window.location.href);
         const original = copyBtn.innerHTML;
-        copyBtn.innerHTML = '<span>✓</span> Copied to Clipboard!';
-        copyBtn.style.borderColor = 'var(--pink)';
-        copyBtn.style.color = 'var(--pink)';
+        copyBtn.innerHTML = "<span>✓</span> Copied to Clipboard!";
+        copyBtn.style.borderColor = "var(--pink)";
+        copyBtn.style.color = "var(--pink)";
         setTimeout(() => {
           copyBtn.innerHTML = original;
-          copyBtn.style.borderColor = '';
-          copyBtn.style.color = '';
+          copyBtn.style.borderColor = "";
+          copyBtn.style.color = "";
         }, 2500);
       } catch (e) {
-        alert('Job link copied!');
+        alert("Job link copied!");
       }
     });
   }
@@ -335,55 +371,73 @@ const { job, otherJobs } = Astro.props;
   // ============================================================
   //  Application Form Handler (WP Job Openings / HireZoot)
   // ============================================================
-  const form = document.getElementById('brandelierApplicationForm') as HTMLFormElement | null;
-  const statusBox = document.getElementById('formStatus') as HTMLDivElement | null;
-  const submitBtn = document.getElementById('submitBtn') as HTMLButtonElement | null;
-  const fileInput = document.getElementById('awsm-application-file') as HTMLInputElement | null;
-  const fileDropZone = document.getElementById('fileDropZone') as HTMLDivElement | null;
-  const uploadPlaceholder = document.getElementById('uploadPlaceholder') as HTMLDivElement | null;
-  const uploadPreview = document.getElementById('uploadPreview') as HTMLDivElement | null;
-  const previewFileName = document.getElementById('previewFileName') as HTMLSpanElement | null;
-  const removeFileBtn = document.getElementById('removeFileBtn') as HTMLButtonElement | null;
+  const form = document.getElementById(
+    "brandelierApplicationForm",
+  ) as HTMLFormElement | null;
+  const statusBox = document.getElementById(
+    "formStatus",
+  ) as HTMLDivElement | null;
+  const submitBtn = document.getElementById(
+    "submitBtn",
+  ) as HTMLButtonElement | null;
+  const fileInput = document.getElementById(
+    "awsm-application-file",
+  ) as HTMLInputElement | null;
+  const fileDropZone = document.getElementById(
+    "fileDropZone",
+  ) as HTMLDivElement | null;
+  const uploadPlaceholder = document.getElementById(
+    "uploadPlaceholder",
+  ) as HTMLDivElement | null;
+  const uploadPreview = document.getElementById(
+    "uploadPreview",
+  ) as HTMLDivElement | null;
+  const previewFileName = document.getElementById(
+    "previewFileName",
+  ) as HTMLSpanElement | null;
+  const removeFileBtn = document.getElementById(
+    "removeFileBtn",
+  ) as HTMLButtonElement | null;
 
   // --- File Upload UX ---
   function showFilePreview(file: File) {
-    if (uploadPlaceholder) uploadPlaceholder.style.display = 'none';
-    if (uploadPreview) uploadPreview.style.display = 'flex';
+    if (uploadPlaceholder) uploadPlaceholder.style.display = "none";
+    if (uploadPreview) uploadPreview.style.display = "flex";
     if (previewFileName) previewFileName.textContent = file.name;
   }
 
   function resetFilePreview() {
-    if (uploadPlaceholder) uploadPlaceholder.style.display = 'flex';
-    if (uploadPreview) uploadPreview.style.display = 'none';
-    if (previewFileName) previewFileName.textContent = '';
-    if (fileInput) fileInput.value = '';
+    if (uploadPlaceholder) uploadPlaceholder.style.display = "flex";
+    if (uploadPreview) uploadPreview.style.display = "none";
+    if (previewFileName) previewFileName.textContent = "";
+    if (fileInput) fileInput.value = "";
   }
 
   if (fileInput) {
-    fileInput.addEventListener('change', () => {
+    fileInput.addEventListener("change", () => {
       const file = fileInput.files?.[0];
       if (file) showFilePreview(file);
     });
   }
 
   if (removeFileBtn) {
-    removeFileBtn.addEventListener('click', resetFilePreview);
+    removeFileBtn.addEventListener("click", resetFilePreview);
   }
 
   // Drag & drop
   if (fileDropZone && fileInput) {
-    fileDropZone.addEventListener('click', () => fileInput.click());
+    fileDropZone.addEventListener("click", () => fileInput.click());
 
-    fileDropZone.addEventListener('dragover', (e) => {
+    fileDropZone.addEventListener("dragover", (e) => {
       e.preventDefault();
-      fileDropZone.classList.add('drag-over');
+      fileDropZone.classList.add("drag-over");
     });
-    fileDropZone.addEventListener('dragleave', () => {
-      fileDropZone.classList.remove('drag-over');
+    fileDropZone.addEventListener("dragleave", () => {
+      fileDropZone.classList.remove("drag-over");
     });
-    fileDropZone.addEventListener('drop', (e) => {
+    fileDropZone.addEventListener("drop", (e) => {
       e.preventDefault();
-      fileDropZone.classList.remove('drag-over');
+      fileDropZone.classList.remove("drag-over");
       const droppedFile = e.dataTransfer?.files?.[0];
       if (droppedFile && fileInput) {
         const dt = new DataTransfer();
@@ -396,50 +450,71 @@ const { job, otherJobs } = Astro.props;
 
   // --- Validation ---
   function clearErrors() {
-    document.querySelectorAll('.field-error').forEach((el) => {
-      (el as HTMLElement).textContent = '';
+    document.querySelectorAll(".field-error").forEach((el) => {
+      (el as HTMLElement).textContent = "";
     });
-    document.querySelectorAll('.form-input, .form-textarea, .file-upload-zone').forEach((el) => {
-      el.classList.remove('input-error');
-    });
+    document
+      .querySelectorAll(".form-input, .form-textarea, .file-upload-zone")
+      .forEach((el) => {
+        el.classList.remove("input-error");
+      });
   }
 
   function validateForm(): boolean {
     clearErrors();
     let valid = true;
 
-    const nameInput = document.getElementById('awsm-applicant-name') as HTMLInputElement;
-    const emailInput = document.getElementById('awsm-applicant-email') as HTMLInputElement;
-    const phoneInput = document.getElementById('awsm-applicant-phone') as HTMLInputElement;
-    const letterInput = document.getElementById('awsm-applicant-letter') as HTMLTextAreaElement;
+    const nameInput = document.getElementById(
+      "awsm-applicant-name",
+    ) as HTMLInputElement;
+    const emailInput = document.getElementById(
+      "awsm-applicant-email",
+    ) as HTMLInputElement;
+    const phoneInput = document.getElementById(
+      "awsm-applicant-phone",
+    ) as HTMLInputElement;
+    const letterInput = document.getElementById(
+      "awsm-applicant-letter",
+    ) as HTMLTextAreaElement;
 
     if (!nameInput?.value.trim()) {
-      setFieldError('error-name', 'Full name is required', nameInput);
+      setFieldError("error-name", "Full name is required", nameInput);
       valid = false;
     }
-    if (!emailInput?.value.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailInput.value)) {
-      setFieldError('error-email', 'A valid email address is required', emailInput);
+    if (
+      !emailInput?.value.trim() ||
+      !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailInput.value)
+    ) {
+      setFieldError(
+        "error-email",
+        "A valid email address is required",
+        emailInput,
+      );
       valid = false;
     }
     if (!phoneInput?.value.trim()) {
-      setFieldError('error-phone', 'Phone number is required', phoneInput);
+      setFieldError("error-phone", "Phone number is required", phoneInput);
       valid = false;
     }
     if (!letterInput?.value.trim()) {
-      setFieldError('error-letter', 'Please write a brief bio or cover message', letterInput);
+      setFieldError(
+        "error-letter",
+        "Please write a brief bio or cover message",
+        letterInput,
+      );
       valid = false;
     }
     if (!fileInput?.files?.length) {
-      const errEl = document.getElementById('error-file');
-      if (errEl) errEl.textContent = 'Please upload your CV / resume';
-      fileDropZone?.classList.add('input-error');
+      const errEl = document.getElementById("error-file");
+      if (errEl) errEl.textContent = "Please upload your CV / resume";
+      fileDropZone?.classList.add("input-error");
       valid = false;
     } else {
       const file = fileInput.files[0];
       if (file.size > 10 * 1024 * 1024) {
-        const errEl = document.getElementById('error-file');
-        if (errEl) errEl.textContent = 'File must be under 10 MB';
-        fileDropZone?.classList.add('input-error');
+        const errEl = document.getElementById("error-file");
+        if (errEl) errEl.textContent = "File must be under 10 MB";
+        fileDropZone?.classList.add("input-error");
         valid = false;
       }
     }
@@ -447,73 +522,95 @@ const { job, otherJobs } = Astro.props;
     return valid;
   }
 
-  function setFieldError(errorId: string, message: string, inputEl?: HTMLElement | null) {
+  function setFieldError(
+    errorId: string,
+    message: string,
+    inputEl?: HTMLElement | null,
+  ) {
     const errEl = document.getElementById(errorId);
     if (errEl) errEl.textContent = message;
-    if (inputEl) inputEl.classList.add('input-error');
+    if (inputEl) inputEl.classList.add("input-error");
   }
 
   // --- Form Submission ---
   if (form) {
-    form.addEventListener('submit', async (e) => {
+    form.addEventListener("submit", async (e) => {
       e.preventDefault();
       if (!validateForm()) return;
 
-      const ajaxUrl = form.dataset.ajaxUrl || '';
-      const btnText = submitBtn?.querySelector('.btn-text') as HTMLElement | null;
-      const btnLoading = submitBtn?.querySelector('.btn-loading') as HTMLElement | null;
+      const ajaxUrl = form.dataset.ajaxUrl || "";
+      const btnText = submitBtn?.querySelector(
+        ".btn-text",
+      ) as HTMLElement | null;
+      const btnLoading = submitBtn?.querySelector(
+        ".btn-loading",
+      ) as HTMLElement | null;
 
       // Loading state
       if (submitBtn) submitBtn.disabled = true;
-      if (btnText) btnText.style.display = 'none';
-      if (btnLoading) btnLoading.style.display = 'inline-flex';
+      if (btnText) btnText.style.display = "none";
+      if (btnLoading) btnLoading.style.display = "inline-flex";
 
       const formData = new FormData(form);
 
       try {
         const response = await fetch(ajaxUrl, {
-          method: 'POST',
+          method: "POST",
           body: formData,
           headers: {
-            'X-Requested-With': 'XMLHttpRequest'
-          }
+            "X-Requested-With": "XMLHttpRequest",
+          },
         });
 
         let result: any = {};
-        const contentType = response.headers.get('content-type') || '';
-        if (contentType.includes('application/json')) {
+        const contentType = response.headers.get("content-type") || "";
+        if (contentType.includes("application/json")) {
           result = await response.json();
         } else {
           const text = await response.text();
-          try { result = JSON.parse(text); } catch { result = { success: response.ok }; }
+          try {
+            result = JSON.parse(text);
+          } catch {
+            result = { success: response.ok };
+          }
         }
 
-        if (response.ok && (result.success !== false)) {
-          showStatus('success', '🎉 Application submitted successfully! We\'ll review your application and get back to you soon.');
+        if (response.ok && result.success !== false) {
+          showStatus(
+            "success",
+            "🎉 Application submitted successfully! We'll review your application and get back to you soon.",
+          );
           form.reset();
           resetFilePreview();
         } else {
-          const errorMsg = result?.message || result?.data?.message || result?.data || 'Something went wrong. Please try again or use the email option below.';
-          showStatus('error', `❌ ${errorMsg}`);
+          const errorMsg =
+            result?.message ||
+            result?.data?.message ||
+            result?.data ||
+            "Something went wrong. Please try again or use the email option below.";
+          showStatus("error", `❌ ${errorMsg}`);
         }
       } catch (err) {
         // CORS or network error — fall back to direct form submission
-        showStatus('error', '⚠️ Could not submit directly. This may be a network issue. Please try the email option below, or <a href="' + (form.dataset.ajaxUrl?.replace('/wp-admin/admin-ajax.php', '/jobs/') || '#') + '" target="_blank" rel="noopener">apply on our CMS portal ↗</a>.');
+        showStatus(
+          "error",
+          "⚠️ Could not submit directly due to a network issue. Please apply directly via the email option below.",
+        );
       }
 
       // Reset button state
       if (submitBtn) submitBtn.disabled = false;
-      if (btnText) btnText.style.display = 'inline';
-      if (btnLoading) btnLoading.style.display = 'none';
+      if (btnText) btnText.style.display = "inline";
+      if (btnLoading) btnLoading.style.display = "none";
     });
   }
 
-  function showStatus(type: 'success' | 'error', message: string) {
+  function showStatus(type: "success" | "error", message: string) {
     if (!statusBox) return;
-    statusBox.style.display = 'block';
+    statusBox.style.display = "block";
     statusBox.className = `form-status status-${type}`;
     statusBox.innerHTML = message;
-    statusBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    statusBox.scrollIntoView({ behavior: "smooth", block: "nearest" });
   }
 </script>
 
@@ -554,11 +651,30 @@ const { job, otherJobs } = Astro.props;
     padding: 6px 14px;
     border-radius: 100px;
   }
-  .dept-pill { background: rgba(221,46,184,.1); color: var(--pink); border: 1px solid rgba(221,46,184,.25); }
-  .type-pill { background: rgba(63,154,230,.12); color: var(--blue-bell); border: 1px solid rgba(63,154,230,.25); }
-  .loc-pill { background: rgba(0,0,62,.06); color: var(--ink); }
-  .exp-pill { background: rgba(235,173,116,.18); color: #b86214; }
-  .meta-date { font-family: var(--font-body); font-size: 0.82rem; color: var(--muted); margin-left: auto; }
+  .dept-pill {
+    background: rgba(221, 46, 184, 0.1);
+    color: var(--pink);
+    border: 1px solid rgba(221, 46, 184, 0.25);
+  }
+  .type-pill {
+    background: rgba(63, 154, 230, 0.12);
+    color: var(--blue-bell);
+    border: 1px solid rgba(63, 154, 230, 0.25);
+  }
+  .loc-pill {
+    background: rgba(0, 0, 62, 0.06);
+    color: var(--ink);
+  }
+  .exp-pill {
+    background: rgba(235, 173, 116, 0.18);
+    color: #b86214;
+  }
+  .meta-date {
+    font-family: var(--font-body);
+    font-size: 0.82rem;
+    color: var(--muted);
+    margin-left: auto;
+  }
 
   /* --------------------------------------------------------
      Prose Content (WordPress / HireZoot HTML)
@@ -568,7 +684,7 @@ const { job, otherJobs } = Astro.props;
     border: 1px solid var(--line);
     border-radius: 24px;
     padding: 3.5rem;
-    box-shadow: 0 10px 30px rgba(0,0,62,.03);
+    box-shadow: 0 10px 30px rgba(0, 0, 62, 0.03);
     margin-bottom: 4rem;
   }
 
@@ -642,12 +758,12 @@ const { job, otherJobs } = Astro.props;
   .skill-tag {
     font-family: var(--font-body);
     font-size: 0.8rem;
-    background: rgba(0,0,62,.05);
+    background: rgba(0, 0, 62, 0.05);
     color: var(--ink);
     padding: 0.45rem 1rem;
     border-radius: 8px;
     font-weight: 500;
-    border: 1px solid rgba(0,0,62,.08);
+    border: 1px solid rgba(0, 0, 62, 0.08);
   }
 
   /* --------------------------------------------------------
@@ -658,7 +774,7 @@ const { job, otherJobs } = Astro.props;
     border: 1px solid var(--line);
     border-radius: 24px;
     padding: 3.5rem;
-    box-shadow: 0 15px 40px rgba(0,0,62,.04);
+    box-shadow: 0 15px 40px rgba(0, 0, 62, 0.04);
   }
 
   .app-header .section-label {
@@ -734,7 +850,10 @@ const { job, otherJobs } = Astro.props;
     border-radius: 12px;
     padding: 0.85rem 1.1rem;
     outline: none;
-    transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+    transition:
+      border-color 0.2s,
+      box-shadow 0.2s,
+      background 0.2s;
     width: 100%;
     box-sizing: border-box;
   }
@@ -775,7 +894,9 @@ const { job, otherJobs } = Astro.props;
     border-radius: 14px;
     background: #f8f9fc;
     cursor: pointer;
-    transition: border-color 0.2s, background 0.2s;
+    transition:
+      border-color 0.2s,
+      background 0.2s;
     overflow: hidden;
   }
   .file-upload-zone:hover,
@@ -858,7 +979,9 @@ const { job, otherJobs } = Astro.props;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: border-color 0.2s, color 0.2s;
+    transition:
+      border-color 0.2s,
+      color 0.2s;
   }
   .remove-file-btn:hover {
     border-color: #e53e3e;
@@ -887,7 +1010,10 @@ const { job, otherJobs } = Astro.props;
     padding: 1.1rem 2.8rem;
     border-radius: 100px;
     cursor: pointer;
-    transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+    transition:
+      background 0.2s,
+      transform 0.2s,
+      box-shadow 0.2s;
     min-width: 240px;
   }
   .submit-application-btn:hover:not(:disabled) {
@@ -916,7 +1042,9 @@ const { job, otherJobs } = Astro.props;
     animation: spin 0.6s linear infinite;
   }
   @keyframes spin {
-    to { transform: rotate(360deg); }
+    to {
+      transform: rotate(360deg);
+    }
   }
 
   /* Status Messages */
@@ -981,7 +1109,9 @@ const { job, otherJobs } = Astro.props;
     border-radius: 100px;
     text-decoration: none;
     white-space: nowrap;
-    transition: border-color 0.2s, color 0.2s;
+    transition:
+      border-color 0.2s,
+      color 0.2s;
     flex-shrink: 0;
   }
   .email-alt-btn:hover {
@@ -1025,7 +1155,7 @@ const { job, otherJobs } = Astro.props;
     border: 1px solid var(--line);
     border-radius: 20px;
     padding: 2rem;
-    box-shadow: 0 8px 24px rgba(0,0,62,.03);
+    box-shadow: 0 8px 24px rgba(0, 0, 62, 0.03);
   }
 
   .quick-facts-card h3 {
@@ -1048,7 +1178,7 @@ const { job, otherJobs } = Astro.props;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 1px dashed rgba(0,0,62,.1);
+    border-bottom: 1px dashed rgba(0, 0, 62, 0.1);
     padding-bottom: 0.8rem;
   }
   .facts-list li:last-child {
@@ -1084,7 +1214,9 @@ const { job, otherJobs } = Astro.props;
     padding: 1rem;
     border-radius: 100px;
     margin-bottom: 0.8rem;
-    transition: transform 0.2s, background 0.2s;
+    transition:
+      transform 0.2s,
+      background 0.2s;
     box-sizing: border-box;
   }
   .sidebar-apply-btn:hover {
@@ -1107,7 +1239,9 @@ const { job, otherJobs } = Astro.props;
     padding: 0.8rem;
     border-radius: 100px;
     cursor: pointer;
-    transition: border-color 0.2s, color 0.2s;
+    transition:
+      border-color 0.2s,
+      color 0.2s;
   }
   .sidebar-share-btn:hover {
     border-color: var(--pink);
@@ -1173,10 +1307,13 @@ const { job, otherJobs } = Astro.props;
     align-items: center;
     padding: 0.8rem 1rem;
     border-radius: 12px;
-    border: 1px solid rgba(0,0,62,.06);
+    border: 1px solid rgba(0, 0, 62, 0.06);
     background: #fbfdff;
     text-decoration: none;
-    transition: border-color 0.2s, transform 0.2s, background 0.2s;
+    transition:
+      border-color 0.2s,
+      transform 0.2s,
+      background 0.2s;
   }
   .other-job-item:hover {
     border-color: var(--pink);
@@ -1212,8 +1349,14 @@ const { job, otherJobs } = Astro.props;
   }
 
   @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(6px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+      opacity: 0;
+      transform: translateY(6px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 
   @media (max-width: 960px) {
