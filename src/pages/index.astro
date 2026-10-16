@@ -6,6 +6,7 @@ import BeaneryModal from "../components/BeaneryModal.astro";
 import CampaignAnalytics from "../components/CampaignAnalytics.astro";
 import BrandReveal from "../components/BrandReveal.astro";
 import { getPosts } from "../lib/wp";
+import onSetImage from "../assets/images/hero/IMG20261012162800.jpg.webp";
 
 const services = [
   [
@@ -166,7 +167,7 @@ const featuredBlogs = allWpPosts.slice(0, 3);
   <section class="proof-section">
     <div class="proof-image">
       <Image
-        src="https://brandelier.in/wp-content/uploads/2026/08/WhatsApp-Image-2026-08-25-at-2.02.42-AM.jpeg"
+        src={onSetImage}
         alt="Brandelier team working on set"
         width={900}
         height={1200}
@@ -378,6 +379,9 @@ const featuredBlogs = allWpPosts.slice(0, 3);
     height: 100%;
     object-fit: cover;
     width: 100%;
+  }
+  .proof-image img {
+    object-position: center 10%;
   }
   .hero-visual img {
     filter: saturate(0.85);
