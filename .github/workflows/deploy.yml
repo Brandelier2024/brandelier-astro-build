@@ -1,4 +1,4 @@
-name: Deploy Brandelier to Hostinger
+name: Test, Build & Deploy to Hostinger
 
 on:
   push:
@@ -14,20 +14,23 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build-and-deploy:
+  test-and-deploy:
     runs-on: ubuntu-latest
     steps:
       - name: 📥 Checkout repository
         uses: actions/checkout@v4
 
-      - name: ⚙️ Setup Node.js
+      - name: ⚙️ Setup Node.js & Cache npm
         uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: 'npm'
 
-      - name: 📦 Install dependencies
+      - name: 📦 Install dependencies (uses cache)
         run: npm ci
+
+      - name: 🧪 Run Automated Unit Tests
+        run: npm test
 
       - name: 🏗️ Build Astro Site (Pulling Fresh WordPress Posts)
         run: npm run build
@@ -35,13 +38,13 @@ jobs:
           WP_API_KEY: ${{ secrets.WP_API_KEY }}
           PUBLIC_BRANDELIER_FORM_TOKEN: ${{ secrets.PUBLIC_BRANDELIER_FORM_TOKEN }}
 
-      - name: 🚀 Deploy to Hostinger via FTP
+      - name: 🚀 Sync Changed Files to Hostinger via FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
           server: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
-          protocol: ftps
+          protocol: ftp
           local-dir: ./dist/
           server-dir: ./public_html/
           dangerous-clean-slate: false
