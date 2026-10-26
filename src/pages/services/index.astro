@@ -10,7 +10,7 @@ const servicesData = [
     title: 'Social Media Marketing',
     href: '/services/social-media-marketing',
     category: 'Audience & Engagement',
-    image: 'https://brandelier.in/wp-content/uploads/2026/08/WhatsApp-Image-2026-08-25-at-2.02.42-AM.jpeg',
+    image: '/fallback-placeholder.webp',
     tagline: 'Turn digital attention into passionate brand advocacy and paying customers.',
     description: 'Build your brand voice, grow your audience, and drive real engagement across platforms. We manage your social presence with strategic content, community management, and targeted campaigns.',
     features: ['Platform Strategy', 'Content Calendars', 'Community Management', 'Paid Social Campaigns'],
@@ -24,7 +24,7 @@ const servicesData = [
     title: 'Website Design & Development',
     href: '/services/web-development',
     category: 'Architecture & UI/UX',
-    image: 'https://brandelier.in/wp-content/uploads/2026/08/TAG@LENSSHIMMMER-08585-scaled.jpg',
+    image: '/fallback-placeholder.webp',
     tagline: 'High-speed, conversion-engineered digital flagships crafted to scale.',
     description: 'We build more than websites — we craft seamless digital journeys. Our web development services help brands convert, connect, and grow with beautiful, high-performance sites.',
     features: ['Custom Websites', 'E-commerce Solutions', 'High-Converting Landing Pages', 'Bespoke UI/UX Design'],
@@ -38,7 +38,7 @@ const servicesData = [
     title: 'SEO Optimization',
     href: '/services/seo-optimization',
     category: 'Organic Dominance',
-    image: 'https://brandelier.in/wp-content/uploads/2026/08/TAG@LENSSHIMMMER-08596-scaled.jpg',
+    image: '/fallback-placeholder.webp',
     tagline: 'Claim dominant organic search real estate right where your high-intent buyers search.',
     description: 'Dominate search rankings with data-driven SEO strategies. We optimize your digital presence to drive organic traffic, increase visibility, and generate quality leads.',
     features: ['On-page & Off-page SEO', 'Technical Audits', 'Authority Link Building', 'Local Pune & Pan-India SEO'],
@@ -52,7 +52,7 @@ const servicesData = [
     title: 'Videography & Photography',
     href: '/services/videography-photography',
     category: 'Visual Storytelling',
-    image: 'https://brandelier.in/wp-content/uploads/2026/08/TAG@LENSSHIMMMER-00268-scaled.jpg',
+    image: '/fallback-placeholder.webp',
     tagline: 'Cinematic visual production that halts the scroll and etches your brand into memory.',
     description: 'Visual storytelling that captures your brand essence. From product shoots to cinematic brand films, we produce content that makes audiences stop, watch, and remember.',
     features: ['Cinematic Brand Films', 'Studio Product Photography', 'Viral High-Energy Reels', 'Corporate & Event Coverage'],
@@ -66,7 +66,7 @@ const servicesData = [
     title: 'Content Marketing',
     href: '/services/content-marketing',
     category: 'Thought Leadership',
-    image: 'https://brandelier.in/wp-content/uploads/2026/08/Brandelier-.jpg-scaled.jpeg',
+    image: '/fallback-placeholder.webp',
     tagline: 'Strategic content engines that educate, convert, and nurture lifelong customer relationships.',
     description: 'Stories, systems, and useful content that keep your brand in motion. We create and distribute compelling content that educates, entertains, and converts your audience.',
     features: ['SEO Editorial & Blog Writing', 'Conversion Copywriting', 'Automated Email Systems', 'Omnichannel Content Strategy'],
@@ -80,7 +80,7 @@ const servicesData = [
     title: 'Branding & Design',
     href: '/services/brand-design',
     category: 'Brand Systems & Design',
-    image: 'https://brandelier.in/wp-content/uploads/2026/08/Brandelier-3.jpg-scaled.jpeg',
+    image: '/fallback-placeholder.webp',
     tagline: 'Timeless visual identity systems that position you as the undeniable market leader.',
     description: 'Create a powerful visual identity that resonates with your audience. From logos to complete brand guidelines, we design identities that stand the test of time.',
     features: ['Iconic Logo Design', 'Comprehensive Brand Guidelines', 'Premium Packaging Design', 'Complete Visual Design Systems'],
@@ -288,13 +288,14 @@ const latestBlogs = allWpPosts.slice(0, 3);
         {servicesData.map(service => (
           <a href={service.href} class="service-card-link reveal-on-scroll" id={service.targetId}>
             <article class="service-card">
-              <!-- Service Image Placeholder from brandelier.in -->
+              <!-- Service Image Placeholder -->
               <div class="service-card-image-box">
                 <img 
                   src={service.image} 
                   alt={service.title} 
                   class="service-img-placeholder"
                   loading="lazy"
+                  onerror="this.onerror=null;this.src='/fallback-placeholder.webp'"
                 />
                 <div class="service-image-overlay">
                   <span class="service-num-badge">{service.number}</span>

@@ -3,13 +3,20 @@ import Layout from '../layouts/Layout.astro';
 import { Image } from 'astro:assets';
 import PageHero from '../components/PageHero.astro';
 
+import imgBeanery from '../assets/images/hero/IMG20261012162800.jpg.webp';
+import imgFilm from '../assets/images/hero/WhatsApp Image 2026-10-11 at 3.03.19 AM.webp';
+import imgMarketing from '../assets/images/hero/WhatsApp Image 2026-10-11 at 3.04.52 AM.webp';
+import imgEcommerce from '../assets/images/hero/IMG20261012162638.jpg.webp';
+import imgSocial from '../assets/images/hero/WhatsApp Image 2026-10-11 at 3.05.28 AM.webp';
+import imgBranding from '../assets/images/hero/IMG20261012162747.jpg.webp';
+
 const projects = [
-  { title: 'Beanery Café', category: 'Content Production', image: 'https://brandelier.in/wp-content/uploads/2026/08/TAG@LENSSHIMMMER-00268-scaled.jpg', desc: 'Full content production including photography, videography, and social media content for this premium café brand.' },
-  { title: 'Brand Film Production', category: 'Videography', image: 'https://brandelier.in/wp-content/uploads/2026/08/Brandelier-.jpg-scaled.jpeg', desc: 'Cinematic brand films crafted to tell compelling stories and connect with audiences emotionally.' },
-  { title: 'Digital Marketing Campaign', category: 'Performance Marketing', image: 'https://brandelier.in/wp-content/uploads/2026/08/TAG@LENSSHIMMMER-08596-scaled.jpg', desc: 'Data-driven performance campaigns delivering measurable ROI across multiple channels.' },
-  { title: 'E-commerce Website', category: 'Web Development', image: 'https://brandelier.in/wp-content/uploads/2026/08/TAG@LENSSHIMMMER-08585-scaled.jpg', desc: 'Custom e-commerce platforms designed for conversion with seamless user experiences.' },
-  { title: 'Social Media Growth', category: 'Social Media', image: 'https://brandelier.in/wp-content/uploads/2026/08/WhatsApp-Image-2026-08-25-at-2.02.42-AM.jpeg', desc: 'Strategic social media management driving community growth and brand engagement.' },
-  { title: 'Brand Identity Design', category: 'Brand Design', image: 'https://brandelier.in/wp-content/uploads/2026/08/Brandelier-3.jpg-scaled.jpeg', desc: 'Complete brand identity systems including logos, typography, color palettes, and guidelines.' },
+  { title: 'Beanery Café', category: 'Content Production', image: imgBeanery, desc: 'Full content production including photography, videography, and social media content for this premium café brand.' },
+  { title: 'Brand Film Production', category: 'Videography', image: imgFilm, desc: 'Cinematic brand films crafted to tell compelling stories and connect with audiences emotionally.' },
+  { title: 'Digital Marketing Campaign', category: 'Performance Marketing', image: imgMarketing, desc: 'Data-driven performance campaigns delivering measurable ROI across multiple channels.' },
+  { title: 'E-commerce Website', category: 'Web Development', image: imgEcommerce, desc: 'Custom e-commerce platforms designed for conversion with seamless user experiences.' },
+  { title: 'Social Media Growth', category: 'Social Media', image: imgSocial, desc: 'Strategic social media management driving community growth and brand engagement.' },
+  { title: 'Brand Identity Design', category: 'Brand Design', image: imgBranding, desc: 'Complete brand identity systems including logos, typography, color palettes, and guidelines.' },
 ];
 
 const categories = ['All', 'Content Production', 'Videography', 'Performance Marketing', 'Web Development', 'Social Media', 'Brand Design'];

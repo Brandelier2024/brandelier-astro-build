@@ -69,10 +69,11 @@ const { post, allPosts } = Astro.props;
         <div class="featured-image-container">
           <div class="featured-image-card">
             <img
-              src={post.image}
+              src={post.image || '/fallback-placeholder.webp'}
               alt={post.title}
               loading="eager"
               class="post-main-img"
+              onerror="this.onerror=null;this.src='/fallback-placeholder.webp'"
             />
           </div>
         </div>
@@ -189,7 +190,12 @@ const { post, allPosts } = Astro.props;
                 <a href={item.href} class="related-card">
                   {item.image && (
                     <div class="related-card-img">
-                      <img src={item.image} alt={item.title} loading="lazy" />
+                      <img
+                        src={item.image || '/fallback-placeholder.webp'}
+                        alt={item.title}
+                        loading="lazy"
+                        onerror="this.onerror=null;this.src='/fallback-placeholder.webp'"
+                      />
                       <span class="related-badge">{item.category}</span>
                     </div>
                   )}

@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" width="1200" height="800">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#00003E" />
+      <stop offset="50%" stop-color="#07074E" />
+      <stop offset="100%" stop-color="#00002A" />
+    </linearGradient>
+    <radialGradient id="glow1" cx="30%" cy="40%" r="50%">
+      <stop offset="0%" stop-color="#DD2EB8" stop-opacity="0.35" />
+      <stop offset="100%" stop-color="#DD2EB8" stop-opacity="0" />
+    </radialGradient>
+    <radialGradient id="glow2" cx="75%" cy="65%" r="45%">
+      <stop offset="0%" stop-color="#3F9AE6" stop-opacity="0.30" />
+      <stop offset="100%" stop-color="#3F9AE6" stop-opacity="0" />
+    </radialGradient>
+    <linearGradient id="accent" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#9B2FCA" />
+      <stop offset="100%" stop-color="#DD2EB8" />
+    </linearGradient>
+  </defs>
+
+  <!-- Background Base -->
+  <rect width="1200" height="800" fill="url(#bg)" />
+
+  <!-- Ambient Glows -->
+  <circle cx="360" cy="320" r="420" fill="url(#glow1)" />
+  <circle cx="900" cy="520" r="380" fill="url(#glow2)" />
+
+  <!-- Subtle Grid Lines -->
+  <g stroke="#3F9AE6" stroke-opacity="0.08" stroke-width="1">
+    <line x1="0" y1="200" x2="1200" y2="200" />
+    <line x1="0" y1="400" x2="1200" y2="400" />
+    <line x1="0" y1="600" x2="1200" y2="600" />
+    <line x1="300" y1="0" x2="300" y2="800" />
+    <line x1="600" y1="0" x2="600" y2="800" />
+    <line x1="900" y1="0" x2="900" y2="800" />
+  </g>
+
+  <!-- Center Card Emblem -->
+  <g transform="translate(600, 360)">
+    <!-- Outer Glow Ring -->
+    <circle cx="0" cy="0" r="70" fill="none" stroke="url(#accent)" stroke-width="2" opacity="0.6" stroke-dasharray="8 6" />
+    <!-- Inner Circle -->
+    <circle cx="0" cy="0" r="50" fill="#00003E" stroke="#3F9AE6" stroke-width="2" opacity="0.9" />
+    
+    <!-- Camera / Aperture Icon -->
+    <path d="M-18 -10 L-10 -18 L10 -18 L18 -10 L22 -10 A4 4 0 0 1 26 -6 L26 16 A4 4 0 0 1 22 20 L-22 20 A4 4 0 0 1 -26 16 L-26 -6 A4 4 0 0 1 -22 -10 Z" fill="none" stroke="#FFFFFF" stroke-width="2.5" stroke-linejoin="round" />
+    <circle cx="0" cy="5" r="9" fill="none" stroke="url(#accent)" stroke-width="2.5" />
+    <circle cx="0" cy="5" r="3" fill="#DD2EB8" />
+  </g>
+
+  <!-- Brand Typography -->
+  <text x="600" y="480" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="32" font-weight="800" fill="#FFFFFF" letter-spacing="4">
+    BRANDELIER
+  </text>
+  <text x="600" y="515" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="14" font-weight="600" fill="#DD2EB8" letter-spacing="6">
+    STUDIO VISUAL ASSET
+  </text>
+
+  <!-- Corner Badges -->
+  <text x="50" y="750" font-family="monospace" font-size="12" fill="#3F9AE6" opacity="0.7" letter-spacing="2">
+    BRANDELIER MEDIA WORKS · PUNE
+  </text>
+  <text x="1150" y="750" text-anchor="end" font-family="monospace" font-size="12" fill="#FFFFFF" opacity="0.5" letter-spacing="2">
+    FALLBACK PREVIEW
+  </text>
+</svg>

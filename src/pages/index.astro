@@ -247,12 +247,13 @@ const featuredBlogs = allWpPosts.slice(0, 3);
         featuredBlogs.map((post) => (
           <a href={post.href} class="home-blog-card">
             <div class="home-blog-image">
-              <Image
-                src={post.image}
+              <img
+                src={post.image || '/fallback-placeholder.webp'}
                 alt={post.title}
-                width={600}
-                height={400}
+                width="600"
+                height="400"
                 loading="lazy"
+                onerror="this.onerror=null;this.src='/fallback-placeholder.webp'"
               />
               <span class="home-blog-cat">{post.category}</span>
             </div>

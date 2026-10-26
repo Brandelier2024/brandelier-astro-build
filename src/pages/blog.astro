@@ -32,7 +32,12 @@ const allCategories = [
         <article class="featured-post">
           <div class="featured-img-wrap">
             <a href={featured.href}>
-              <img src={featured.image} alt={featured.title} loading="eager" />
+              <img
+                src={featured.image || '/fallback-placeholder.webp'}
+                alt={featured.title}
+                loading="eager"
+                onerror="this.onerror=null;this.src='/fallback-placeholder.webp'"
+              />
             </a>
             <span class="featured-badge">Featured Read</span>
           </div>
@@ -88,7 +93,12 @@ const allCategories = [
           >
             <div class="article-thumb">
               <a href={article.href} class="card-link">
-                <img src={article.image} alt={article.title} loading="lazy" />
+                <img
+                  src={article.image || '/fallback-placeholder.webp'}
+                  alt={article.title}
+                  loading="lazy"
+                  onerror="this.onerror=null;this.src='/fallback-placeholder.webp'"
+                />
               </a>
               <span class="cat-pill">{article.category}</span>
             </div>

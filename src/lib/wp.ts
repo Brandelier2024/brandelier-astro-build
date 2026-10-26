@@ -468,7 +468,7 @@ export function transformWpPost(post: any): BlogPost {
   const media = post._embedded?.['wp:featuredmedia']?.[0];
   const image = media?.source_url ||
     media?.media_details?.sizes?.large?.source_url ||
-    'https://cms.brandelier.in/wp-content/uploads/2025/08/Gemini_Generated_Image_6vcxf86vcxf86vcx.png';
+    '/fallback-placeholder.webp';
 
   // Extract author name
   const authorData = post._embedded?.author?.[0];

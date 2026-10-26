@@ -17,7 +17,7 @@ interface Props {
 const {
   title,
   description = "Brandelier Media Works is a results-driven digital marketing company in Pune offering SEO, social media, branding & web services to grow your business online.",
-  image = "https://brandelier.in/wp-content/uploads/2025/08/Gemini_Generated_Image_6vcxf86vcxf86vcx.png",
+  image = "/fallback-placeholder.webp",
   canonical,
   type = "website",
   darkHero,
@@ -28,6 +28,10 @@ const canonicalUrl =
   (Astro.site
     ? new URL(Astro.url.pathname, Astro.site).href
     : `https://brandelier.in${Astro.url.pathname}`);
+
+const ogImageUrl = image.startsWith("http")
+  ? image
+  : new URL(image, Astro.site || "https://brandelier.in").href;
 ---
 
 <!doctype html>
@@ -49,13 +53,13 @@ const canonicalUrl =
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonicalUrl} />
     <meta property="og:type" content={type} />
-    <meta property="og:image" content={image} />
+    <meta property="og:image" content={ogImageUrl} />
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
-    <meta name="twitter:image" content={image} />
+    <meta name="twitter:image" content={ogImageUrl} />
 
     <!-- Google Fonts: Montserrat (Headings) & Open Sans (Body/UI) with non-blocking async loading -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />

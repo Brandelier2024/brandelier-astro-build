@@ -2,30 +2,35 @@
 // BeaneryModal.astro — Horizontal scroll gallery popup for Beanery Café BTS
 import { Image } from 'astro:assets';
 
+import beanerySetup from '../assets/images/hero/IMG20261012162800.jpg.webp';
+import beaneryAction from '../assets/images/hero/WhatsApp Image 2026-10-11 at 3.03.19 AM.webp';
+import beaneryEnvironment from '../assets/images/hero/IMG20261012162638.jpg.webp';
+import beaneryReview from '../assets/images/hero/IMG20261012162747.jpg.webp';
+
 const galleryItems = [
   {
-    src: 'https://brandelier.in/wp-content/uploads/2026/08/TAG@LENSSHIMMMER-00268-scaled.jpg',
+    src: beanerySetup,
     alt: 'Camera Setup',
     label: '01 / Setup',
     title: 'Finding the Light',
     description: 'Dialing in the practical lights to match the café\'s natural ambient warmth.'
   },
   {
-    src: 'https://brandelier.in/wp-content/uploads/2026/08/TAG@LENSSHIMMMER-08596-scaled.jpg',
+    src: beaneryAction,
     alt: 'Coffee Pour',
     label: '02 / Action',
     title: 'The Perfect Pour',
     description: 'Shooting at 120fps to capture the rich texture and steam of the espresso extraction.'
   },
   {
-    src: 'https://brandelier.in/wp-content/uploads/2026/08/TAG@LENSSHIMMMER-08585-scaled.jpg',
+    src: beaneryEnvironment,
     alt: 'Cafe Vibe',
     label: '03 / Environment',
     title: 'Capturing Vibe',
     description: 'Using a wide prime lens to establish the premium yet inviting identity of the space.'
   },
   {
-    src: 'https://brandelier.in/wp-content/uploads/2026/08/Brandelier-.jpg-scaled.jpeg',
+    src: beaneryReview,
     alt: 'Reviewing footage',
     label: '04 / Review',
     title: 'On-Set Polish',

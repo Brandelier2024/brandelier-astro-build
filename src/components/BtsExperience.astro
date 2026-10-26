@@ -1,6 +1,12 @@
 ---
 // BtsExperience.astro — Full Behind-the-Scenes cinematic experience
 import { Image } from 'astro:assets';
+
+import btsCameraSetup from '../assets/images/hero/WhatsApp Image 2026-10-11 at 3.03.19 AM.webp';
+import btsOnSet from '../assets/images/hero/WhatsApp Image 2026-10-11 at 3.04.52 AM.webp';
+import btsDirecting from '../assets/images/hero/WhatsApp Image 2026-10-11 at 3.05.28 AM.webp';
+import btsLighting from '../assets/images/hero/IMG20261012162638.jpg.webp';
+import btsFilmingHero from '../assets/images/hero/IMG20261012162800.jpg.webp';
 ---
 
 <div id="brandelier-bts-env" class="relative bg-[#f4f7ff] text-[#00003E] w-full min-h-screen overflow-clip">
@@ -14,16 +20,16 @@ import { Image } from 'astro:assets';
         <section class="hero-section relative min-h-screen flex items-center justify-center pt-20 pb-10 px-6">
             <!-- Floating Parallax Images -->
             <div class="floating-img absolute w-40 md:w-64 h-56 md:h-80 top-[15%] left-[5%] md:left-[10%] rotate-[-8deg] rounded-xl overflow-hidden shadow-2xl z-10" data-speed="0.1" data-parallax="1.5">
-                <Image src="https://brandelier.in/wp-content/uploads/2026/08/Brandelier-.jpg-scaled.jpeg" width={600} height={800} class="w-full h-full object-cover grayscale-[40%] hover:grayscale-0 transition-all duration-500 scale-110" alt="Camera Setup" />
+                <Image src={btsCameraSetup} width={600} height={800} class="w-full h-full object-cover grayscale-[40%] hover:grayscale-0 transition-all duration-500 scale-110" alt="Camera Setup" />
             </div>
             <div class="floating-img absolute w-32 md:w-56 h-40 md:h-72 top-[20%] right-[-2%] md:right-[5%] rotate-[10deg] rounded-xl overflow-hidden shadow-2xl z-10" data-speed="0.05" data-parallax="-1.2">
-                <Image src="https://brandelier.in/wp-content/uploads/2026/08/WhatsApp-Image-2026-08-25-at-2.02.42-AM.jpeg" width={600} height={800} class="w-full h-full object-cover grayscale-[40%] hover:grayscale-0 transition-all duration-500 scale-110" alt="On Set" />
+                <Image src={btsOnSet} width={600} height={800} class="w-full h-full object-cover grayscale-[40%] hover:grayscale-0 transition-all duration-500 scale-110" alt="On Set" />
             </div>
             <div class="floating-img hide-mobile absolute w-48 h-64 bottom-[15%] left-[12%] rotate-[12deg] rounded-xl overflow-hidden shadow-2xl z-10" data-speed="0.15" data-parallax="2">
-                <Image src="https://brandelier.in/wp-content/uploads/2026/08/Brandelier-3.jpg-scaled.jpeg" width={600} height={800} class="w-full h-full object-cover grayscale-[40%] hover:grayscale-0 transition-all duration-500 scale-110" alt="Directing" />
+                <Image src={btsDirecting} width={600} height={800} class="w-full h-full object-cover grayscale-[40%] hover:grayscale-0 transition-all duration-500 scale-110" alt="Directing" />
             </div>
             <div class="floating-img hide-mobile absolute w-56 h-56 bottom-[20%] right-[15%] rotate-[-15deg] rounded-xl overflow-hidden shadow-2xl z-10" data-speed="0.08" data-parallax="-1.8">
-                <Image src="https://brandelier.in/wp-content/uploads/2026/08/TAG@LENSSHIMMMER-00268-scaled.jpg" width={600} height={600} class="w-full h-full object-cover grayscale-[40%] hover:grayscale-0 transition-all duration-500 scale-110" alt="Lighting Setup" />
+                <Image src={btsLighting} width={600} height={600} class="w-full h-full object-cover grayscale-[40%] hover:grayscale-0 transition-all duration-500 scale-110" alt="Lighting Setup" />
             </div>
 
             <!-- Hero Text Content -->
@@ -78,7 +84,7 @@ import { Image } from 'astro:assets';
             <div class="stack-card sticky top-0 h-screen w-full flex items-center justify-center p-8">
                 <div class="card-inner relative w-full max-w-[1200px] h-[80vh] rounded-[24px] overflow-hidden shadow-2xl border border-[#3F9AE6]/30 bg-[#00003E]">
                     <div class="absolute inset-[-10%] w-[120%] h-[120%] z-0">
-                        <Image class="gsap-parallax-img w-full h-full object-cover" src="https://brandelier.in/wp-content/uploads/2026/08/TAG@LENSSHIMMMER-08596-scaled.jpg" width={1600} height={1000} alt="On Set Filming" />
+                        <Image class="gsap-parallax-img w-full h-full object-cover" src={btsFilmingHero} width={1600} height={1000} alt="On Set Filming" />
                     </div>
                     <div class="relative z-10 h-full flex flex-col justify-end p-8 md:p-16 bg-gradient-to-t from-black/85 via-black/40 to-transparent">
                         <div class="overflow-hidden mb-2">
@@ -150,7 +156,7 @@ import { Image } from 'astro:assets';
                 <div class="relative mx-auto flex justify-center beanery-phone cursor-pointer open-gallery-btn w-full max-w-[300px]">
                     <div class="bts-phone-mockup relative w-full aspect-[9/19] bg-black border-[8px] border-[#1a1a1a] rounded-[2.5rem] overflow-hidden transform rotate-[-6deg] transition-all duration-700 hover:rotate-0 hover:scale-105 group flex items-center justify-center">
                         
-                        <Image src="https://brandelier.in/wp-content/uploads/2026/08/WhatsApp-Image-2026-08-25-at-2.02.42-AM.jpeg" width={540} height={960} class="w-full h-full object-contain bg-black opacity-90 group-hover:scale-110 transition-transform duration-700" alt="Beanery Coffee Reel" />
+                        <Image src={btsOnSet} width={540} height={960} class="w-full h-full object-contain bg-black opacity-90 group-hover:scale-110 transition-transform duration-700" alt="Beanery Coffee Reel" />
                         
                         <!-- Overlay -->
                         <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent flex flex-col justify-end p-6 pointer-events-none">
