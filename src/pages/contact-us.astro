@@ -2,9 +2,9 @@
 import Layout from "../layouts/Layout.astro";
 import PageHero from "../components/PageHero.astro";
 
-const formToken = import.meta.env.PUBLIC_BRANDELIER_FORM_TOKEN;
-if (!formToken) {
-  throw new Error("Missing required environment variable: PUBLIC_BRANDELIER_FORM_TOKEN");
+const formToken = import.meta.env.PUBLIC_BRANDELIER_FORM_TOKEN || "";
+if (!formToken && import.meta.env.DEV) {
+  console.warn("[Security Notice] PUBLIC_BRANDELIER_FORM_TOKEN is not defined in environment.");
 }
 ---
 

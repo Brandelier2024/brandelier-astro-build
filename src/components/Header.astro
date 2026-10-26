@@ -142,23 +142,25 @@ const serviceItems = [
 
 <script>
   // Mobile Menu Toggle
-  const btn = document.getElementById('mobile-menu-btn')!;
-  const overlay = document.getElementById('mobile-nav-overlay')!;
-  const header = document.getElementById('site-header')!;
+  const btn = document.getElementById('mobile-menu-btn');
+  const overlay = document.getElementById('mobile-nav-overlay');
+  const header = document.getElementById('site-header');
 
-  btn.addEventListener('click', () => {
-    btn.classList.toggle('open');
-    overlay.classList.toggle('open');
-    document.body.style.overflow = overlay.classList.contains('open') ? 'hidden' : '';
-  });
-
-  overlay.querySelectorAll('a').forEach(a => {
-    a.addEventListener('click', () => {
-      btn.classList.remove('open');
-      overlay.classList.remove('open');
-      document.body.style.overflow = '';
+  if (btn && overlay && header) {
+    btn.addEventListener('click', () => {
+      btn.classList.toggle('open');
+      overlay.classList.toggle('open');
+      document.body.style.overflow = overlay.classList.contains('open') ? 'hidden' : '';
     });
-  });
+
+    overlay.querySelectorAll('a').forEach(a => {
+      a.addEventListener('click', () => {
+        btn.classList.remove('open');
+        overlay.classList.remove('open');
+        document.body.style.overflow = '';
+      });
+    });
+  }
 
   // Mobile Services Accordion
   const servicesToggle = document.getElementById('mobile-services-toggle');
@@ -172,35 +174,44 @@ const serviceItems = [
     });
   }
 
-  // Sticky header on scroll & Homepage Intro Reveal
+  // Sticky header on scroll & Homepage Intro Reveal (Optimized - zero layout thrashing)
   let lastScroll = 0;
   const revealContainer = document.getElementById('revealScrollContainer');
+  let enterThreshold = 500;
 
-  window.addEventListener('scroll', () => {
-    const y = window.scrollY;
+  function updateEnterThreshold() {
+    if (revealContainer) {
+      enterThreshold = (revealContainer.offsetHeight - window.innerHeight) * 0.70;
+    } else {
+      enterThreshold = 200;
+    }
+  }
 
-    // On homepage, ensure header only shows after entering the screen / past 3D intro
-    if (header.classList.contains('home-intro-hidden')) {
-      if (revealContainer) {
-        const enterThreshold = (revealContainer.offsetHeight - window.innerHeight) * 0.70;
+  if (header) {
+    updateEnterThreshold();
+    window.addEventListener('resize', updateEnterThreshold, { passive: true });
+
+    window.addEventListener('scroll', () => {
+      const y = window.scrollY;
+
+      // On homepage, ensure header only shows after entering the screen / past 3D intro
+      if (header.classList.contains('home-intro-hidden')) {
         if (y >= enterThreshold) {
           header.classList.add('entered');
         } else {
           header.classList.remove('entered');
         }
-      } else if (y > 200) {
-        header.classList.add('entered');
       }
-    }
 
-    if (y > 60) {
-      header.classList.add('scrolled');
-      header.classList.toggle('hide', y > lastScroll && y > 300);
-    } else {
-      header.classList.remove('scrolled', 'hide');
-    }
-    lastScroll = y;
-  }, { passive: true });
+      if (y > 60) {
+        header.classList.add('scrolled');
+        header.classList.toggle('hide', y > lastScroll && y > 300);
+      } else {
+        header.classList.remove('scrolled', 'hide');
+      }
+      lastScroll = y;
+    }, { passive: true });
+  }
 
   // Persistent Dropdown Bridge: Keeps hover active when cursor moves down to select a service
   const dropdownWrapper = document.querySelector('.nav-dropdown-wrapper');

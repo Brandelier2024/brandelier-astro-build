@@ -21,9 +21,9 @@ interface Props {
 
 const { job, otherJobs } = Astro.props;
 
-const formToken = import.meta.env.PUBLIC_BRANDELIER_FORM_TOKEN;
-if (!formToken) {
-  throw new Error("Missing required environment variable: PUBLIC_BRANDELIER_FORM_TOKEN");
+const formToken = import.meta.env.PUBLIC_BRANDELIER_FORM_TOKEN || "";
+if (!formToken && import.meta.env.DEV) {
+  console.warn("[Security Notice] PUBLIC_BRANDELIER_FORM_TOKEN is not defined in environment.");
 }
 ---
 
@@ -426,12 +426,22 @@ if (!formToken) {
   }
 
   if (removeFileBtn) {
-    removeFileBtn.addEventListener("click", resetFilePreview);
+    removeFileBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      e.preventDefault();
+      resetFilePreview();
+    });
   }
 
   // Drag & drop
   if (fileDropZone && fileInput) {
-    fileDropZone.addEventListener("click", () => fileInput.click());
+    fileDropZone.addEventListener("click", (e) => {
+      const target = e.target as HTMLElement;
+      if (target.closest("#removeFileBtn") || target === fileInput) {
+        return;
+      }
+      fileInput.click();
+    });
 
     fileDropZone.addEventListener("dragover", (e) => {
       e.preventDefault();
@@ -614,7 +624,8 @@ if (!formToken) {
     if (!statusBox) return;
     statusBox.style.display = "block";
     statusBox.className = `form-status status-${type}`;
-    statusBox.innerHTML = message;
+    // Use textContent to prevent DOM XSS vulnerabilities
+    statusBox.textContent = message;
     statusBox.scrollIntoView({ behavior: "smooth", block: "nearest" });
   }
 </script>

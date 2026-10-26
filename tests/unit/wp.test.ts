@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import {
   cleanHtml,
+  sanitizeRichHtml,
   calculateReadTime,
   formatDate,
   parseDepartment,
@@ -15,6 +16,42 @@ import {
 } from '../../src/lib/wp';
 
 describe('WordPress CMS Utilities (src/lib/wp.ts)', () => {
+  describe('sanitizeRichHtml()', () => {
+    it('should strip script tags and their contents', () => {
+      const malicious = '<p>Normal text</p><script>alert("XSS")</script><span>More text</span>';
+      expect(sanitizeRichHtml(malicious)).toBe('<p>Normal text</p><span>More text</span>');
+    });
+
+    it('should strip iframes, objects, and embeds', () => {
+      const malicious = '<p>Video</p><iframe src="https://evil.com"></iframe><object data="test.swf"></object><embed src="test.mov">';
+      expect(sanitizeRichHtml(malicious)).toBe('<p>Video</p>');
+    });
+
+    it('should strip inline event handlers', () => {
+      const malicious = '<img src="valid.jpg" onload="alert(1)" onerror="alert(2)" /><div onclick="doEvil()">Click</div>';
+      expect(sanitizeRichHtml(malicious)).toBe('<img src="valid.jpg" /><div>Click</div>');
+    });
+
+    it('should neutralize javascript: and vbscript: pseudo-protocols', () => {
+      const malicious = '<a href="javascript:alert(1)">Link</a><img src="javascript:evil()" />';
+      const sanitized = sanitizeRichHtml(malicious);
+      expect(sanitized).not.toContain('javascript:');
+      expect(sanitized).toContain('href="#"');
+      expect(sanitized).toContain('src="#"');
+    });
+
+    it('should preserve safe HTML tags and formatting', () => {
+      const safe = '<h2>Title</h2><p>Paragraph with <strong>bold</strong> and <em>italic</em>.</p><ul><li>Item 1</li></ul>';
+      expect(sanitizeRichHtml(safe)).toBe(safe);
+    });
+
+    it('should handle empty and whitespace strings safely', () => {
+      expect(sanitizeRichHtml('')).toBe('');
+      // @ts-expect-error test undefined
+      expect(sanitizeRichHtml(undefined)).toBe('');
+    });
+  });
+
   describe('cleanHtml()', () => {
     it('should strip standard HTML tags', () => {
       const input = '<p>Hello <strong>World</strong>, this is an <a href="#">anchor</a>.</p>';

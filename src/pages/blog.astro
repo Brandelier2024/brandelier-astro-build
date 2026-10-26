@@ -11,7 +11,7 @@ const remaining = articles.slice(1);
 // Extract distinct categories from fetched articles
 const allCategories = [
   "All",
-  ...Array.from(new Set(articles.flatMap((a) => a.categories).filter(Boolean))),
+  ...Array.from(new Set(articles.flatMap((a) => a?.categories ?? []).filter(Boolean))),
 ];
 ---
 

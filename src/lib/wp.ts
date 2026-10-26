@@ -35,6 +35,8 @@ const defaultHeaders: Record<string, string> = {
   'X-Brandelier-Key': WP_API_KEY
 };
 
+const API_TIMEOUT_MS = 8000;
+
 // Clean HTML tags and decode basic HTML entities
 export function cleanHtml(html: string): string {
   if (!html) return '';
@@ -52,6 +54,28 @@ export function cleanHtml(html: string): string {
     .replace(/\[&hellip;\]/g, '...')
     .replace(/&hellip;/g, '...')
     .replace(/\[\.\.\.\]/g, '...')
+    .trim();
+}
+
+/**
+ * Sanitizes rich HTML from external CMS to prevent Stored XSS
+ * Strips script tags, iframes, objects, embeds, inline event handlers (onload, onerror, etc.),
+ * and javascript: / vbscript: pseudo-protocols in links/attributes.
+ */
+export function sanitizeRichHtml(rawHtml: string): string {
+  if (!rawHtml) return '';
+  return rawHtml
+    // Remove script tags and their contents
+    .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
+    // Remove iframes and objects
+    .replace(/<iframe\b[^<]*(?:(?!<\/iframe>)<[^<]*)*<\/iframe>/gi, '')
+    .replace(/<object\b[^<]*(?:(?!<\/object>)<[^<]*)*<\/object>/gi, '')
+    .replace(/<embed\b[^>]*>/gi, '')
+    .replace(/<applet\b[^>]*>/gi, '')
+    // Remove dangerous inline event handlers (onclick, onload, onerror, etc.)
+    .replace(/\s+on[a-z0-9_-]+\s*=\s*(?:'[^']*'|"[^"]*"|[^\s>]+)/gi, '')
+    // Remove javascript: and vbscript: pseudo-protocols in href/src
+    .replace(/(href|src)\s*=\s*(?:['"]\s*(?:javascript|vbscript):[^'"]*['"]|(?:javascript|vbscript):[^\s>]+)/gi, '$1="#"')
     .trim();
 }
 
@@ -128,7 +152,7 @@ export const FALLBACK_POSTS: BlogPost[] = [
 
 export function transformWpPost(post: any): BlogPost {
   const title = cleanHtml(post.title?.rendered || 'Untitled Post');
-  const content = post.content?.rendered || '';
+  const content = sanitizeRichHtml(post.content?.rendered || '');
   const excerpt = cleanHtml(post.excerpt?.rendered || '');
 
   // Extract category from embedded terms
@@ -179,7 +203,8 @@ export function transformWpPost(post: any): BlogPost {
 export async function getPosts(): Promise<BlogPost[]> {
   try {
     const res = await fetch(`${WP_API_URL}/posts?_embed&per_page=100`, {
-      headers: defaultHeaders
+      headers: defaultHeaders,
+      signal: AbortSignal.timeout(API_TIMEOUT_MS)
     });
 
     if (!res.ok) {
@@ -205,7 +230,8 @@ export async function getPosts(): Promise<BlogPost[]> {
 export async function getPostBySlug(slug: string): Promise<BlogPost | null> {
   try {
     const res = await fetch(`${WP_API_URL}/posts?slug=${encodeURIComponent(slug)}&_embed`, {
-      headers: defaultHeaders
+      headers: defaultHeaders,
+      signal: AbortSignal.timeout(API_TIMEOUT_MS)
     });
 
     if (res.ok) {
@@ -388,11 +414,11 @@ export function transformWpJob(raw: any): JobOpening {
   const title = cleanHtml(raw.title?.rendered || 'Open Role');
   const classList = raw.class_list || [];
 
-  // Clean content or use default fallback if empty
-  let content = raw.content?.rendered || '';
+  // Clean and sanitize content or use default fallback if empty
+  let content = sanitizeRichHtml(raw.content?.rendered || '');
   if (!content.trim()) {
     const fallback = FALLBACK_JOBS.find(j => j.slug === raw.slug);
-    if (fallback) content = fallback.content;
+    if (fallback) content = sanitizeRichHtml(fallback.content);
   }
 
   let excerpt = cleanHtml(raw.excerpt?.rendered || '');
@@ -422,7 +448,8 @@ export function transformWpJob(raw: any): JobOpening {
 export async function getJobs(): Promise<JobOpening[]> {
   try {
     const res = await fetch('https://cms.brandelier.in/wp-json/wp/v2/awsm_job_openings?per_page=100', {
-      headers: defaultHeaders
+      headers: defaultHeaders,
+      signal: AbortSignal.timeout(API_TIMEOUT_MS)
     });
 
     if (res.ok) {
@@ -441,7 +468,8 @@ export async function getJobs(): Promise<JobOpening[]> {
 export async function getJobBySlug(slug: string): Promise<JobOpening | null> {
   try {
     const res = await fetch(`https://cms.brandelier.in/wp-json/wp/v2/awsm_job_openings?slug=${encodeURIComponent(slug)}`, {
-      headers: defaultHeaders
+      headers: defaultHeaders,
+      signal: AbortSignal.timeout(API_TIMEOUT_MS)
     });
 
     if (res.ok) {

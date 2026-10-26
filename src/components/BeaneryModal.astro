@@ -103,94 +103,115 @@ const galleryItems = [
 
 <script>
     // Astro isolates this script automatically
-    const modal = document.getElementById('beanery-modal')! as HTMLDivElement;
-    const slider = document.getElementById('horizontal-scroll-container')! as HTMLDivElement;
-    const progressBar = document.getElementById('scroll-progress-bar')! as HTMLDivElement;
-    const closeBtn = document.getElementById('close-modal-btn')! as HTMLButtonElement;
-    const modalHeader = document.getElementById('modal-header')! as HTMLDivElement;
-    const modalControls = document.getElementById('modal-controls')! as HTMLDivElement;
+    const modal = document.getElementById('beanery-modal') as HTMLDivElement | null;
+    const slider = document.getElementById('horizontal-scroll-container') as HTMLDivElement | null;
+    const progressBar = document.getElementById('scroll-progress-bar') as HTMLDivElement | null;
+    const closeBtn = document.getElementById('close-modal-btn') as HTMLButtonElement | null;
+    const modalHeader = document.getElementById('modal-header') as HTMLDivElement | null;
+    const modalControls = document.getElementById('modal-controls') as HTMLDivElement | null;
 
-    let isDown = false;
-    let startX = 0;
-    let scrollLeft = 0;
+    if (modal && slider && progressBar && closeBtn && modalHeader && modalControls) {
+        let isDown = false;
+        let startX = 0;
+        let scrollLeft = 0;
 
-    // ---- Move modal to body root to escape any stacking context ----
-    if (modal && modal.parentNode !== document.body) {
-        document.body.appendChild(modal);
-    }
-
-    // ---- OPEN MODAL ----
-    document.querySelectorAll('.open-gallery-btn').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-            e.preventDefault();
-            modal.classList.remove('opacity-0', 'pointer-events-none');
-
-            // Animate header & controls in
-            setTimeout(() => {
-                modalHeader.classList.remove('opacity-0', 'translate-y-8');
-                modalControls.classList.remove('opacity-0');
-                updateProgress();
-            }, 100);
-
-            // Lock background scroll
-            document.body.classList.add('brandelier-modal-active');
-            document.documentElement.classList.add('brandelier-modal-active');
-            document.body.style.setProperty('overflow', 'hidden', 'important');
-            document.documentElement.style.setProperty('overflow', 'hidden', 'important');
-        });
-    });
-
-    // ---- CLOSE MODAL ----
-    closeBtn.addEventListener('click', () => {
-        modal.classList.add('opacity-0', 'pointer-events-none');
-        modalHeader.classList.add('opacity-0', 'translate-y-8');
-        modalControls.classList.add('opacity-0');
-
-        // Restore scroll
-        document.body.classList.remove('brandelier-modal-active');
-        document.documentElement.classList.remove('brandelier-modal-active');
-        document.body.style.removeProperty('overflow');
-        document.documentElement.style.removeProperty('overflow');
-    });
-
-    // Close on background click
-    modal.addEventListener('click', (e) => {
-        if (e.target === modal) closeBtn.click();
-    });
-
-    // ---- PROGRESS BAR ----
-    function updateProgress() {
-        const maxScroll = slider.scrollWidth - slider.clientWidth;
-        progressBar.style.width = maxScroll > 0 ? (slider.scrollLeft / maxScroll) * 100 + '%' : '0%';
-    }
-    slider.addEventListener('scroll', updateProgress);
-
-    // ---- WHEEL → HORIZONTAL SCROLL ----
-    modal.addEventListener('wheel', (e) => {
-        if (!modal.classList.contains('opacity-0') && Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
-            e.preventDefault();
-            slider.scrollLeft += e.deltaY;
+        // ---- Move modal to body root to escape any stacking context ----
+        if (modal.parentNode !== document.body) {
+            document.body.appendChild(modal);
         }
-    }, { passive: false });
 
-    // ---- DRAG TO SCROLL ----
-    slider.addEventListener('mousedown', (e) => {
-        isDown = true;
-        slider.classList.add('cursor-grabbing');
-        startX = e.pageX - slider.offsetLeft;
-        scrollLeft = slider.scrollLeft;
-    });
-    slider.addEventListener('mouseleave', () => { isDown = false; slider.classList.remove('cursor-grabbing'); });
-    slider.addEventListener('mouseup', () => { isDown = false; slider.classList.remove('cursor-grabbing'); });
-    slider.addEventListener('mousemove', (e) => {
-        if (!isDown) return;
-        e.preventDefault();
-        const x = e.pageX - slider.offsetLeft;
-        slider.scrollLeft = scrollLeft - (x - startX) * 2;
-    });
+        // ---- OPEN MODAL ----
+        document.querySelectorAll('.open-gallery-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                modal.classList.remove('opacity-0', 'pointer-events-none');
 
-    // Resize update
-    window.addEventListener('resize', () => {
-        if (!modal.classList.contains('opacity-0')) updateProgress();
-    });
+                // Animate header & controls in
+                setTimeout(() => {
+                    modalHeader.classList.remove('opacity-0', 'translate-y-8');
+                    modalControls.classList.remove('opacity-0');
+                    updateProgress();
+                }, 100);
+
+                // Lock background scroll
+                document.body.classList.add('brandelier-modal-active');
+                document.documentElement.classList.add('brandelier-modal-active');
+                document.body.style.setProperty('overflow', 'hidden', 'important');
+                document.documentElement.style.setProperty('overflow', 'hidden', 'important');
+            });
+        });
+
+        // ---- CLOSE MODAL ----
+        const closeModal = () => {
+            modal.classList.add('opacity-0', 'pointer-events-none');
+            modalHeader.classList.add('opacity-0', 'translate-y-8');
+            modalControls.classList.add('opacity-0');
+
+            // Restore scroll
+            document.body.classList.remove('brandelier-modal-active');
+            document.documentElement.classList.remove('brandelier-modal-active');
+            document.body.style.removeProperty('overflow');
+            document.documentElement.style.removeProperty('overflow');
+        };
+
+        closeBtn.addEventListener('click', closeModal);
+
+        // Close on background click
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) closeModal();
+        });
+
+        // Close on Escape key
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && !modal.classList.contains('opacity-0')) {
+                closeModal();
+            }
+        });
+
+        // ---- PROGRESS BAR ----
+        function updateProgress() {
+            if (!slider || !progressBar) return;
+            const maxScroll = slider.scrollWidth - slider.clientWidth;
+            progressBar.style.width = maxScroll > 0 ? (slider.scrollLeft / maxScroll) * 100 + '%' : '0%';
+        }
+        slider.addEventListener('scroll', updateProgress);
+
+        // ---- WHEEL → HORIZONTAL SCROLL ----
+        modal.addEventListener('wheel', (e) => {
+            if (!modal.classList.contains('opacity-0') && Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
+                e.preventDefault();
+                slider.scrollLeft += e.deltaY;
+            }
+        }, { passive: false });
+
+        // ---- DRAG TO SCROLL (Global mouseup prevents stuck drag) ----
+        slider.addEventListener('mousedown', (e) => {
+            isDown = true;
+            slider.classList.add('cursor-grabbing');
+            startX = e.pageX - slider.offsetLeft;
+            scrollLeft = slider.scrollLeft;
+        });
+
+        const stopDragging = () => {
+            if (isDown) {
+                isDown = false;
+                slider.classList.remove('cursor-grabbing');
+            }
+        };
+
+        window.addEventListener('mouseup', stopDragging);
+        window.addEventListener('blur', stopDragging);
+
+        slider.addEventListener('mousemove', (e) => {
+            if (!isDown) return;
+            e.preventDefault();
+            const x = e.pageX - slider.offsetLeft;
+            slider.scrollLeft = scrollLeft - (x - startX) * 2;
+        });
+
+        // Resize update
+        window.addEventListener('resize', () => {
+            if (!modal.classList.contains('opacity-0')) updateProgress();
+        });
+    }
 </script>
