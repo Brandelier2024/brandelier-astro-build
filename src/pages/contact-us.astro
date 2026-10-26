@@ -3,8 +3,11 @@ import Layout from "../layouts/Layout.astro";
 import PageHero from "../components/PageHero.astro";
 
 const formToken = import.meta.env.PUBLIC_BRANDELIER_FORM_TOKEN || "";
-if (!formToken && import.meta.env.DEV) {
-  console.warn("[Security Notice] PUBLIC_BRANDELIER_FORM_TOKEN is not defined in environment.");
+const isFormAvailable = Boolean(formToken.trim());
+if (!isFormAvailable) {
+  console.warn(
+    "[Deployment Warning] PUBLIC_BRANDELIER_FORM_TOKEN is empty. Contact form rendered in unavailable fallback state."
+  );
 }
 ---
 
@@ -24,12 +27,14 @@ if (!formToken && import.meta.env.DEV) {
       <!-- Contact Form -->
       <div class="contact-form-wrap">
         <h2>Send us a message</h2>
-        <form
-          class="contact-form"
-          id="contact-form"
-          data-ajax-url="https://cms.brandelier.in/wp-json/brandelier/v1/contact"
-          novalidate
-        >
+        {
+          isFormAvailable ? (
+            <form
+              class="contact-form"
+              id="contact-form"
+              data-ajax-url="https://cms.brandelier.in/wp-json/brandelier/v1/contact"
+              novalidate
+            >
           <div class="form-row">
             <div class="form-group">
               <label for="name"
@@ -135,14 +140,40 @@ if (!formToken && import.meta.env.DEV) {
             </span>
           </button>
 
-          <div
-            class="form-status"
-            id="formStatus"
-            style="display:none;"
-            role="alert"
-          >
-          </div>
-        </form>
+              <div
+                class="form-status"
+                id="formStatus"
+                style="display:none;"
+                role="alert"
+              >
+              </div>
+            </form>
+          ) : (
+            <div class="form-unavailable-card">
+              <div class="unavailable-badge">
+                <span>⚠️</span> Form Under Maintenance
+              </div>
+              <h3>Web Contact Form Temporarily Offline</h3>
+              <p>
+                Our direct messaging portal is temporarily undergoing maintenance. Please contact our team directly via email or phone.
+              </p>
+              <div class="unavailable-actions">
+                <a
+                  href="mailto:Info@brandelier.in?subject=Website Inquiry"
+                  class="submit-btn unavailable-action-btn"
+                >
+                  Email Info@brandelier.in ↗
+                </a>
+                <a
+                  href="tel:+918080808080"
+                  class="submit-btn unavailable-action-btn-secondary"
+                >
+                  Call Studio ↗
+                </a>
+              </div>
+            </div>
+          )
+        }
       </div>
 
       <!-- Contact Info Sidebar -->
@@ -360,6 +391,67 @@ if (!formToken && import.meta.env.DEV) {
     opacity: 0.65;
     cursor: not-allowed;
     transform: none;
+  }
+
+  /* Unavailable Form State */
+  .form-unavailable-card {
+    background: #ffffff;
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    padding: 3.5rem 2.5rem;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0, 0, 62, 0.03);
+    margin-bottom: 2rem;
+  }
+  .unavailable-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.35rem 0.9rem;
+    border-radius: 100px;
+    background: rgba(234, 88, 12, 0.1);
+    color: #c2410c;
+    font-family: var(--font-body);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 1.25rem;
+  }
+  .form-unavailable-card h3 {
+    font-family: var(--font-heading);
+    font-size: clamp(1.4rem, 2.5vw, 1.8rem);
+    color: var(--ink);
+    margin: 0 0 0.8rem;
+  }
+  .form-unavailable-card p {
+    font-family: var(--font-body);
+    font-size: 0.95rem;
+    color: var(--muted);
+    max-width: 500px;
+    margin: 0 auto 2rem;
+    line-height: 1.6;
+  }
+  .unavailable-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .unavailable-action-btn {
+    text-decoration: none !important;
+    display: inline-flex !important;
+  }
+  .unavailable-action-btn-secondary {
+    text-decoration: none !important;
+    display: inline-flex !important;
+    background: #ffffff !important;
+    color: var(--ink) !important;
+    border: 1px solid var(--line) !important;
+  }
+  .unavailable-action-btn-secondary:hover {
+    border-color: var(--pink) !important;
+    color: var(--pink) !important;
   }
 
   .btn-loading {

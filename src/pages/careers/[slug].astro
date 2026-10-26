@@ -22,8 +22,11 @@ interface Props {
 const { job, otherJobs } = Astro.props;
 
 const formToken = import.meta.env.PUBLIC_BRANDELIER_FORM_TOKEN || "";
-if (!formToken && import.meta.env.DEV) {
-  console.warn("[Security Notice] PUBLIC_BRANDELIER_FORM_TOKEN is not defined in environment.");
+const isFormAvailable = Boolean(formToken.trim());
+if (!isFormAvailable) {
+  console.warn(
+    "[Deployment Warning] PUBLIC_BRANDELIER_FORM_TOKEN is empty. Career application form rendered in unavailable fallback state."
+  );
 }
 ---
 
@@ -86,17 +89,18 @@ if (!formToken && import.meta.env.DEV) {
               </p>
             </div>
 
-            <!-- Native Application Form -->
-            <form
-              id="brandelierApplicationForm"
-              class="application-form"
-              data-job-id={job.id}
-              data-job-title={job.title}
-              data-ajax-url="https://cms.brandelier.in/wp-json/brandelier/v1/apply"
-              enctype="multipart/form-data"
-              novalidate
-            >
-              <div class="form-grid">
+            {
+              isFormAvailable ? (
+                <form
+                  id="brandelierApplicationForm"
+                  class="application-form"
+                  data-job-id={job.id}
+                  data-job-title={job.title}
+                  data-ajax-url="https://cms.brandelier.in/wp-json/brandelier/v1/apply"
+                  enctype="multipart/form-data"
+                  novalidate
+                >
+                  <div class="form-grid">
                 <!-- Full Name -->
                 <div class="form-group">
                   <label for="awsm-applicant-name" class="form-label">
@@ -241,10 +245,28 @@ if (!formToken && import.meta.env.DEV) {
                 </button>
               </div>
 
-              <!-- Status Messages -->
-              <div class="form-status" id="formStatus" style="display:none;">
-              </div>
-            </form>
+                  <!-- Status Messages -->
+                  <div class="form-status" id="formStatus" style="display:none;">
+                  </div>
+                </form>
+              ) : (
+                <div class="form-unavailable-card">
+                  <div class="unavailable-badge">
+                    <span>⚠️</span> Form Under Maintenance
+                  </div>
+                  <h3>Direct Online Applications Currently Offline</h3>
+                  <p>
+                    Our direct submission portal is temporarily unavailable. Please apply directly by emailing your CV, portfolio link, and introduction to our recruitment team.
+                  </p>
+                  <a
+                    href={`mailto:Info@brandelier.in?subject=Application for ${encodeURIComponent(job.title)}`}
+                    class="email-alt-btn unavailable-action-btn"
+                  >
+                    Email Your Application (Info@brandelier.in) ✉
+                  </a>
+                </div>
+              )
+            }
 
             <!-- Alternate Email Submission Option -->
             <div class="email-alternate-card">
@@ -1133,6 +1155,60 @@ if (!formToken && import.meta.env.DEV) {
   .email-alt-btn:hover {
     border-color: var(--pink);
     color: var(--pink);
+  }
+
+  /* Unavailable Form State Card */
+  .form-unavailable-card {
+    background: #ffffff;
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    padding: 3rem 2rem;
+    text-align: center;
+    margin-bottom: 2rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 62, 0.03);
+  }
+  .unavailable-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.35rem 0.9rem;
+    border-radius: 100px;
+    background: rgba(234, 88, 12, 0.1);
+    color: #c2410c;
+    font-family: var(--font-body);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 1.25rem;
+  }
+  .form-unavailable-card h3 {
+    font-family: var(--font-heading);
+    font-size: clamp(1.3rem, 2.5vw, 1.8rem);
+    color: var(--ink);
+    margin: 0 0 0.8rem;
+  }
+  .form-unavailable-card p {
+    font-family: var(--font-body);
+    font-size: 0.92rem;
+    color: var(--muted);
+    max-width: 520px;
+    margin: 0 auto 1.8rem;
+    line-height: 1.6;
+  }
+  .unavailable-action-btn {
+    background: var(--ink) !important;
+    color: #ffffff !important;
+    border-color: var(--ink) !important;
+    font-size: 0.9rem !important;
+    padding: 0.9rem 1.8rem !important;
+    display: inline-flex !important;
+    justify-content: center !important;
+  }
+  .unavailable-action-btn:hover {
+    background: var(--pink) !important;
+    border-color: var(--pink) !important;
+    color: #ffffff !important;
   }
 
   .app-footer-note {

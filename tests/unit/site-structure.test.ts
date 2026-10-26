@@ -70,4 +70,27 @@ describe('Project Structure & Static Assets Validation', () => {
       }
     });
   });
+
+  describe('Form Token Availability & Unavailable State Fallbacks', () => {
+    it('src/pages/careers/[slug].astro should check isFormAvailable and provide unavailable-form fallback', () => {
+      const filePath = path.join(rootDir, 'src/pages/careers/[slug].astro');
+      const content = fs.readFileSync(filePath, 'utf-8');
+
+      expect(content).toContain('isFormAvailable');
+      expect(content).toContain('form-unavailable-card');
+      expect(content).toContain('unavailable-badge');
+      expect(content).toContain('mailto:Info@brandelier.in');
+    });
+
+    it('src/pages/contact-us.astro should check isFormAvailable and provide unavailable-form fallback', () => {
+      const filePath = path.join(rootDir, 'src/pages/contact-us.astro');
+      const content = fs.readFileSync(filePath, 'utf-8');
+
+      expect(content).toContain('isFormAvailable');
+      expect(content).toContain('form-unavailable-card');
+      expect(content).toContain('unavailable-badge');
+      expect(content).toContain('mailto:Info@brandelier.in');
+    });
+  });
 });
+

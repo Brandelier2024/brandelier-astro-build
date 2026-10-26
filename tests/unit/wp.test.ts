@@ -2,6 +2,7 @@ import { describe, it, expect } from 'vitest';
 import {
   cleanHtml,
   sanitizeRichHtml,
+  isSafeUrl,
   calculateReadTime,
   formatDate,
   parseDepartment,
@@ -40,15 +41,98 @@ describe('WordPress CMS Utilities (src/lib/wp.ts)', () => {
       expect(sanitized).toContain('src="#"');
     });
 
+    it('should strip SVG event handlers without preceding whitespace', () => {
+      // SVG tag separated from onload by slash without whitespace
+      const maliciousWithGroup = '<svg/onload=alert(1)><g onload="alert(2)">test</g></svg>safe text';
+      expect(sanitizeRichHtml(maliciousWithGroup)).toBe('safe text');
+
+      // Standalone unclosed SVG with slash-delimited onload
+      const standaloneSvg = '<svg/onload=alert(1)>safe text';
+      expect(sanitizeRichHtml(standaloneSvg)).toBe('safe text');
+
+      // Self-closing SVG with onload
+      const selfClosingSvg = '<svg/onload=alert(1)/>safe text';
+      expect(sanitizeRichHtml(selfClosingSvg)).toBe('safe text');
+
+      // Img tag with slash-delimited onerror
+      const slashImg = '<img/onerror=alert(1) src="https://example.com/pic.jpg" />';
+      expect(sanitizeRichHtml(slashImg)).toBe('<img src="https://example.com/pic.jpg" />');
+    });
+
+    it('should neutralize character-reference-obfuscated javascript URLs', () => {
+      // Hex numeric entity for horizontal tab inside javascript scheme
+      const tabObfuscated = '<a href="jav&#x09;ascript:alert(1)">click</a>';
+      expect(sanitizeRichHtml(tabObfuscated)).toBe('<a href="#">click</a>');
+
+      // Decimal numeric entities for all letters of javascript:
+      const fullEntityEncoded = '<a href="&#106;&#97;&#118;&#97;&#115;&#99;&#114;&#105;&#112;&#116;:alert(1)">click</a>';
+      expect(sanitizeRichHtml(fullEntityEncoded)).toBe('<a href="#">click</a>');
+
+      // Entity-encoded colon &#58;
+      const entityColon = '<a href="javascript&#58;alert(1)">click</a>';
+      expect(sanitizeRichHtml(entityColon)).toBe('<a href="#">click</a>');
+
+      // Named entities &Tab; and &NewLine;
+      const namedTab = '<a href="jav&Tab;ascript:alert(1)">click</a>';
+      expect(sanitizeRichHtml(namedTab)).toBe('<a href="#">click</a>');
+
+      const namedNewline = '<a href="jav&NewLine;ascript:alert(1)">click</a>';
+      expect(sanitizeRichHtml(namedNewline)).toBe('<a href="#">click</a>');
+    });
+
     it('should preserve safe HTML tags and formatting', () => {
       const safe = '<h2>Title</h2><p>Paragraph with <strong>bold</strong> and <em>italic</em>.</p><ul><li>Item 1</li></ul>';
       expect(sanitizeRichHtml(safe)).toBe(safe);
+    });
+
+    it('should enforce rel="noopener noreferrer" on target="_blank" links', () => {
+      const link = '<a href="https://brandelier.in" target="_blank">Brand</a>';
+      expect(sanitizeRichHtml(link)).toBe('<a href="https://brandelier.in" target="_blank" rel="noopener noreferrer">Brand</a>');
+
+      const existingRel = '<a href="https://brandelier.in" target="_blank" rel="nofollow">Brand</a>';
+      expect(sanitizeRichHtml(existingRel)).toBe('<a href="https://brandelier.in" target="_blank" rel="nofollow noopener noreferrer">Brand</a>');
     });
 
     it('should handle empty and whitespace strings safely', () => {
       expect(sanitizeRichHtml('')).toBe('');
       // @ts-expect-error test undefined
       expect(sanitizeRichHtml(undefined)).toBe('');
+    });
+  });
+
+  describe('isSafeUrl()', () => {
+    it('should allow valid http and https URLs', () => {
+      expect(isSafeUrl('https://brandelier.in')).toBe(true);
+      expect(isSafeUrl('http://example.com/test?param=1')).toBe(true);
+    });
+
+    it('should allow mailto and tel links', () => {
+      expect(isSafeUrl('mailto:hello@brandelier.in')).toBe(true);
+      expect(isSafeUrl('tel:+919876543210')).toBe(true);
+    });
+
+    it('should allow safe relative URLs', () => {
+      expect(isSafeUrl('/careers/seo-executive')).toBe(true);
+      expect(isSafeUrl('./image.png')).toBe(true);
+      expect(isSafeUrl('../blog')).toBe(true);
+      expect(isSafeUrl('#section')).toBe(true);
+      expect(isSafeUrl('?tab=details')).toBe(true);
+    });
+
+    it('should reject dangerous pseudo-protocols even with leading whitespace or mixed case', () => {
+      expect(isSafeUrl('javascript:alert(1)')).toBe(false);
+      expect(isSafeUrl('   JaVaScRiPt:alert(1)')).toBe(false);
+      expect(isSafeUrl('vbscript:msgbox(1)')).toBe(false);
+      expect(isSafeUrl('data:text/html,<script>alert(1)</script>')).toBe(false);
+      expect(isSafeUrl('file:///etc/passwd')).toBe(false);
+    });
+
+    it('should reject URLs with obfuscated control characters and character references', () => {
+      expect(isSafeUrl('jav\0ascript:alert(1)')).toBe(false);
+      expect(isSafeUrl('jav&#x09;ascript:alert(1)')).toBe(false);
+      expect(isSafeUrl('&#106;&#97;&#118;&#97;&#115;&#99;&#114;&#105;&#112;&#116;:alert(1)')).toBe(false);
+      expect(isSafeUrl('javascript&#58;alert(1)')).toBe(false);
+      expect(isSafeUrl('jav&Tab;ascript:alert(1)')).toBe(false);
     });
   });
 

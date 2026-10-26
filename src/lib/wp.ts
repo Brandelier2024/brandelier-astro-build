@@ -1,6 +1,8 @@
 // src/lib/wp.ts
 // Headless WordPress API Client for cms.brandelier.in
 
+import { decodeHTML } from 'entities';
+
 export interface BlogPost {
   id: number;
   slug: string;
@@ -57,27 +59,329 @@ export function cleanHtml(html: string): string {
     .trim();
 }
 
+// List of allowed tags for rich blog/job content
+const ALLOWED_TAGS = new Set([
+  'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
+  'p', 'a', 'b', 'strong', 'i', 'em', 'u', 's', 'strike', 'del', 'ins',
+  'mark', 'small', 'sub', 'sup', 'span', 'div', 'hr', 'br',
+  'ul', 'ol', 'li', 'blockquote', 'pre', 'code', 'kbd', 'samp', 'var',
+  'table', 'thead', 'tbody', 'tfoot', 'tr', 'th', 'td', 'caption',
+  'figure', 'figcaption', 'img', 'q', 'time'
+]);
+
+// Tags whose contents must be dropped
+const DROP_CONTENT_TAGS = new Set([
+  'script', 'style', 'iframe', 'object', 'embed', 'applet', 'svg', 'math', 'noscript', 'template'
+]);
+
+// Global allowed attributes
+const GLOBAL_ALLOWED_ATTRS = new Set([
+  'class', 'id', 'title', 'dir', 'lang', 'role'
+]);
+
+// Tag-specific allowed attributes
+const TAG_ALLOWED_ATTRS: Record<string, Set<string>> = {
+  a: new Set(['href', 'target', 'rel', 'download', 'title']),
+  img: new Set(['src', 'alt', 'width', 'height', 'loading', 'decoding', 'srcset', 'sizes']),
+  th: new Set(['colspan', 'rowspan', 'scope', 'headers']),
+  td: new Set(['colspan', 'rowspan', 'headers']),
+  ol: new Set(['start', 'reversed', 'type']),
+  li: new Set(['value']),
+  blockquote: new Set(['cite']),
+  q: new Set(['cite']),
+  del: new Set(['cite', 'datetime']),
+  ins: new Set(['cite', 'datetime']),
+  time: new Set(['datetime'])
+};
+
+const VOID_ELEMENTS = new Set([
+  'area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input', 'link', 'meta', 'param', 'source', 'track', 'wbr'
+]);
+
 /**
- * Sanitizes rich HTML from external CMS to prevent Stored XSS
- * Strips script tags, iframes, objects, embeds, inline event handlers (onload, onerror, etc.),
- * and javascript: / vbscript: pseudo-protocols in links/attributes.
+ * Validates URL schemes after decoding character references to prevent XSS.
+ * Only allows http, https, mailto, tel, or safe relative URLs.
  */
-export function sanitizeRichHtml(rawHtml: string): string {
-  if (!rawHtml) return '';
-  return rawHtml
-    // Remove script tags and their contents
-    .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
-    // Remove iframes and objects
-    .replace(/<iframe\b[^<]*(?:(?!<\/iframe>)<[^<]*)*<\/iframe>/gi, '')
-    .replace(/<object\b[^<]*(?:(?!<\/object>)<[^<]*)*<\/object>/gi, '')
-    .replace(/<embed\b[^>]*>/gi, '')
-    .replace(/<applet\b[^>]*>/gi, '')
-    // Remove dangerous inline event handlers (onclick, onload, onerror, etc.)
-    .replace(/\s+on[a-z0-9_-]+\s*=\s*(?:'[^']*'|"[^"]*"|[^\s>]+)/gi, '')
-    // Remove javascript: and vbscript: pseudo-protocols in href/src
-    .replace(/(href|src)\s*=\s*(?:['"]\s*(?:javascript|vbscript):[^'"]*['"]|(?:javascript|vbscript):[^\s>]+)/gi, '$1="#"')
-    .trim();
+export function isSafeUrl(rawUrl: string): boolean {
+  if (!rawUrl || typeof rawUrl !== 'string') return false;
+  // 1. Decode character references (HTML entities like &#x09;, &#106;, etc.)
+  const decoded = decodeHTML(rawUrl);
+  // 2. Strip whitespace and non-printable control characters that browsers ignore in URLs
+  const cleaned = decoded.replace(/[\u0000-\u0020\u007F-\u009F\s]+/g, '');
+
+  // 3. Reject if empty after cleaning
+  if (!cleaned) return false;
+
+  // 4. Safe relative URLs
+  if (
+    cleaned.startsWith('/') ||
+    cleaned.startsWith('./') ||
+    cleaned.startsWith('../') ||
+    cleaned.startsWith('#') ||
+    cleaned.startsWith('?')
+  ) {
+    return true;
+  }
+
+  // 5. Check protocol
+  const colonIdx = cleaned.indexOf(':');
+  if (colonIdx === -1) {
+    // Relative path without scheme
+    return true;
+  }
+
+  const scheme = cleaned.slice(0, colonIdx).toLowerCase();
+  return scheme === 'http' || scheme === 'https' || scheme === 'mailto' || scheme === 'tel';
 }
+
+function escapeAttr(str: string): string {
+  return str
+    .replace(/&/g, '&amp;')
+    .replace(/"/g, '&quot;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+}
+
+interface ParsedAttr {
+  name: string;
+  value: string;
+}
+
+function parseAttributes(attrText: string): ParsedAttr[] {
+  const attrs: ParsedAttr[] = [];
+  let i = 0;
+  const len = attrText.length;
+
+  while (i < len) {
+    // Skip whitespace and slashes
+    while (i < len && /[\s/]/.test(attrText[i])) i++;
+    if (i >= len) break;
+
+    // Read attribute name
+    const nameStart = i;
+    while (i < len && !/[\s/=]/.test(attrText[i])) i++;
+    const name = attrText.slice(nameStart, i);
+    if (!name) break;
+
+    // Skip whitespace before '='
+    while (i < len && /\s/.test(attrText[i])) i++;
+
+    if (i < len && attrText[i] === '=') {
+      i++; // skip '='
+      // Skip whitespace after '='
+      while (i < len && /\s/.test(attrText[i])) i++;
+
+      if (i < len) {
+        let val = '';
+        const quote = attrText[i];
+        if (quote === '"' || quote === "'") {
+          i++; // skip quote
+          const valStart = i;
+          while (i < len && attrText[i] !== quote) i++;
+          val = attrText.slice(valStart, i);
+          if (i < len && attrText[i] === quote) i++;
+        } else {
+          // Unquoted value: terminates at whitespace, '/', or '>'
+          const valStart = i;
+          while (i < len && !/[\s/>]/.test(attrText[i])) i++;
+          val = attrText.slice(valStart, i);
+        }
+        attrs.push({ name, value: val });
+        continue;
+      }
+    }
+
+    // Boolean attribute or attribute without value
+    attrs.push({ name, value: '' });
+  }
+
+  return attrs;
+}
+
+/**
+ * Sanitizes rich HTML from external CMS using an HTML-aware parser with element & attribute allowlists.
+ * Validates URL schemes after decoding character references to prevent Stored XSS.
+ */
+export function sanitizeRichHtml(html: string): string {
+  if (!html || typeof html !== 'string') return '';
+
+  let out = '';
+  let i = 0;
+  const len = html.length;
+
+  while (i < len) {
+    const nextLt = html.indexOf('<', i);
+    if (nextLt === -1) {
+      out += html.slice(i);
+      break;
+    }
+
+    out += html.slice(i, nextLt);
+    i = nextLt;
+
+    // Check for comments <!-- ... -->
+    if (html.startsWith('<!--', i)) {
+      const endComment = html.indexOf('-->', i + 4);
+      if (endComment === -1) break;
+      i = endComment + 3;
+      continue;
+    }
+
+    // Check for <! or <?
+    if (html.startsWith('<!', i) || html.startsWith('<?', i)) {
+      const endTag = html.indexOf('>', i);
+      if (endTag === -1) break;
+      i = endTag + 1;
+      continue;
+    }
+
+    // Parse tag
+    const isClosing = html[i + 1] === '/';
+    const tagStart = isClosing ? i + 2 : i + 1;
+
+    // Find end of tag name (delimited by whitespace, '/', '>', or end of string)
+    let tagEnd = tagStart;
+    while (tagEnd < len && !/[\s/>]/.test(html[tagEnd])) {
+      tagEnd++;
+    }
+
+    const tagName = html.slice(tagStart, tagEnd).toLowerCase();
+
+    if (!tagName || !/^[a-z][a-z0-9:-]*$/.test(tagName)) {
+      out += '&lt;';
+      i++;
+      continue;
+    }
+
+    // Find the end of this tag definition '>'
+    let cursor = tagEnd;
+    let quote: string | null = null;
+    let endOfTag = -1;
+
+    while (cursor < len) {
+      const ch = html[cursor];
+      if (quote) {
+        if (ch === quote) quote = null;
+      } else {
+        if (ch === '"' || ch === "'") {
+          quote = ch;
+        } else if (ch === '>') {
+          endOfTag = cursor;
+          break;
+        }
+      }
+      cursor++;
+    }
+
+    if (endOfTag === -1) {
+      break;
+    }
+
+    const tagContent = html.slice(tagEnd, endOfTag);
+    const isSelfClosing = tagContent.trim().endsWith('/') || VOID_ELEMENTS.has(tagName);
+    i = endOfTag + 1;
+
+    // If this tag is one whose entire content must be dropped
+    if (DROP_CONTENT_TAGS.has(tagName)) {
+      if (!isClosing && !isSelfClosing) {
+        // Look for matching closing tag `</tagName...>`
+        const closePattern = new RegExp(`</${tagName}[^>]*>`, 'i');
+        const remaining = html.slice(i);
+        const match = remaining.match(closePattern);
+        if (match && match.index !== undefined) {
+          i += match.index + match[0].length;
+        }
+      }
+      continue;
+    }
+
+    // Check if tag is in allowed list
+    if (!ALLOWED_TAGS.has(tagName)) {
+      continue;
+    }
+
+    if (isClosing) {
+      out += `</${tagName}>`;
+      continue;
+    }
+
+    // Parse attributes for allowed opening tag
+    const rawAttrs = parseAttributes(tagContent);
+    const validAttrs: string[] = [];
+    const seenAttrs = new Set<string>();
+    const allowedForTag = TAG_ALLOWED_ATTRS[tagName] || new Set();
+
+    let hasTargetBlank = false;
+    let existingRel = '';
+
+    for (const { name: attrName, value: rawVal } of rawAttrs) {
+      const lowerName = attrName.toLowerCase();
+
+      // Disallow event handlers or malformed attribute names
+      if (lowerName.startsWith('on') || !/^[a-z][a-z0-9_-]*$/i.test(lowerName)) {
+        continue;
+      }
+
+      // Prevent duplicate attributes
+      if (seenAttrs.has(lowerName)) continue;
+      seenAttrs.add(lowerName);
+
+      const isAria = lowerName.startsWith('aria-') && /^[a-z0-9-]+$/.test(lowerName);
+
+      // Check allowlist
+      if (!GLOBAL_ALLOWED_ATTRS.has(lowerName) && !isAria && !allowedForTag.has(lowerName)) {
+        continue;
+      }
+
+      const decodedVal = decodeHTML(rawVal);
+
+      // Validate URL attributes
+      if (lowerName === 'href' || lowerName === 'src' || lowerName === 'cite') {
+        if (!isSafeUrl(decodedVal)) {
+          if (lowerName === 'href' || lowerName === 'src') {
+            validAttrs.push(`${lowerName}="#"`);
+          }
+          continue;
+        }
+      }
+
+      if (tagName === 'a' && lowerName === 'target') {
+        const lowerVal = decodedVal.toLowerCase();
+        if (lowerVal === '_blank' || lowerVal === '_self' || lowerVal === '_top' || lowerVal === '_parent') {
+          validAttrs.push(`target="${escapeAttr(lowerVal)}"`);
+          if (lowerVal === '_blank') {
+            hasTargetBlank = true;
+          }
+        }
+        continue;
+      }
+
+      if (tagName === 'a' && lowerName === 'rel') {
+        existingRel = decodedVal;
+        continue;
+      }
+
+      validAttrs.push(`${lowerName}="${escapeAttr(decodedVal)}"`);
+    }
+
+    if (tagName === 'a') {
+      if (hasTargetBlank) {
+        const relTokens = new Set(existingRel.split(/\s+/).filter(Boolean));
+        relTokens.add('noopener');
+        relTokens.add('noreferrer');
+        validAttrs.push(`rel="${escapeAttr(Array.from(relTokens).join(' '))}"`);
+      } else if (existingRel) {
+        validAttrs.push(`rel="${escapeAttr(existingRel)}"`);
+      }
+    }
+
+    const attrStr = validAttrs.length > 0 ? ' ' + validAttrs.join(' ') : '';
+    out += isSelfClosing ? `<${tagName}${attrStr} />` : `<${tagName}${attrStr}>`;
+  }
+
+  return out.trim();
+}
+
 
 // Calculate approximate read time
 export function calculateReadTime(text: string): string {
