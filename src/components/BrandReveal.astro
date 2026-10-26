@@ -121,12 +121,13 @@ const heroCards = [
         <div class="reveal-hero-deck" id="revealHeroDeck" aria-label="Brandelier creative production photo cards">
           <div class="deck-cards-viewport" id="deckCardsViewport">
             {heroCards.map((card, idx) => (
-              <article
+              <button
+                type="button"
                 class="deck-photo-card"
                 data-card-idx={idx}
                 data-depth={idx}
-                tabindex="0"
-                role="button"
+                tabindex={idx === 0 ? "0" : "-1"}
+                aria-hidden={idx === 0 ? "false" : "true"}
                 aria-label={`Photo ${idx + 1} of ${heroCards.length}: ${card.tag}. Click to view next photo.`}
               >
                 <div class="deck-photo-inner">
@@ -147,7 +148,7 @@ const heroCards = [
                   <span class="reveal-visual-note"><Fragment set:html={card.note} /></span>
                   <span class="reveal-visual-index">{card.index}</span>
                 </div>
-              </article>
+              </button>
             ))}
           </div>
 
@@ -254,8 +255,10 @@ const heroCards = [
     cards.forEach((card, idx) => {
       if (idx === dealOutCardIdx) return;
       const depth = (idx - activeDeckIndex + total) % total;
+      const isActive = depth === 0;
       card.setAttribute('data-depth', String(depth));
-      card.setAttribute('aria-hidden', depth === 0 ? 'false' : 'true');
+      card.setAttribute('aria-hidden', isActive ? 'false' : 'true');
+      card.setAttribute('tabindex', isActive ? '0' : '-1');
       card.classList.remove('is-dealing-out', 'is-dealing-in', 'is-swooping-in');
     });
 
@@ -276,6 +279,7 @@ const heroCards = [
     const oldActiveIdx = activeDeckIndex;
     const oldCard = cards[oldActiveIdx];
     const newActiveIdx = (activeDeckIndex + 1) % total;
+    const hadFocus = document.activeElement === oldCard;
 
     if (oldCard) {
       oldCard.classList.add('is-dealing-out');
@@ -285,12 +289,17 @@ const heroCards = [
     updateDeckSlots(oldActiveIdx);
     resetProgressAnimation();
 
+    if (hadFocus && cards[newActiveIdx]) {
+      cards[newActiveIdx].focus();
+    }
+
     setTimeout(() => {
       if (oldCard) {
         oldCard.classList.remove('is-dealing-out');
         oldCard.classList.add('is-dealing-in');
         oldCard.setAttribute('data-depth', String(total - 1));
         oldCard.setAttribute('aria-hidden', 'true');
+        oldCard.setAttribute('tabindex', '-1');
         void oldCard.offsetHeight; // force reflow
         oldCard.classList.remove('is-dealing-in');
       }
@@ -306,6 +315,7 @@ const heroCards = [
     if (total <= 1 || isDeckAnimating) return;
 
     isDeckAnimating = true;
+    const hadFocus = document.activeElement === cards[activeDeckIndex];
     const prevIdx = (activeDeckIndex - 1 + total) % total;
     const incomingCard = cards[prevIdx];
 
@@ -313,6 +323,10 @@ const heroCards = [
       incomingCard.classList.add('is-swooping-in');
       incomingCard.setAttribute('data-depth', '0');
       incomingCard.setAttribute('aria-hidden', 'false');
+      incomingCard.setAttribute('tabindex', '0');
+      if (hadFocus) {
+        incomingCard.focus();
+      }
     }
 
     activeDeckIndex = prevIdx;
@@ -1152,6 +1166,17 @@ const heroCards = [
       filter 0.45s ease,
       box-shadow 0.45s ease;
     outline: none;
+    appearance: none;
+    -webkit-appearance: none;
+    background: transparent;
+    border: none;
+    padding: 0;
+    margin: 0;
+    text-align: left;
+    font: inherit;
+    color: inherit;
+    cursor: pointer;
+    display: block;
   }
 
   .deck-photo-card:focus-visible {
